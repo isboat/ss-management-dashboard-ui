@@ -8,18 +8,18 @@
                       <p class="card-category">Complete your login</p>
                   </div>
                   <div class="card-body">
-                      <form>
+                      <form  [formGroup]="loginForm" (ngSubmit)="submit()">
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width">
-                                  <input matInput placeholder="Email" type="text">
+                                  <input matInput placeholder="Email" type="email" formControlName="email">
                                 </mat-form-field>
                               </div>
                           </div>
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width">
-                                  <input matInput placeholder="Password" type="password">
+                                  <input matInput placeholder="Password" type="password" formControlName="password">
                                 </mat-form-field>
                               </div>
                           </div>
