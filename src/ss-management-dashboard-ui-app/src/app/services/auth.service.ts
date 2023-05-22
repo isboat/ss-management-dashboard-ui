@@ -6,11 +6,16 @@ import { LocalStorageService } from './localstorage.service';
   providedIn: 'root'
 })
 export class AuthService {
+  private tokenKey: string = "token";
 
   constructor(private localStorage: LocalStorageService, private router: Router){}
 
   getAuthorizationToken(): string {
-    return this.localStorage.get("token");
+    return this.localStorage.get(this.tokenKey);
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getAuthorizationToken();
   }
 
   redirectToLogin() {

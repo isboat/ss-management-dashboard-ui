@@ -17,6 +17,8 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
+import { GuardPermissionsService } from 'app/services/can-activate-route.service';
+import { AuthService } from 'app/services/auth.service';
 
 @NgModule({
   imports: [
@@ -40,7 +42,8 @@ import {MatSelectModule} from '@angular/material/select';
     IconsComponent,
     NotificationsComponent,
     UpgradeComponent,
-  ]
+  ],
+  providers: [AuthService, GuardPermissionsService]
 })
 
 export class AdminLayoutModule {}
