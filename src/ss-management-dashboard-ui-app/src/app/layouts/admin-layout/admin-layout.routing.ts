@@ -8,11 +8,11 @@ import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
-import { canActivateRoute } from 'app/services/can-activate-route.service';
+import { canActivateLoginRoute, canActivateRoute } from 'app/services/can-activate-route.service';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
-    { path: 'login',   component: LoginComponent },
+    { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
