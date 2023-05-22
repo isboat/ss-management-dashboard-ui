@@ -9,9 +9,11 @@ import { IconsComponent } from '../../icons/icons.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { canActivateLoginRoute, canActivateRoute } from 'app/services/can-activate-route.service';
+import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
+    { path: 'screens',     component: ScreenListComponent, canActivate: [canActivateRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },

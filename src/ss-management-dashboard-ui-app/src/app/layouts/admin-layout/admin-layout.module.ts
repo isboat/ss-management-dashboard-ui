@@ -19,6 +19,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { GuardPermissionsService } from 'app/services/can-activate-route.service';
 import { AuthService } from 'app/services/auth.service';
+import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { AuthService } from 'app/services/auth.service';
     UserProfileComponent,
     LoginComponent,
     TableListComponent,
+    ScreenListComponent,
     TypographyComponent,
     IconsComponent,
     NotificationsComponent,
