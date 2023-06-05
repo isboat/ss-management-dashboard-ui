@@ -18,7 +18,8 @@ export class AuthService {
     return !!this.getAuthorizationToken();
   }
 
-  redirectToLogin() {
+  redirectToLogin(force?: boolean) {
+    if(force) this.localStorage.remove(this.tokenKey);
     this.router.navigate(['/login']);
 }
 }

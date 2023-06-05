@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { DataService } from 'app/services/data.service';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-screen-list',
@@ -11,7 +12,7 @@ export class ScreenListComponent implements OnInit {
 
   listData: ScreenModel[] = null;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private authService: AuthService) { }
 
   ngOnInit() {
     this.fetchListData();
@@ -22,9 +23,21 @@ export class ScreenListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchScreens().subscribe(data => {
-        this.listData = data;
-    });
+    this.dataService.fetchScreens().subscribe(
+      {
+        next: (data) => this.listData = data,
+        error: (e) => {
+          if(e.status == 401) 
+          {
+            this.authService.redirectToLogin(true);
+          }
+          else
+          {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
  }
 
 }
