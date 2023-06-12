@@ -18,10 +18,6 @@ export class ScreenListComponent implements OnInit {
     this.fetchListData();
   }
 
-  generateScreenPath(id: string): string {
-    return  `/screens/${id}`;
-  }
-
   fetchListData(){
     this.dataService.fetchScreens().subscribe(
       {

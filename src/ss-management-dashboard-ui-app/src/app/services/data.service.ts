@@ -17,4 +17,11 @@ export class DataService {
       { responseType: 'json' }
     );
   }
+
+  fetchScreenDetails(id: string): Observable<ScreenModel>  {
+    return this.http.get<ScreenModel>(
+      environment.apiBaseUrl + '/v1/tenant/screens/' + id,
+      { responseType: 'json' }
+    );
+  }
 }

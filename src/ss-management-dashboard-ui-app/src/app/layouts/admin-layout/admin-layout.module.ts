@@ -20,6 +20,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { GuardPermissionsService } from 'app/services/can-activate-route.service';
 import { AuthService } from 'app/services/auth.service';
 import { ScreenListComponent } from 'app/screen-list/screen-list.component';
+import { ScreenDetailsComponent } from 'app/screen/screen.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { ScreenListComponent } from 'app/screen-list/screen-list.component';
     LoginComponent,
     TableListComponent,
     ScreenListComponent,
+    ScreenDetailsComponent,
     TypographyComponent,
     IconsComponent,
     NotificationsComponent,

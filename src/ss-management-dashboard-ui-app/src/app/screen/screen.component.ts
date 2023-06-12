@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { DataService } from 'app/services/data.service';
 
@@ -7,23 +8,30 @@ import { DataService } from 'app/services/data.service';
   templateUrl: './screen.component.html',
   styleUrls: ['./screen.component.css']
 })
-export class ScreenListComponent implements OnInit {
+export class ScreenDetailsComponent implements OnInit, OnDestroy {
+  id: string;
+  private sub: any;
 
-  listData: ScreenModel[] = null;
+  data: ScreenModel = null;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.fetchListData();
+    this.sub = this.route.params.subscribe(params => {
+      this.id = params['id'];
+      this.fetchData();
+
+      // In a real app: dispatch action to load the details here.
+   });
   }
 
-  generateScreenPath(id: string): string {
-    return  `/screens/${id}`;
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
-  fetchListData(){
-    this.dataService.fetchScreens().subscribe({
-      next: (data) => this.listData = data,
+  fetchData(){
+    this.dataService.fetchScreenDetails(this.id).subscribe({
+      next: (data) => this.data = data,
       error: (e) => {
         if(e.status == 401) console.log("ERORR HERE:" + e)
       },
