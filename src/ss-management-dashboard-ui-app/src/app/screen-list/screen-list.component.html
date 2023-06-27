@@ -6,6 +6,9 @@
                   <div class="card-header card-header-danger">
                       <h4 class="card-title ">Screen List</h4>
                       <p class="card-category"> The list of all screens</p>
+                      <p class="card-category">
+                        <a [routerLink]="['/screen-create']" mat-raised-button type="button" class="btn btn-info">Create New Screen</a>
+                      </p>
                   </div>
                   <div class="card-body">
                       <div class="table-responsive">
@@ -30,8 +33,11 @@
                                         {{screen.displayName}}
                                       </td>
                                       <td class="text-primary">
-                                          <a class="nav-link" [routerLink]="['/screen-details', screen.id]">
-                                            Link
+                                          <a [routerLink]="['/screen-details', screen.id]" mat-raised-button type="button" class="btn btn-info">
+                                            View Details
+                                        </a>
+                                        <a (click)="deleteScreen(screen.id)"mat-raised-button type="button" class="btn btn-danger">
+                                            Delete
                                         </a>
                                       </td>
                                   </tr>

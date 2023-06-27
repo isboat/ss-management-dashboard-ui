@@ -21,6 +21,7 @@ import { GuardPermissionsService } from 'app/services/can-activate-route.service
 import { AuthService } from 'app/services/auth.service';
 import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 import { ScreenDetailsComponent } from 'app/screen/screen.component';
+import { ScreenCreateComponent } from 'app/screen-create/screen-create.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { ScreenDetailsComponent } from 'app/screen/screen.component';
     TableListComponent,
     ScreenListComponent,
     ScreenDetailsComponent,
+    ScreenCreateComponent,
     TypographyComponent,
     IconsComponent,
     NotificationsComponent,

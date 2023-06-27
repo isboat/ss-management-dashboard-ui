@@ -26,6 +26,21 @@ export class DataService {
     );
   }
 
+  createNewScreen(data: any): Observable<any>  {
+    return this.http.post<any>(
+      environment.apiBaseUrl + '/v1/tenant/screens/',
+      data,
+      { responseType: 'json' }
+    );
+  }
+
+  deleteScreen(id: string): Observable<any>  {
+    return this.http.delete<any>(
+      environment.apiBaseUrl + '/v1/tenant/screens/' + id,
+      { responseType: 'json' }
+    );
+  }
+
   fetchTemplates(): Observable<TemplateModel[]>  {
     return this.http.get<TemplateModel[]>(
       environment.apiBaseUrl + '/v1/templates',
