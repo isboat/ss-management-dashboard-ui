@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MenuModel } from 'app/models/menu-response.model';
+import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
@@ -17,12 +17,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
 
   data: MenuModel = null;
 
-  allItems = [
-    { description: "eat", done: true },
-    { description: "sleep", done: false },
-    { description: "play", done: false },
-    { description: "laugh", done: false },
-  ];
+  itemToAdd: MenuItemModel = null;
 
   constructor(private dataService: MenuService, private route: ActivatedRoute) { }
 
@@ -32,12 +27,36 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
       this.id = params['id'];
       this.fetchData();
    });
+
+   this.resetItemToAdd();
   }
 
-  addItem(description: string) {
-    this.allItems.unshift({
-      description,
-      done: false
+  resetItemToAdd(): void
+  {
+    this.itemToAdd  =
+    {
+      id: '',
+      name: '',
+      description: '',
+      price: 0,
+      title: ''
+    }
+  }
+
+  addItemToList() {
+    this.data.menuItems.push(this.itemToAdd);
+    this.resetItemToAdd();
+  }
+
+  saveMenu(){
+    this.dataService.saveMenu(this.data).subscribe({
+      next: () => 
+      {
+      },
+      error: (e) => {
+        if(e.status == 401) console.log("ERORR HERE:" + e)
+      },
+      complete: () => console.info('complete') 
     });
   }
 

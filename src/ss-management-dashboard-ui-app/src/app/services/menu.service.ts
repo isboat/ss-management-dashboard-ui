@@ -26,10 +26,18 @@ export class MenuService {
     );
   }
 
-  createNewMenu(data: any): Observable<any>  {
+  createNewMenu(data: MenuModel): Observable<any>  {
     return this.http.post<any>(
       environment.apiBaseUrl + '/v1/tenant/menus/',
       data,
+      { responseType: 'json' }
+    );
+  }
+
+  saveMenu(data: MenuModel): Observable<any>  {
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/menus/',
+      JSON.stringify(data),
       { responseType: 'json' }
     );
   }

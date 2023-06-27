@@ -34,7 +34,8 @@
                                             <th>Name</th>
                                             <th>Title</th>
                                             <th>Price</th>
-                                            <th class="text-center">Description</th>
+                                            <th>Description</th>
+                                            <th class="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -42,26 +43,37 @@
                                             <td>{{item.name}}</td>
                                             <td>{{item.title}}</td>
                                             <td>£{{item.price}}</td>
-                                            <td class="text-center"><a href="javascript:void(0)" class="btn btn-round btn-fill btn-default disabled">Delete</a></td>
+                                            <td>{{item.description}}</td>
+                                            <td class="text-center"><a href="javascript:void(0)" class="btn btn-round btn-fill btn-default">Delete</a></td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <input type="text" placeholder="add a name" class="lg-text-input" id="addItemName" />
+                                                <input [(ngModel)]="itemToAdd.name" type="text" placeholder="add a name" class="form-control" id="addItemName" />
                                             </td>
                                             <td>
-                                                <input type="text" placeholder="add a title" class="lg-text-input" id="addItemTitle" />
+                                                <input [(ngModel)]="itemToAdd.title" type="text" placeholder="add a title" class="form-control" id="addItemTitle" />
                                             </td>
                                             <td>
-                                                <input type="number" placeholder="add a price" class="lg-text-input" id="addItemPrice" />
+                                                <input [(ngModel)]="itemToAdd.price" type="number" placeholder="add a price" class="form-control" id="addItemPrice" />
+                                            </td>
+                                            <td>
+                                                <input [(ngModel)]="itemToAdd.description" type="text" placeholder="add a description" class="form-control" id="addItemdescription" />
                                             </td>
                                             <td class="text-center">
-                                                <a target="_blank" href="https:live" class="btn btn-round btn-fill btn-info">Add Item</a>
+                                                <a (click)="addItemToList()" class="btn btn-round btn-fill btn-info">Add Item</a>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>DataTables, VectorMap, SweetAlert, Wizard, jQueryValidation, FullCalendar etc...</td>
+                                            <td>DataTables, VectorMap, etc...</td>
                                             <td class="text-center"><i class="fa fa-times text-danger"></i></td>
                                             <td class="text-center"><i class="fa fa-check text-success"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a (click)="saveMenu()" class="btn btn-fill btn-success">Save Menu</a></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>

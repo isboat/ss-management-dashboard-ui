@@ -29,10 +29,13 @@ export class MenuCreateComponent implements OnInit {
   }
 
  submit(){
-  var data = {
+  var data: MenuModel = {
     name: this.form.get("name").value,
     title: this.form.get("title").value,
-    description: this.form.get("description").value
+    description: this.form.get("description").value,
+    id: '',
+    tenantId:'',
+    menuItems:[]
   }
 
   this.dataService.createNewMenu(data).subscribe({
