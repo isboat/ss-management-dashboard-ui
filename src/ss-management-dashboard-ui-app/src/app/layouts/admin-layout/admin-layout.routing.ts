@@ -12,12 +12,18 @@ import { canActivateLoginRoute, canActivateRoute } from 'app/services/can-activa
 import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 import { ScreenDetailsComponent } from 'app/screen/screen.component';
 import { ScreenCreateComponent } from 'app/screen-create/screen-create.component';
+import { MenuListComponent } from 'app/menu-list/menu-list.component';
+import { MenuCreateComponent } from 'app/menu-create/menu-create.component';
+import { MenuDetailsComponent } from 'app/menu/menu.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
     { path: 'screens',     component: ScreenListComponent, canActivate: [canActivateRoute] },
     { path: 'screen-details/:id',     component: ScreenDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'screen-create',     component: ScreenCreateComponent, canActivate: [canActivateRoute] },
+    { path: 'menus',     component: MenuListComponent, canActivate: [canActivateRoute] },
+    { path: 'menu-create',     component: MenuCreateComponent, canActivate: [canActivateRoute] },
+    { path: 'menu-details/:id',     component: MenuDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },

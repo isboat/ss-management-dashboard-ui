@@ -22,6 +22,9 @@ import { AuthService } from 'app/services/auth.service';
 import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 import { ScreenDetailsComponent } from 'app/screen/screen.component';
 import { ScreenCreateComponent } from 'app/screen-create/screen-create.component';
+import { MenuListComponent } from 'app/menu-list/menu-list.component';
+import { MenuCreateComponent } from 'app/menu-create/menu-create.component';
+import { MenuDetailsComponent } from 'app/menu/menu.component';
 
 @NgModule({
   imports: [
@@ -44,6 +47,9 @@ import { ScreenCreateComponent } from 'app/screen-create/screen-create.component
     ScreenListComponent,
     ScreenDetailsComponent,
     ScreenCreateComponent,
+    MenuCreateComponent,
+    MenuListComponent,
+    MenuDetailsComponent,
     TypographyComponent,
     IconsComponent,
     NotificationsComponent,

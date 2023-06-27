@@ -1,0 +1,41 @@
+<div class="main-content">
+  <div class="container-fluid">
+      
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Screen Create</h4>
+                </div>
+                <div class="card-body">
+                    <form  [formGroup]="form" (ngSubmit)="submit()">
+                        <div class="row">
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Menu name" type="text" formControlName="name">
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Menu Title" type="text" formControlName="title">
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Menu Description" type="text" formControlName="description">
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <button mat-raised-button type="submit" class="btn btn-danger pull-right">Create</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
