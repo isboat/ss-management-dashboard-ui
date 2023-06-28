@@ -44,7 +44,7 @@ export class MenuListComponent implements OnInit {
       {
         this.listData.forEach((value,index)=>{
           if(value.id==id) this.listData.splice(index,1);
-      });
+        });
       },
       error: (e) => {
         if(e.status == 401) 

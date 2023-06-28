@@ -1,10 +1,10 @@
 export class TemplateModel
 {
     key: string;
-    requiredProperties: RequiredProperty[];
+    requiredProperties: TemplateProperty[];
 }
 
-export class RequiredProperty
+export class TemplateProperty
 {
     key: string;
     value: string;

@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { TemplateModel } from 'app/models/template-response.model';
 import { DataService } from 'app/services/data.service';
+import { MenuService } from 'app/services/menu.service';
 
 @Component({
   selector: 'app-screen',
@@ -14,68 +16,85 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   id: string;
   private sub: any;
 
-  form: FormGroup;
-
   data: ScreenModel = null;
   templates: TemplateModel[] = [];
+  menus: MenuModel[] = [];
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) { }
+  selectedTemplate: TemplateModel = null;
+  selectedTemplateKey: string = null;
 
+  constructor(
+    private dataService: DataService, 
+    private menuService: MenuService,
+    private route: ActivatedRoute) { }
+
+  onTemplateChange(newTemplateKey: string) {
+    this.templates.forEach((value, index) => {
+      if (value.key == newTemplateKey) {
+        this.selectedTemplate = value;
+        this.data.templateKey = value.key;
+        this.data.templateProperties = value.requiredProperties
+      }
+    });
+  }
+  onMenuChange(newMenuKey: string) {
+    this.menus.forEach((value, index) => {
+      if (value.id == newMenuKey) {
+        this.data.menuEntityId = value.id;
+      }
+    });
+  }
   ngOnInit() {
-    
-    this.form = new FormGroup({
-      displayName: new FormControl(),
-      menuEntityId: new FormControl(),
-      mediaAssetEntityId: new FormControl(),
-      templateKey: new FormControl(),
-      templateProperties: new FormControl(),
-      address:new FormGroup({
-        city: new FormControl(),
-        street: new FormControl(),
-        pincode:new FormControl(),
-        country: new FormControl(),
-      })
-    })
 
     this.fetchTemplates();
+    this.fetchMenus();
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
-   });
+    });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
-  fetchData(){
+  fetchData() {
     this.dataService.fetchScreenDetails(this.id).subscribe({
-      next: (data) => 
-      {
+      next: (data) => {
         this.data = data
-        this.form.get("displayName").setValue(data.displayName)
       },
       error: (e) => {
-        if(e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) console.log("ERORR HERE:" + e)
       },
-      complete: () => console.info('complete') 
+      complete: () => console.info('complete')
     });
- }
+  }
 
- fetchTemplates(){
-   this.dataService.fetchTemplates().subscribe({
-     next: (data) => 
-     {
-       this.templates = data
-     },
-     error: (e) => {
-       if(e.status == 401) console.log("ERORR HERE:" + e)
-     },
-     complete: () => console.info('complete') 
-   });
-}
+  fetchTemplates() {
+    this.dataService.fetchTemplates().subscribe({
+      next: (data) => {
+        this.templates = data
+      },
+      error: (e) => {
+        if (e.status == 401) console.log("ERORR HERE:" + e)
+      },
+      complete: () => console.info('complete')
+    });
+  }
 
- submit(){}
+  fetchMenus() {
+    this.menuService.fetchMenus().subscribe({
+      next: (data) => {
+        this.menus = data
+      },
+      error: (e) => {
+        if (e.status == 401) console.log("ERORR HERE:" + e)
+      },
+      complete: () => console.info('complete')
+    });
+  }
+
+  saveScreenUpdates() { }
 
 }

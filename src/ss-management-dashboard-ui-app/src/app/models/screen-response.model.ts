@@ -1,3 +1,5 @@
+import { TemplateProperty } from "./template-response.model";
+
 export class ScreenModel
 {
     id: string;
@@ -6,5 +8,5 @@ export class ScreenModel
     menuEntityId: string;
     mediaAssetEntityId: string;
     templateKey: string;
-    templateProperties: string;
+    templateProperties: TemplateProperty[];
 }
