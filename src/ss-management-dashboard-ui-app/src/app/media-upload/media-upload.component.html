@@ -1,0 +1,39 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h3 class="card-title">Media Upload</h3>
+                <p class="card-category">Handcrafted by our friend
+                    <a target="_blank" href="https://github.com/mouse0270">Robert McIntosh</a>. Please checkout
+                </p>
+            </div>
+            <div class="card-body">
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="formtitle" class="form-label">Title</label>
+                            <input [(ngModel)]="title" class="form-control" type="text" id="formtitle">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="formtitle" class="form-label">Description</label>
+                            <input [(ngModel)]="desc" class="form-control" type="text" id="formdesc">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Upload file</label>
+                            <input (change)="this.onFilechange($event)" class="form-control" type="file" id="formFile">
+                            <button (click)="this.upload()" type="button" class="btn btn-primary mt-3">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

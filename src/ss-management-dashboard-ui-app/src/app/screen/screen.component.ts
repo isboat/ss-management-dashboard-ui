@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { TemplateModel } from 'app/models/template-response.model';
 import { DataService } from 'app/services/data.service';
+import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
@@ -19,6 +21,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   data: ScreenModel = null;
   templates: TemplateModel[] = [];
   menus: MenuModel[] = [];
+  mediaAssets: MediaAssetModel[] = [];
 
   selectedTemplate: TemplateModel = null;
   selectedTemplateKey: string = null;
@@ -26,6 +29,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService, 
     private menuService: MenuService,
+    private mediaService: MediaService,
     private route: ActivatedRoute) { }
 
   onTemplateChange(newTemplateKey: string) {
@@ -48,6 +52,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
     this.fetchTemplates();
     this.fetchMenus();
+    this.fetchMediaAssets();
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -87,6 +92,18 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.menuService.fetchMenus().subscribe({
       next: (data) => {
         this.menus = data
+      },
+      error: (e) => {
+        if (e.status == 401) console.log("ERORR HERE:" + e)
+      },
+      complete: () => console.info('complete')
+    });
+  }
+
+  fetchMediaAssets() {
+    this.mediaService.fetchMenus().subscribe({
+      next: (data) => {
+        this.mediaAssets = data
       },
       error: (e) => {
         if (e.status == 401) console.log("ERORR HERE:" + e)

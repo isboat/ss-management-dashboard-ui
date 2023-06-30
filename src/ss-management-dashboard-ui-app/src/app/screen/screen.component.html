@@ -57,13 +57,13 @@
                                 <select class="custom-select" id="templateSelector" [ngModel]="selectedTemplateKey"
                                     (ngModelChange)="onMenuChange($event)">
                                     <option>Choose...</option>
-                                    <option *ngFor="let menu of menus; index as i;"
-                                        [selected]="menu.id == data.menuEntityId" value="{{menu.id}}">
-                                        {{menu.title}}
+                                    <option *ngFor="let media of mediaAssets; index as i;"
+                                        [selected]="media.id == data.mediaAssetEntityId" value="{{media.id}}">
+                                        {{media.name}}
                                     </option>
                                 </select>
-                                <div class="input-group-prepend" *ngIf="data.menuEntityId">
-                                    <a [routerLink]="['/menu-details', data.menuEntityId]" mat-raised-button
+                                <div class="input-group-prepend" *ngIf="data.mediaAssetEntityId">
+                                    <a [routerLink]="['/media-details', data.mediaAssetEntityId]" mat-raised-button
                                         type="button" class="btn btn-info">
                                         View Media
                                     </a>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div>
-                            <a [routerLink]="['/menu-create']" mat-raised-button type="button"
+                            <a [routerLink]="['/media-upload']" mat-raised-button type="button"
                                 class="btn btn-primary">Upload New Media</a>
                         </div>
                     </div>

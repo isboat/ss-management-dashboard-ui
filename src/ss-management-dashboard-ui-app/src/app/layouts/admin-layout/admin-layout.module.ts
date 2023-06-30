@@ -25,6 +25,7 @@ import { ScreenCreateComponent } from 'app/screen-create/screen-create.component
 import { MenuListComponent } from 'app/menu-list/menu-list.component';
 import { MenuCreateComponent } from 'app/menu-create/menu-create.component';
 import { MenuDetailsComponent } from 'app/menu/menu.component';
+import { MediaUploadComponent } from 'app/media-upload/media-upload.component';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { MenuDetailsComponent } from 'app/menu/menu.component';
     MenuCreateComponent,
     MenuListComponent,
     MenuDetailsComponent,
+    MediaUploadComponent,
     TypographyComponent,
     IconsComponent,
     NotificationsComponent,

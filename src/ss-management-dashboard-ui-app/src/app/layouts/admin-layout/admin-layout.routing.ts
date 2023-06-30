@@ -15,6 +15,7 @@ import { ScreenCreateComponent } from 'app/screen-create/screen-create.component
 import { MenuListComponent } from 'app/menu-list/menu-list.component';
 import { MenuCreateComponent } from 'app/menu-create/menu-create.component';
 import { MenuDetailsComponent } from 'app/menu/menu.component';
+import { MediaUploadComponent } from 'app/media-upload/media-upload.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -24,6 +25,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'menus',     component: MenuListComponent, canActivate: [canActivateRoute] },
     { path: 'menu-create',     component: MenuCreateComponent, canActivate: [canActivateRoute] },
     { path: 'menu-details/:id',     component: MenuDetailsComponent, canActivate: [canActivateRoute] },
+    { path: 'media-upload',     component: MediaUploadComponent, canActivate: [canActivateRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
