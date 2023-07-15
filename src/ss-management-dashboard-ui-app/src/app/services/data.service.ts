@@ -34,6 +34,14 @@ export class DataService {
     );
   }
 
+  updateScreen(data: any): Observable<any>  {
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/screens/',
+      data,
+      { responseType: 'json' }
+    );
+  }
+
   deleteScreen(id: string): Observable<any>  {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/screens/' + id,

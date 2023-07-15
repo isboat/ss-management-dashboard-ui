@@ -8,25 +8,24 @@
                         <p class="card-category">Handcrafted by our friend
                         </p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="data">
                         <p class="card-text">
                             <input type="text" class="form-control" id="displayNameInput" placeholder="Username"
                                 [(ngModel)]="data.displayName">
                         </p>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h3 class="card-title">Menu</h3>
                         <p class="card-category">Handcrafted by our friend
                         </p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="data">
 
                         <div class="input-group mb-3">
-                            <select class="form-control" id="templateSelector" [ngModel]="selectedTemplateKey"
-                                (ngModelChange)="onMenuChange($event)">
+                            <select class="form-control" id="templateSelector"
+                                (change)="onMenuChange($event)">
                                 <option>Choose...</option>
                                 <option *ngFor="let menu of menus; index as i;"
                                     [selected]="menu.id == data.menuEntityId" value="{{menu.id}}">
@@ -52,9 +51,9 @@
                         <p class="card-category">Handcrafted by our friend
                         </p>
                     </div>
-                    <div class="card-body">
-                        <select class="custom-select" id="templateSelector" [ngModel]="selectedTemplateKey"
-                            (ngModelChange)="onMenuChange($event)">
+                    <div class="card-body" *ngIf="data">
+                        <select class="custom-select" id="templateSelector"
+                            (change)="onMediaChange($event)">
                             <option>Choose...</option>
                             <option *ngFor="let media of mediaAssets; index as i;"
                                 [selected]="media.id == data.mediaAssetEntityId" value="{{media.id}}">
@@ -81,13 +80,13 @@
                         <p class="card-category">Handcrafted by our friend
                         </p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="data">
                         <div class="input-group mb-3 text-info">
-                            <select class="custom-select" id="templateSelector" [ngModel]="selectedTemplateKey"
-                                (ngModelChange)="onTemplateChange($event)">
+                            <select class="custom-select" id="templateSelector" 
+                                (change)="onTemplateChange($event)">
                                 <option>Choose...</option>
                                 <option *ngFor="let template of templates; index as i;"
-                                    [selected]="template.key == data.templateKey" value="{{template.key}}">
+                                    [selected]="template.key === data.templateKey" value="{{template.key}}">
                                     {{template.key}}
                                 </option>
                             </select>

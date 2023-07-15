@@ -5,6 +5,7 @@ import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { TemplateModel } from 'app/models/template-response.model';
+import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
 import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
@@ -24,15 +25,16 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   mediaAssets: MediaAssetModel[] = [];
 
   selectedTemplate: TemplateModel = null;
-  selectedTemplateKey: string = null;
 
   constructor(
     private dataService: DataService, 
     private menuService: MenuService,
     private mediaService: MediaService,
+    private authService: AuthService,
     private route: ActivatedRoute) { }
 
-  onTemplateChange(newTemplateKey: string) {
+  onTemplateChange(evt: any) {
+    const newTemplateKey = evt.target.value;
     this.templates.forEach((value, index) => {
       if (value.key == newTemplateKey) {
         this.selectedTemplate = value;
@@ -41,10 +43,19 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
-  onMenuChange(newMenuKey: string) {
+  onMenuChange(evt: any) {
+    const newMenuKey = evt.target.value;
     this.menus.forEach((value, index) => {
       if (value.id == newMenuKey) {
         this.data.menuEntityId = value.id;
+      }
+    });
+  }
+  onMediaChange(evt: any) {
+    const newMenuKey = evt.target.value;
+    this.mediaAssets.forEach((value, index) => {
+      if (value.id == newMenuKey) {
+        this.data.mediaAssetEntityId = value.id;
       }
     });
   }
@@ -70,7 +81,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.data = data
       },
       error: (e) => {
-        if (e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) this.authService.redirectToLogin(true);
       },
       complete: () => console.info('complete')
     });
@@ -82,7 +93,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.templates = data
       },
       error: (e) => {
-        if (e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) this.authService.redirectToLogin(true);
       },
       complete: () => console.info('complete')
     });
@@ -94,7 +105,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.menus = data
       },
       error: (e) => {
-        if (e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) this.authService.redirectToLogin(true);
       },
       complete: () => console.info('complete')
     });
@@ -106,12 +117,32 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.mediaAssets = data
       },
       error: (e) => {
-        if (e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) this.authService.redirectToLogin(true);
       },
       complete: () => console.info('complete')
     });
   }
 
-  saveScreenUpdates() { }
+  saveScreenUpdates() { 
+    console.log(this.data);
+    this.dataService.updateScreen(this.data).subscribe(
+      {
+        next: () => 
+        {
+          console.log("SAVED..")
+        },
+        error: (e) => {
+          if(e.status == 401) 
+          {
+            this.authService.redirectToLogin(true);
+          }
+          else
+          {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
+  }
 
 }
