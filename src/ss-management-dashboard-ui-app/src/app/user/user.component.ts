@@ -50,6 +50,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   saveUpdates() { 
     console.log(this.data);
+    this.data.created = null;
     this.dataService.saveUser(this.data).subscribe(
       {
         next: () => 
