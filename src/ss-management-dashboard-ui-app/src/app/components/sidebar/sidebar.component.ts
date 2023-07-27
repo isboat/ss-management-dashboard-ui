@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'app/services/auth.service';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -14,7 +15,6 @@ export const ROUTES: RouteInfo[] = [
     { path: '/users', title: 'User List',  icon:'person', class: '' },
     { path: '/media-upload', title: 'Upload Media',  icon:'content_paste', class: '' },
     { path: '/login', title: 'Login',  icon:'person', class: '' },
-    { path: '/upgrade', title: 'Upgrade to PRO',  icon:'unarchive', class: 'active-pro' },
 ];
 
 @Component({
@@ -25,11 +25,20 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    var filtered = [];
+    for (let index = 0; index < ROUTES.length; index++) {
+      const element = ROUTES[index];
+      if(element.path == '/login' && this.auth.isAuthenticated()) continue;
+      if(element.path != '/users' || this.auth.isAdminUser()) filtered.push(element)
+      
+    }
+    this.menuItems = filtered;
   }
+
+  
   isMobileMenu() {
       if ($(window).width() > 991) {
           return false;

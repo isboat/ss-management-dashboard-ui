@@ -17,7 +17,7 @@ export class GuardPermissionsService {
     }
   }
   canActivateUserRoute(auth: AuthService): boolean {
-    var authenticated = auth.isAuthenticated();
+    var authenticated = auth.isAdminUser();
     if(authenticated){
       return true;
     }
@@ -40,7 +40,7 @@ export const canActivateRoute: CanActivateFn =
     };
   export const canActivateUserRoute: CanActivateFn =
       (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-        return inject(GuardPermissionsService).canActivate(inject(AuthService));
+        return inject(GuardPermissionsService).canActivateUserRoute(inject(AuthService));
       };
 
 export const canActivateLoginRoute: CanActivateFn =

@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { LoginComponent } from '../../login/login.component';
-import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatRippleModule} from '@angular/material/core';
@@ -51,7 +50,6 @@ import { UserDetailsComponent } from 'app/user/user.component';
     UserListComponent,
     UserCreateComponent,
     UserDetailsComponent,
-    UpgradeComponent,
   ],
   providers: [AuthService, GuardPermissionsService]
 })

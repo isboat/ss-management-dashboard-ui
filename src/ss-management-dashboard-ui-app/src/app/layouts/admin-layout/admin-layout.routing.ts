@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { LoginComponent } from '../../login/login.component';
-import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { canActivateLoginRoute, canActivateRoute, canActivateUserRoute } from 'app/services/can-activate-route.service';
 import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 import { ScreenDetailsComponent } from 'app/screen/screen.component';
@@ -28,7 +27,4 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
-
-    
-    { path: 'upgrade',        component: UpgradeComponent },
 ];
