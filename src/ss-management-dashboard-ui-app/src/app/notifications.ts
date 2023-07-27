@@ -1,28 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 declare var $: any;
-@Component({
-  selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css']
+
+@Injectable({
+  providedIn: 'root'
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsService {
 
   constructor() { }
-  showNotification(from, align){
-      const type = ['','info','success','warning','danger'];
-
-      const color = Math.floor((Math.random() * 4) + 1);
+  showSuccess(msg){
+    this.show(msg, 'success')
+  }
+  showWarning(msg){
+    this.show(msg, 'warning')
+  }
+  showError(msg){
+    this.show(msg, 'danger')
+  }
+  private show(msg, nType){
 
       $.notify({
           icon: "notifications",
-          message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
+          message: msg
 
       },{
-          type: type[color],
+          type: nType || 'warning',
           timer: 4000,
           placement: {
-              from: from,
-              align: align
+              from: 'top',
+              align: 'center'
           },
           template: '<div data-notify="container" class="col-xl-4 col-lg-4 col-11 col-sm-4 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
             '<button mat-button  type="button" aria-hidden="true" class="close mat-button" data-notify="dismiss">  <i class="material-icons">close</i></button>' +

@@ -18,6 +18,9 @@
                                       Name
                                   </th>
                                   <th>
+                                      Email
+                                  </th>
+                                  <th>
                                       Role
                                   </th>
                                   <th>
@@ -31,6 +34,9 @@
                                   <tr *ngFor="let screen of listData; index as i; first as isFirst">
                                       <td>
                                           {{screen.name}}
+                                      </td>
+                                      <td>
+                                          {{screen.email}}
                                       </td>
                                       <td>
                                         {{screen.role === 1 ? 'Admin' : 'Editor'}}

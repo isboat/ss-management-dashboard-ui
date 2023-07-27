@@ -42,6 +42,7 @@ export class UserCreateComponent implements OnInit {
     role: this.form.get("role").value == "1" ? 1 : 0,
     id: null,
     created: null,
+    modifiedDate: null,
     tenantId: null,
   }
 

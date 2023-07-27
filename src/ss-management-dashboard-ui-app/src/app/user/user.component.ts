@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserModel } from 'app/models/user-response.model';
+import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { UserService } from 'app/services/user.service';
 
@@ -18,6 +19,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: UserService, 
     private authService: AuthService,
+    private notification: NotificationsService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -46,16 +48,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       },
       complete: () => console.info('complete')
     });
-  }hiopiol
+  }
 
   saveUpdates() { 
     console.log(this.data);
     this.data.created = null;
+    this.data.modifiedDate = null;
     this.dataService.saveUser(this.data).subscribe(
       {
         next: () => 
         {
           console.log("SAVED..")
+          this.notification.showSuccess('Updated successfully.')
         },
         error: (e) => {
           if(e.status == 401) 

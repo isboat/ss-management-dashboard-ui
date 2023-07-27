@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserModel } from 'app/models/user-response.model';
 import { environment } from 'environments/environment';
@@ -34,10 +34,13 @@ export class UserService {
   }
 
   saveUser(data: UserModel): Observable<any>  {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    
     return this.http.patch<any>(
       environment.apiBaseUrl + '/v1/tenant/users/',
       JSON.stringify(data),
-      { responseType: 'json' }
+      { responseType: 'json', headers: headers }
     );
   }
 
