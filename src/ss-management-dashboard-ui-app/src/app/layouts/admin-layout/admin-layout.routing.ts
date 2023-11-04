@@ -13,6 +13,7 @@ import { MediaUploadComponent } from 'app/media-upload/media-upload.component';
 import { UserListComponent } from 'app/user-list/user-list.component';
 import { UserCreateComponent } from 'app/user-create/user-create.component';
 import { UserDetailsComponent } from 'app/user/user.component';
+import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -26,5 +27,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'users',     component: UserListComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },
+    { path: 'device/auth',     component: DeviceAuthComponent, canActivate: [canActivateUserRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
 ];

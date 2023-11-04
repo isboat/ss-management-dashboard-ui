@@ -23,6 +23,7 @@ import { MediaUploadComponent } from 'app/media-upload/media-upload.component';
 import { UserListComponent } from 'app/user-list/user-list.component';
 import { UserCreateComponent } from 'app/user-create/user-create.component';
 import { UserDetailsComponent } from 'app/user/user.component';
+import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { UserDetailsComponent } from 'app/user/user.component';
     UserListComponent,
     UserCreateComponent,
     UserDetailsComponent,
+    DeviceAuthComponent
   ],
   providers: [AuthService, GuardPermissionsService]
 })
