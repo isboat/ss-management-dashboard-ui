@@ -24,6 +24,7 @@ import { UserListComponent } from 'app/user-list/user-list.component';
 import { UserCreateComponent } from 'app/user-create/user-create.component';
 import { UserDetailsComponent } from 'app/user/user.component';
 import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
+import { DeviceListComponent } from 'app/device-list/device-list.component';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
     UserListComponent,
     UserCreateComponent,
     UserDetailsComponent,
-    DeviceAuthComponent
+    DeviceAuthComponent,
+    DeviceListComponent
   ],
   providers: [AuthService, GuardPermissionsService]
 })

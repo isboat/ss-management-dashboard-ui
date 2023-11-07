@@ -1,0 +1,57 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Device List</h4>
+                        <p class="card-category"> The list of all devices</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Choose Screen
+                                    </th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of listData; index as i; first as isFirst">
+                                        <td>
+                                            {{item.id}}
+                                        </td>
+                                        <td>
+                                            <input type="text" [(ngModel)]="item.deviceName" />
+                                            <button (click)="update(item.id, item.deviceName)"
+                                                class="btn btn-round btn-fill btn-danger">Update Name</button>
+                                        </td>
+                                        <td>
+                                            <select class="form-control"
+                                                (change)="onScreenChange($event, item.id)">
+                                                <option>Choose...</option>
+                                                <option *ngFor="let screen of screens; index as i;"
+                                                    [selected]="screen.id == item.screenId" value="{{screen.id}}">
+                                                    {{screen.displayName}}
+                                                </option>
+                                            </select>
+                                            <button (click)="updateDeviceScreen(item.id)"
+                                                class="btn btn-round btn-fill btn-danger">Update</button>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
