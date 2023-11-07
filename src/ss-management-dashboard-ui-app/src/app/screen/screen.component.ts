@@ -5,6 +5,7 @@ import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { TemplateModel } from 'app/models/template-response.model';
+import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
 import { MediaService } from 'app/services/media.service';
@@ -28,6 +29,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataService: DataService, 
+    private notification: NotificationsService,
     private menuService: MenuService,
     private mediaService: MediaService,
     private authService: AuthService,
@@ -129,7 +131,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       {
         next: () => 
         {
-          console.log("SAVED..")
+          this.notification.showSuccess("SAVED..")
         },
         error: (e) => {
           if(e.status == 401) 

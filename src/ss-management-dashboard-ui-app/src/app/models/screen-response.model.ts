@@ -9,4 +9,5 @@ export class ScreenModel
     mediaAssetEntityId: string;
     templateKey: string;
     templateProperties: TemplateProperty[];
+    externalMediaSource: string;
 }

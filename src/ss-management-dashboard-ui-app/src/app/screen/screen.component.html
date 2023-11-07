@@ -24,8 +24,7 @@
                     <div class="card-body" *ngIf="data">
 
                         <div class="input-group mb-3">
-                            <select class="form-control" id="templateSelector"
-                                (change)="onMenuChange($event)">
+                            <select class="form-control" id="templateSelector" (change)="onMenuChange($event)">
                                 <option>Choose...</option>
                                 <option *ngFor="let menu of menus; index as i;"
                                     [selected]="menu.id == data.menuEntityId" value="{{menu.id}}">
@@ -52,8 +51,7 @@
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <select class="custom-select" id="templateSelector"
-                            (change)="onMediaChange($event)">
+                        <select class="custom-select" id="templateSelector" (change)="onMediaChange($event)">
                             <option>Choose...</option>
                             <option *ngFor="let media of mediaAssets; index as i;"
                                 [selected]="media.id == data.mediaAssetEntityId" value="{{media.id}}">
@@ -82,8 +80,7 @@
                     </div>
                     <div class="card-body" *ngIf="data">
                         <div class="input-group mb-3 text-info">
-                            <select class="custom-select" id="templateSelector" 
-                                (change)="onTemplateChange($event)">
+                            <select class="custom-select" id="templateSelector" (change)="onTemplateChange($event)">
                                 <option>Choose...</option>
                                 <option *ngFor="let template of templates; index as i;"
                                     [selected]="template.key === data.templateKey" value="{{template.key}}">
@@ -102,7 +99,21 @@
                             </div>
                         </div>
                     </div>
+                </div>                
+                <div class="card">
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">External Media Source</h3>
+                        <p class="card-category">You can paste url/link for a media, you want to play on this screen. E.g youtube link
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <p class="card-text">
+                            <input type="text" class="form-control" id="displayNameInput" placeholder="youtube link"
+                                [(ngModel)]="data.externalMediaSource">
+                        </p>
+                    </div>
                 </div>
+
             </div>
         </div>
         <div class="row">
