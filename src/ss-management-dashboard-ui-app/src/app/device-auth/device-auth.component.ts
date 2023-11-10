@@ -11,16 +11,16 @@ import { DeviceService } from 'app/services/device.service';
   styleUrls: ['./device-auth.component.css']
 })
 export class DeviceAuthComponent implements OnInit {
-  
+
   constructor(
-    private dataService: DeviceService, 
+    private dataService: DeviceService,
     private notification: NotificationsService,
     private authService: AuthService,) { }
 
-    deviceAuthForm = new FormGroup({
-      partOne: new FormControl(''),
-      partTwo: new FormControl(''),
-      partThree: new FormControl(''),
+  deviceAuthForm = new FormGroup({
+    partOne: new FormControl(''),
+    partTwo: new FormControl(''),
+    partThree: new FormControl(''),
   });
 
   showForm: boolean = true;
@@ -29,18 +29,37 @@ export class DeviceAuthComponent implements OnInit {
   }
 
   submit() {
-    const partOne = this.deviceAuthForm.get('partOne').value; 
-    const partTwo = this.deviceAuthForm.get('partTwo').value; 
-    const partThree = this.deviceAuthForm.get('partThree').value;   
-    const data: DeviceAuthRequestModel = { userCode: `${partOne}-${partTwo}-${partThree}`};
+    const partOne = this.deviceAuthForm.get('partOne').value;
+    const partTwo = this.deviceAuthForm.get('partTwo').value;
+    const partThree = this.deviceAuthForm.get('partThree').value;
+    if (!partOne || !partTwo || !partThree) {
+      this.notification.showWarning("Enter all part of the code");
+      return;
+    }
+    const data: DeviceAuthRequestModel = { userCode: `${partOne}-${partTwo}-${partThree}` };
     this.dataService.post(data).subscribe({
       next: (data) => {
         this.showForm = false;
-        this.notification.showSuccess('Success: TV App authenticated.');        
+        this.notification.showSuccess('Success: TV App authenticated.');
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
         if (e.status == 404) this.notification.showWarning('NOT FOUND: Incorrect code, please update.')
+        if (e.status == 400) {
+          var message = "";
+          const error = e.error;
+          switch (error) {
+            case "device_limit_reached":
+              message = "You have reached the maximum allow number of TV apps"
+              break;
+            case "already_approved":
+              message = "You have already approved this app."
+              break;
+            default:
+              break;
+          }
+          if (message) this.notification.showWarning(message)
+        }
       },
       complete: () => console.info('complete')
     });

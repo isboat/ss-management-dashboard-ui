@@ -13,8 +13,8 @@ export const ROUTES: RouteInfo[] = [
     { path: '/screens', title: 'Screen List',  icon:'content_paste', class: '' },
     { path: '/menus', title: 'Menu List',  icon:'content_paste', class: '' },
     { path: '/users', title: 'User List',  icon:'person', class: '' },
-    { path: '/devices', title: 'Device List',  icon:'person', class: '' },
-    { path: '/device/auth', title: 'Device Setup',  icon:'video_label', class: '' },
+    { path: '/devices', title: 'TV Screen Apps',  icon:'person', class: '' },
+    { path: '/device/auth', title: 'TV Client App Setup',  icon:'video_label', class: '' },
     { path: '/media-upload', title: 'Upload Media',  icon:'content_paste', class: '' },
     { path: '/login', title: 'Login',  icon:'person', class: '' },
 ];
