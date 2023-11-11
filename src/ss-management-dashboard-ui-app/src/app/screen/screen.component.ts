@@ -125,6 +125,10 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  previewScreenUpdates() { 
+    console.log(this.data);
+    this.notification.showError("Not Implemented yet")
+  }
   saveScreenUpdates() { 
     console.log(this.data);
     this.dataService.updateScreen(this.data).subscribe(

@@ -2,6 +2,8 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
+import { LoginService } from 'app/services/login.service';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,8 +16,9 @@ export class NavbarComponent implements OnInit {
       mobile_menu_visible: any = 0;
     private toggleButton: any;
     private sidebarVisible: boolean;
+    showLogoutBtn: boolean = true;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router) {
+    constructor(location: Location,  private element: ElementRef, private router: Router, private loginService: LoginService, private authService: AuthService) {
       this.location = location;
           this.sidebarVisible = false;
     }
@@ -31,7 +34,14 @@ export class NavbarComponent implements OnInit {
            $layer.remove();
            this.mobile_menu_visible = 0;
          }
+         this.onAuthentication();
      });
+     this.onAuthentication();
+    }
+
+    onAuthentication()
+    {
+        this.showLogoutBtn = this.authService.isAuthenticated();
     }
 
     sidebarOpen() {
@@ -121,5 +131,10 @@ export class NavbarComponent implements OnInit {
           }
       }
       return 'Dashboard';
+    }
+
+    logout()
+    {
+        this.loginService.logout();
     }
 }

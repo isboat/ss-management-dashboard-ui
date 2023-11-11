@@ -75,7 +75,8 @@
                 <div class="card">
                     <div class="card-header card-header-success">
                         <h3 class="card-title">Screen Design template</h3>
-                        <p class="card-category">Select one of these pre-defined templates of how you want the screen to look on the TV
+                        <p class="card-category">Select one of these pre-defined templates of how you want the screen to
+                            look on the TV
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
@@ -99,11 +100,12 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
                 <div class="card">
                     <div class="card-header card-header-warning">
                         <h3 class="card-title">External Media Source</h3>
-                        <p class="card-category">You can paste url/link for a media, you want to play on this screen. E.g youtube link
+                        <p class="card-category">You can paste url/link for a media, you want to play on this screen.
+                            E.g youtube link
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
@@ -120,14 +122,26 @@
 
                 <div class="card">
                     <div class="card-header card-header-danger">
-                        <h3 class="card-title">Save Changes</h3>
+                        <h3 class="card-title">Preview and Save Changes</h3>
                     </div>
                     <div class="card-body">
 
-                        <p class="card-category">Save changes you've made to screen settings. </p>
-                        <p class="card-category">
-                            <a (click)="saveScreenUpdates()" class="btn btn-round btn-fill btn-danger">Save Updates</a>
-                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="card-category">Preview changes you've made to screen settings brfore saving. </p>
+                                <p class="card-category">
+                                    <a (click)="previewScreenUpdates()" class="btn btn-round btn-fill btn-success">Preview
+                                        Updates</a>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-category">Save changes you've made to screen settings. </p>
+                                <p class="card-category">
+                                    <a (click)="saveScreenUpdates()" class="btn btn-round btn-fill btn-danger">Save
+                                        Updates</a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

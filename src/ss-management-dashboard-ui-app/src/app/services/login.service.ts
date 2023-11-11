@@ -20,6 +20,10 @@ export class LoginService {
       this.router.navigate(['/']);
     });
   }
+  public logout(): void {
+    this.localStorage.remove(this.tokenKey);
+    this.router.navigate(['/login']);
+  }
 
   private loginRequest(username: string, password: string): Observable<TokenResponse> {
     return this.http.post<TokenResponse>(
