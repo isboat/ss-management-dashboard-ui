@@ -5,21 +5,21 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header card-header-danger">
-                    <h4 class="card-title">Screen Create</h4>
+                    <h4 class="card-title">Create New Menu </h4>
                 </div>
                 <div class="card-body">
                     <form  [formGroup]="form" (ngSubmit)="submit()">
                         <div class="row">
                             <div class="col-md-6">
                               <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Menu name" type="text" formControlName="name">
+                                <input matInput placeholder="Menu internal name" type="text" formControlName="name">
                               </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                               <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Menu Title" type="text" formControlName="title">
+                                <input matInput placeholder="Menu Display Title" type="text" formControlName="title">
                               </mat-form-field>
                             </div>
                         </div>

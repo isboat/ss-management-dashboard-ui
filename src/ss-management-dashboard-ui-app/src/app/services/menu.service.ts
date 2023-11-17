@@ -12,21 +12,21 @@ export class MenuService {
 
   constructor(private http: HttpClient) { }
 
-  fetchMenus(): Observable<MenuModel[]>  {
+  fetchMenus(): Observable<MenuModel[]> {
     return this.http.get<MenuModel[]>(
       environment.apiBaseUrl + '/v1/tenant/menus',
       { responseType: 'json' }
     );
   }
 
-  fetchMenuDetails(id: string): Observable<MenuModel>  {
+  fetchMenuDetails(id: string): Observable<MenuModel> {
     return this.http.get<MenuModel>(
       environment.apiBaseUrl + '/v1/tenant/menus/' + id,
       { responseType: 'json' }
     );
   }
 
-  createNewMenu(data: MenuModel): Observable<any>  {
+  createNewMenu(data: MenuModel): Observable<any> {
     return this.http.post<any>(
       environment.apiBaseUrl + '/v1/tenant/menus/',
       data,
@@ -34,15 +34,17 @@ export class MenuService {
     );
   }
 
-  saveMenu(data: MenuModel): Observable<any>  {
+  saveMenu(data: MenuModel): Observable<any> {
     return this.http.patch<any>(
       environment.apiBaseUrl + '/v1/tenant/menus/',
       JSON.stringify(data),
-      { responseType: 'json' }
+      {
+        headers: { responseType: 'json', 'Content-Type': 'application/json' }
+      }
     );
   }
 
-  deleteMenu(id: string): Observable<any>  {
+  deleteMenu(id: string): Observable<any> {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/menus/' + id,
       { responseType: 'json' }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
+import { NotificationsService } from 'app/notifications';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
@@ -17,9 +18,11 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
 
   data: MenuModel = null;
 
+  currencies: string[] = ["£","$"]
+
   itemToAdd: MenuItemModel = null;
 
-  constructor(private dataService: MenuService, private route: ActivatedRoute) { }
+  constructor(private dataService: MenuService, private route: ActivatedRoute, private notificationService: NotificationsService) { }
 
   ngOnInit() {
     
@@ -31,6 +34,15 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
    this.resetItemToAdd();
   }
 
+  onMenuCurrencyChange(evt: any) {
+    const newCur = evt.target.value;
+    this.currencies.forEach((value, index) => {
+      if (value == newCur) {
+        this.data.currency = value;
+      }
+    });
+  }
+
   resetItemToAdd(): void
   {
     this.itemToAdd  =
@@ -38,8 +50,9 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
       id: '',
       name: '',
       description: '',
-      price: 0,
-      title: ''
+      price: '0',
+      title: '',
+      iconUrl: ''
     }
   }
 
@@ -52,6 +65,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     this.dataService.saveMenu(this.data).subscribe({
       next: () => 
       {
+        this.notificationService.showSuccess("Changes saved successfully")
       },
       error: (e) => {
         if(e.status == 401) console.log("ERORR HERE:" + e)

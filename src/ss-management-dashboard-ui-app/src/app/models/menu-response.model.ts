@@ -5,6 +5,8 @@ export class MenuModel
     name: string;
     description: string;
     title: string;
+    currency: string;
+    iconUrl: string;
     menuItems: MenuItemModel[]
 }
 
@@ -14,5 +16,6 @@ export class MenuItemModel
     name: string;
     description: string;
     title: string;
-    price: number
+    price: string;
+    iconUrl: string;
 }
