@@ -11,7 +11,7 @@ export class MediaService {
 
   constructor(private http: HttpClient) { }
 
-  fetchMenus(): Observable<MediaAssetModel[]>  {
+  fetchMediaAssets(): Observable<MediaAssetModel[]>  {
     return this.http.get<MediaAssetModel[]>(
       environment.apiBaseUrl + '/v1/tenant/media-assets',
       { responseType: 'json' }

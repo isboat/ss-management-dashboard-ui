@@ -114,7 +114,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchMediaAssets() {
-    this.mediaService.fetchMenus().subscribe({
+    this.mediaService.fetchMediaAssets().subscribe({
       next: (data) => {
         this.mediaAssets = data
       },

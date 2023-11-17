@@ -1,0 +1,57 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Media Assets</h4>
+                        <p class="card-category"> The list of all media assets</p>
+                        <p class="card-category">
+                            <a [routerLink]="['/media-upload']" mat-raised-button type="button"
+                                class="btn btn-info">Upload New Media</a>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of listData; index as i; first as isFirst">
+                                        <td>
+                                            <div>
+                                            <img *ngIf="!IsVideoAsset(item.type)" [src]="item.assetUrl" width="150px" />
+                                            <video *ngIf="IsVideoAsset(item.type)" width="320" height="240" controls>
+                                                <source [src]="item.assetUrl" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                              </video>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{item.name}}
+                                        </td>
+                                        <td class="text-primary">
+                                            <a (click)="deleteMenu(item.id)" mat-raised-button type="button"
+                                                class="btn btn-danger">
+                                                Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

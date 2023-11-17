@@ -15,6 +15,7 @@ import { UserCreateComponent } from 'app/user-create/user-create.component';
 import { UserDetailsComponent } from 'app/user/user.component';
 import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
 import { DeviceListComponent } from 'app/device-list/device-list.component';
+import { MediaListComponent } from 'app/media-list/media-list.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -25,6 +26,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'menu-create',     component: MenuCreateComponent, canActivate: [canActivateRoute] },
     { path: 'menu-details/:id',     component: MenuDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'media-upload',     component: MediaUploadComponent, canActivate: [canActivateRoute] },
+    { path: 'media-list',     component: MediaListComponent, canActivate: [canActivateRoute] },
     { path: 'users',     component: UserListComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },
