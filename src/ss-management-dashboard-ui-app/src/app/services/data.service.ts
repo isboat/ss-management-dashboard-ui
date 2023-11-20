@@ -55,4 +55,11 @@ export class DataService {
       { responseType: 'json' }
     );
   }
+
+  fetchMenuSubtypeTemplates(): Observable<TemplateModel[]>  {
+    return this.http.get<TemplateModel[]>(
+      environment.apiBaseUrl + '/v1/menu-subtype-templates',
+      { responseType: 'json' }
+    );
+  }
 }

@@ -58,12 +58,12 @@
                                 {{media.name}}
                             </option>
                         </select>
-                        <div class="input-group-prepend" *ngIf="data.mediaAssetEntityId">
+                        <!-- <div class="input-group-prepend" *ngIf="data.mediaAssetEntityId">
                             <a [routerLink]="['/media-details', data.mediaAssetEntityId]" mat-raised-button
                                 type="button" class="btn btn-info">
                                 View Media
                             </a>
-                        </div>
+                        </div> -->
                         <div>
                             <a [routerLink]="['/media-upload']" mat-raised-button type="button"
                                 class="btn btn-info">Upload New Media</a>
@@ -82,16 +82,25 @@
                     <div class="card-body" *ngIf="data">
                         <div class="input-group mb-3 text-info">
                             <select class="custom-select" id="templateSelector" (change)="onTemplateChange($event)">
-                                <option>Choose...</option>
+                                <option>Choose Layout Design...</option>
                                 <option *ngFor="let template of templates; index as i;"
-                                    [selected]="template.key === data.templateKey" value="{{template.key}}">
-                                    {{template.key}}
+                                    [selected]="template.key === data.layout.templateKey" value="{{template.key}}">
+                                    {{template.label}}
                                 </option>
                             </select>
                         </div>
-                        <div *ngIf="data.templateKey">
+                        <div class="input-group mb-3 text-info" *ngIf="showMenuDesignTemplates">
+                            <select class="custom-select" id="menuSubtypeTemplates" (change)="onMenuTemplateChange($event)">
+                                <option>Choose Menu Design Type...</option>
+                                <option *ngFor="let template of menuSubtypeTemplates; index as i;"
+                                    [selected]="template.key === data.layout.menuSubType" value="{{template.key}}">
+                                    {{template.label}}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="data.layout.templateKey">
                             Please add/update these values for the layout fields
-                            <div class="input-group mb-3" *ngFor="let prop of data.templateProperties">
+                            <div class="input-group mb-3" *ngFor="let prop of data.layout.templateProperties">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{prop.label}}</span>
                                 </div>
@@ -130,7 +139,7 @@
                             <div class="col-md-6">
                                 <p class="card-category">Preview changes you've made to screen settings brfore saving. </p>
                                 <p class="card-category">
-                                    <a (click)="previewScreenUpdates()" class="btn btn-round btn-fill btn-success">Preview
+                                    <a  (click)="goToPreviewSite()" class="btn btn-round btn-fill btn-success">Preview
                                         Updates</a>
                                 </p>
                             </div>

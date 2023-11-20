@@ -7,7 +7,14 @@ export class ScreenModel
     displayName: string;
     menuEntityId: string;
     mediaAssetEntityId: string;
+    externalMediaSource: string;
+    layout: LayoutModel
+}
+
+export class LayoutModel
+{
+    id: string;
     templateKey: string;
     templateProperties: TemplateProperty[];
-    externalMediaSource: string;
+    menuSubType: string;
 }

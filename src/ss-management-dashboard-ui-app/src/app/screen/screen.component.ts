@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
-import { TemplateModel } from 'app/models/template-response.model';
+import { MenuSubtypeTemplate, TemplateModel } from 'app/models/template-response.model';
 import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
@@ -22,10 +22,12 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   data: ScreenModel = null;
   templates: TemplateModel[] = [];
+  menuSubtypeTemplates: MenuSubtypeTemplate[] = [];
   menus: MenuModel[] = [];
   mediaAssets: MediaAssetModel[] = [];
 
   selectedTemplate: TemplateModel = null;
+  selectedMenuTemplate: MenuSubtypeTemplate = null;
 
   constructor(
     private dataService: DataService, 
@@ -35,13 +37,34 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute) { }
 
+  goToPreviewSite() {
+    this.saveScreenUpdates();
+    window.open(`https://google.com?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "_blank");
+  } 
+
+  get showMenuDesignTemplates()
+  {
+    return this.data.layout 
+      && this.data.layout.templateKey
+      && this.data.layout.templateKey.toLocaleLowerCase().indexOf("menu") > -1
+  }
+
   onTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
     this.templates.forEach((value, index) => {
       if (value.key == newTemplateKey) {
         this.selectedTemplate = value;
-        this.data.templateKey = value.key;
-        this.data.templateProperties = value.requiredProperties
+        this.data.layout.templateKey = value.key;
+        this.data.layout.templateProperties = value.requiredProperties
+      }
+    });
+  }
+  onMenuTemplateChange(evt: any) {
+    const newTemplateKey = evt.target.value;
+    this.menuSubtypeTemplates.forEach((value, index) => {
+      if (value.key == newTemplateKey) {
+        this.selectedMenuTemplate = value;
+        this.data.layout.menuSubType = value.key;
       }
     });
   }
@@ -64,6 +87,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.fetchTemplates();
+    this.fetchMenuSubtypeTemplates();
     this.fetchMenus();
     this.fetchMediaAssets();
 
@@ -93,6 +117,17 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.dataService.fetchTemplates().subscribe({
       next: (data) => {
         this.templates = data
+      },
+      error: (e) => {
+        if (e.status == 401) this.authService.redirectToLogin(true);
+      },
+      complete: () => console.info('complete')
+    });
+  }
+  fetchMenuSubtypeTemplates() {
+    this.dataService.fetchMenuSubtypeTemplates().subscribe({
+      next: (data) => {
+        this.menuSubtypeTemplates = data
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
