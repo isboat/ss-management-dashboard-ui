@@ -136,18 +136,24 @@
                     <div class="card-body">
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <p class="card-category">Preview changes you've made to screen settings brfore saving. </p>
+                            <div class="col-md-4">
+                                <p class="card-category">Save changes you've made to screen settings. </p>
                                 <p class="card-category">
-                                    <a  (click)="goToPreviewSite()" class="btn btn-round btn-fill btn-success">Preview
+                                    <a (click)="saveScreenUpdates()" class="btn btn-round btn-fill btn-success">Save
                                         Updates</a>
                                 </p>
                             </div>
-                            <div class="col-md-6">
-                                <p class="card-category">Save changes you've made to screen settings. </p>
+                            <div class="col-md-4">
+                                <p class="card-category">Preview changes you've made to screen settings. </p>
                                 <p class="card-category">
-                                    <a (click)="saveScreenUpdates()" class="btn btn-round btn-fill btn-danger">Save
+                                    <a  (click)="goToPreviewSite()" class="btn btn-round btn-fill btn-info">Preview
                                         Updates</a>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="card-category">Publish changes you've made to screen settings. </p>
+                                <p class="card-category">
+                                    <a (click)="publishScreenUpdates()" class="btn btn-round btn-fill btn-danger">Publish Live</a>
                                 </p>
                             </div>
                         </div>

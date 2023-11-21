@@ -42,6 +42,15 @@ export class DataService {
     );
   }
 
+  publishScreen(screenId: string): Observable<any>  {
+    var data:any = {}
+    return this.http.post<any>(
+      environment.apiBaseUrl + '/v1/tenant/publish/screens/' + screenId,
+      data,
+      { responseType: 'json' }
+    );
+  }
+
   deleteScreen(id: string): Observable<any>  {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/screens/' + id,
