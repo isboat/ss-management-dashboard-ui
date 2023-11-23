@@ -15,9 +15,6 @@
                           <table class="table">
                               <thead class=" text-primary">
                                   <th>
-                                      ID
-                                  </th>
-                                  <th>
                                       Name
                                   </th>
                                   <th>
@@ -27,15 +24,18 @@
                               <tbody>
                                   <tr *ngFor="let screen of listData; index as i; first as isFirst">
                                       <td>
-                                          {{screen.id}}
-                                      </td>
-                                      <td>
                                         {{screen.displayName}}
                                       </td>
-                                      <td class="text-primary">
+                                      <td class="text-primary" style="text-align: right;">
                                           <a [routerLink]="['/screen-details', screen.id]" mat-raised-button type="button" class="btn btn-info">
-                                            View Details
+                                            View
                                         </a>
+                                        <a (click)="publishScreen(screen.id)" mat-raised-button type="button" class="btn btn-success">
+                                          Publish
+                                      </a>
+                                      <a [routerLink]="['/screen-details', screen.id]" mat-raised-button type="button" class="btn btn-primary">
+                                        Preview
+                                    </a>
                                         <a (click)="deleteScreen(screen.id)"mat-raised-button type="button" class="btn btn-danger">
                                             Delete
                                         </a>
