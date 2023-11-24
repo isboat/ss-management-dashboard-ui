@@ -37,6 +37,13 @@ export class DeviceService {
     );
   }
 
+  deleteScreen(deviceId: string): Observable<any>  {
+    return this.http.delete<any>(
+      environment.apiBaseUrl + `/v1/tenant/devices/${deviceId}}`,
+      { responseType: 'json' }
+    );
+  }
+
   post(data: DeviceAuthRequestModel): Observable<any>  {
     return this.http.post<any>(
       environment.apiBaseUrl + '/v1/tenant/device/auth',

@@ -39,7 +39,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   goToPreviewSite() {
     this.saveScreenUpdates();
-    window.open(`https://google.com?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "_blank");
+    window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
   } 
 
   get showMenuDesignTemplates()
@@ -159,11 +159,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       complete: () => console.info('complete')
     });
   }
-
-  previewScreenUpdates() { 
-    this.saveScreenUpdates(true);
-    this.notification.showError("Not Implemented yet")
-  }
   
   publishScreenUpdates() { 
     this.saveScreenUpdates(true);
@@ -187,7 +182,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       });
   }
   saveScreenUpdates(hidePostAction?: boolean) { 
-    console.log(this.data);
     this.dataService.updateScreen(this.data).subscribe(
       {
         next: () => 

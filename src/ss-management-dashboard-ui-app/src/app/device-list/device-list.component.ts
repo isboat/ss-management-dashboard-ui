@@ -106,4 +106,25 @@ export class DeviceListComponent implements OnInit {
     console.log(this.tmpScreenSelection);
   }
 
+  deleteDevice(deviceId: string) {
+    if (deviceId) {
+      this.deviceService.deleteScreen(deviceId).subscribe(
+        {
+          next: (data) => {
+            this.listData = this.listData.filter(x => x.id != deviceId)
+          },
+          error: (e) => {
+            if (e.status == 401) {
+              this.authService.redirectToLogin(true);
+            }
+            else {
+              console.log(e)
+            }
+          },
+          complete: () => console.info('complete')
+        });
+    }
+    console.log(this.tmpScreenSelection);
+  }
+
 }

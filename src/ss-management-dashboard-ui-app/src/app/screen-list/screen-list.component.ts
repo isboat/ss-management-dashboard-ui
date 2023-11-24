@@ -35,8 +35,9 @@ export class ScreenListComponent implements OnInit {
       });
   }
 
-  previewScreen() {
-  }
+  goToPreviewSite(screenId: string) {
+    window.open(`http://localhost:4401/?screenId=${screenId}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
+  } 
 
   publishScreen(id: string) {
     this.dataService.publishScreen(id).subscribe(

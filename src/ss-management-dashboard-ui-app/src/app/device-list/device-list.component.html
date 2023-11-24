@@ -12,27 +12,21 @@
                             <table class="table">
                                 <thead class=" text-primary">
                                     <th>
-                                        ID
-                                    </th>
-                                    <th>
                                         Name
                                     </th>
                                     <th>
                                         Choose Screen
                                     </th>
-                                    <th></th>
+                                    <th>#</th>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of listData; index as i; first as isFirst">
                                         <td>
-                                            {{item.id}}
-                                        </td>
-                                        <td>
                                             <input type="text" [(ngModel)]="item.deviceName" />
                                             <button (click)="update(item.id, item.deviceName)"
-                                                class="btn btn-round btn-fill btn-danger">Update Name</button>
+                                                class="btn btn-info">Update Name</button>
                                         </td>
-                                        <td>
+                                        <td style="display: inline-flex;">
                                             <select class="form-control"
                                                 (change)="onScreenChange($event, item.id)">
                                                 <option>Choose...</option>
@@ -42,9 +36,12 @@
                                                 </option>
                                             </select>
                                             <button (click)="updateDeviceScreen(item.id)"
-                                                class="btn btn-round btn-fill btn-danger">Update</button>
+                                                class="btn btn-success">Set</button>
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <button (click)="deleteDevice(item.id)"
+                                                class="btn btn-danger">Delete Device</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
