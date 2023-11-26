@@ -89,11 +89,11 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="input-group mb-3 text-info" *ngIf="showMenuDesignTemplates">
-                            <select class="custom-select" id="menuSubtypeTemplates" (change)="onMenuTemplateChange($event)">
-                                <option>Choose Menu Design Type...</option>
-                                <option *ngFor="let template of menuSubtypeTemplates; index as i;"
-                                    [selected]="template.key === data.layout.menuSubType" value="{{template.key}}">
+                        <div class="input-group mb-3 text-info" *ngIf="subtypeTemplates && subtypeTemplates.length > 0">
+                            <select class="custom-select" id="menuSubtypeTemplates" (change)="onsubTemplateChange($event)">
+                                <option>Choose Sub Type...</option>
+                                <option *ngFor="let template of subtypeTemplates; index as i;"
+                                    [selected]="template.key === data.layout.subType" value="{{template.key}}">
                                     {{template.label}}
                                 </option>
                             </select>

@@ -18,20 +18,20 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
 
   data: MenuModel = null;
 
-  currencies: string[] = ["£","$"]
+  currencies: string[] = ["£", "$"]
 
   itemToAdd: MenuItemModel = null;
 
   constructor(private dataService: MenuService, private route: ActivatedRoute, private notificationService: NotificationsService) { }
 
   ngOnInit() {
-    
+
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
-   });
+    });
 
-   this.resetItemToAdd();
+    this.resetItemToAdd();
   }
 
   onMenuCurrencyChange(evt: any) {
@@ -43,9 +43,8 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  resetItemToAdd(): void
-  {
-    this.itemToAdd  =
+  resetItemToAdd(): void {
+    this.itemToAdd =
     {
       id: '',
       name: '',
@@ -56,21 +55,26 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  deleteMenuItem(menuItemId: string)
+  {
+    this.data.menuItems = this.data.menuItems.filter(x => x.id != menuItemId);
+  }
+
   addItemToList() {
+    if(!this.itemToAdd.title || !this.itemToAdd.name || !this.itemToAdd.price) return;
     this.data.menuItems.push(this.itemToAdd);
     this.resetItemToAdd();
   }
 
-  saveMenu(){
+  saveMenu() {
     this.dataService.saveMenu(this.data).subscribe({
-      next: () => 
-      {
+      next: () => {
         this.notificationService.showSuccess("Changes saved successfully")
       },
       error: (e) => {
-        if(e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) console.log("ERORR HERE:" + e)
       },
-      complete: () => console.info('complete') 
+      complete: () => console.info('complete')
     });
   }
 
@@ -78,23 +82,18 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  fetchData(){
+  fetchData() {
     this.dataService.fetchMenuDetails(this.id).subscribe({
-      next: (data) => 
-      {
+      next: (data) => {
         this.data = data
-        if(!data.menuItems)
-        {
+        if (!data.menuItems) {
           data.menuItems = []
         }
       },
       error: (e) => {
-        if(e.status == 401) console.log("ERORR HERE:" + e)
+        if (e.status == 401) console.log("ERORR HERE:" + e)
       },
-      complete: () => console.info('complete') 
+      complete: () => console.info('complete')
     });
- }
-
- submit(){}
-
+  }
 }

@@ -3,6 +3,7 @@ export class TemplateModel
     key: string;
     label: string;
     requiredProperties: TemplateProperty[];
+    subTypes: SubtypeTemplate[];
 }
 
 export class TemplateProperty
@@ -11,7 +12,7 @@ export class TemplateProperty
     value: string;
     label: string;
 }
-export class MenuSubtypeTemplate
+export class SubtypeTemplate
 {
     key: string;
     label: string;

@@ -16,7 +16,6 @@ export const ROUTES: RouteInfo[] = [
     { path: '/devices', title: 'TV Screen Apps',  icon:'person', class: '' },
     { path: '/device/auth', title: 'TV Client App Setup',  icon:'video_label', class: '' },
     { path: '/media-list', title: 'Media Assets',  icon:'content_paste', class: '' },
-    { path: '/media-upload', title: 'Upload New Media',  icon:'content_paste', class: '' },
     { path: '/help-and-support', title: 'Help and Support',  icon:'content_paste', class: '' },
     { path: '/login', title: 'Login',  icon:'person', class: '' },
 ];

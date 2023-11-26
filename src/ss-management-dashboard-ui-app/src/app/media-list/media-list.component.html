@@ -7,8 +7,10 @@
                         <h4 class="card-title ">Media Assets</h4>
                         <p class="card-category"> The list of all media assets</p>
                         <p class="card-category">
-                            <a [routerLink]="['/media-upload']" mat-raised-button type="button"
+                            <a [routerLink]="['/media-new']" mat-raised-button type="button"
                                 class="btn btn-info">Upload New Media</a>
+                                <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button type="button"
+                                    class="btn btn-warning">Generate AI Image</a>
                         </p>
                     </div>
                     <div class="card-body">
@@ -40,7 +42,7 @@
                                             {{item.name}}
                                         </td>
                                         <td class="text-primary">
-                                            <a (click)="deleteMenu(item.id)" mat-raised-button type="button"
+                                            <a (click)="deleteMedia(item.id)" mat-raised-button type="button"
                                                 class="btn btn-danger">
                                                 Delete
                                             </a>

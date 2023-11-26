@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
-import { MenuSubtypeTemplate, TemplateModel } from 'app/models/template-response.model';
+import { SubtypeTemplate, TemplateModel } from 'app/models/template-response.model';
 import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
@@ -22,12 +22,12 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   data: ScreenModel = null;
   templates: TemplateModel[] = [];
-  menuSubtypeTemplates: MenuSubtypeTemplate[] = [];
+  subtypeTemplates: SubtypeTemplate[] = [];
   menus: MenuModel[] = [];
   mediaAssets: MediaAssetModel[] = [];
 
   selectedTemplate: TemplateModel = null;
-  selectedMenuTemplate: MenuSubtypeTemplate = null;
+  selectedSubTemplate: SubtypeTemplate = null;
 
   constructor(
     private dataService: DataService, 
@@ -42,29 +42,27 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
   } 
 
-  get showMenuDesignTemplates()
-  {
-    return this.data.layout 
-      && this.data.layout.templateKey
-      && this.data.layout.templateKey.toLocaleLowerCase().indexOf("menu") > -1
-  }
-
   onTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
+    this.updateSelectedTemplate(newTemplateKey)
+  }
+  updateSelectedTemplate(templateKey: string) {
     this.templates.forEach((value, index) => {
-      if (value.key == newTemplateKey) {
+      if (value.key == templateKey) {
         this.selectedTemplate = value;
         this.data.layout.templateKey = value.key;
         this.data.layout.templateProperties = value.requiredProperties
+        this.subtypeTemplates = value.subTypes
+        if(!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
       }
     });
   }
-  onMenuTemplateChange(evt: any) {
+  onsubTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
-    this.menuSubtypeTemplates.forEach((value, index) => {
+    this.subtypeTemplates.forEach((value, index) => {
       if (value.key == newTemplateKey) {
-        this.selectedMenuTemplate = value;
-        this.data.layout.menuSubType = value.key;
+        this.selectedSubTemplate = value;
+        this.data.layout.subType = value.key;
       }
     });
   }
@@ -87,7 +85,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.fetchTemplates();
-    this.fetchMenuSubtypeTemplates();
     this.fetchMenus();
     this.fetchMediaAssets();
 
@@ -105,6 +102,10 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.dataService.fetchScreenDetails(this.id).subscribe({
       next: (data) => {
         this.data = data
+        if(this.data && this.data.layout && this.data.layout.templateKey)
+        {
+          this.updateSelectedTemplate(this.data.layout.templateKey)
+        }
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -117,17 +118,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.dataService.fetchTemplates().subscribe({
       next: (data) => {
         this.templates = data
-      },
-      error: (e) => {
-        if (e.status == 401) this.authService.redirectToLogin(true);
-      },
-      complete: () => console.info('complete')
-    });
-  }
-  fetchMenuSubtypeTemplates() {
-    this.dataService.fetchMenuSubtypeTemplates().subscribe({
-      next: (data) => {
-        this.menuSubtypeTemplates = data
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -181,7 +171,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         complete: () => console.info('complete')
       });
   }
-  saveScreenUpdates(hidePostAction?: boolean) { 
+  saveScreenUpdates(hidePostAction?: boolean) {
     this.dataService.updateScreen(this.data).subscribe(
       {
         next: () => 

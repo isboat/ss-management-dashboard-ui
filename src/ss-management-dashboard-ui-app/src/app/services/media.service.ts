@@ -18,10 +18,17 @@ export class MediaService {
     );
   }
 
-  upload(data: FormData): Observable<any>  {
+  postNew(data: FormData): Observable<any>  {
     return this.http.post<any>(
-      environment.apiBaseUrl + '/v1/tenant/media-asset/upload/',
+      environment.apiBaseUrl + '/v1/tenant/media-assets/',
       data,
+      { responseType: 'json' }
+    );
+  }
+
+  deleteMedia(id: string): Observable<any> {
+    return this.http.delete<any>(
+      environment.apiBaseUrl + '/v1/tenant/media-assets/' + id,
       { responseType: 'json' }
     );
   }

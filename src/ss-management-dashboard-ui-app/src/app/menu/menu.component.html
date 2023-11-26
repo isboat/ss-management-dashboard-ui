@@ -16,7 +16,7 @@
                                         id="exampleFormControlInputName" placeholder="menu title">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleFormControlInput1">Menu Title</label>
+                                    <label for="exampleFormControlInput1">Menu Display Title</label>
                                     <input type="text" [(ngModel)]="data.title" class="form-control"
                                         id="exampleFormControlInput1" placeholder="menu title">
                                 </div>
@@ -63,11 +63,22 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of data.menuItems">
-                                                <td>{{item.name}}</td>
-                                                <td>{{item.title}}</td>
-                                                <td>{{data.currency}}{{item.price}}</td>
-                                                <td>{{item.description}}</td>
-                                                <td class="text-center"><a href="javascript:void(0)"
+                                                <td>
+                                                    <input [(ngModel)]="item.name" type="text"
+                                                        placeholder="add a name" class="form-control"/>
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="item.title" type="text"
+                                                        placeholder="add a title" class="form-control" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="item.price" type="text"
+                                                        placeholder="add a price" class="form-control" />
+                                                </td>
+                                                <td>
+                                                    <textarea class="form-control" [(ngModel)]="item.description" cols="50" rows="3"></textarea>
+                                                </td>
+                                                <td class="text-center"><a (click)="deleteMenuItem(item.id)"
                                                         class="btn btn-round btn-fill btn-default">Delete</a></td>
                                             </tr>
                                             <tr>
@@ -82,7 +93,7 @@
                                                         id="addItemTitle" />
                                                 </td>
                                                 <td>
-                                                    <input [(ngModel)]="itemToAdd.price" type="number"
+                                                    <input [(ngModel)]="itemToAdd.price" type="text"
                                                         placeholder="add a price" class="form-control"
                                                         id="addItemPrice" />
                                                 </td>
@@ -108,7 +119,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-success">
-                                <h4 class="card-title">Save Changes you've made</h4>
+                                <h4 class="card-title">Save changes you've made</h4>
                                 <p class="card-category">Click the button below to save all changes you have made to the
                                     menu and its menu items</p>
                             </div>
