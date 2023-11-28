@@ -26,6 +26,7 @@ import { UserDetailsComponent } from 'app/user/user.component';
 import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
 import { DeviceListComponent } from 'app/device-list/device-list.component';
 import { MediaListComponent } from 'app/media-list/media-list.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { MediaListComponent } from 'app/media-list/media-list.component';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    CKEditorModule
   ],
   declarations: [
     DashboardComponent,

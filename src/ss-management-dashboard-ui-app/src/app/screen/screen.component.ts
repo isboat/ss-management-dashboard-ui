@@ -10,7 +10,7 @@ import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
 import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
-
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 @Component({
   selector: 'app-screen',
   templateUrl: './screen.component.html',
@@ -29,6 +29,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   selectedTemplate: TemplateModel = null;
   selectedSubTemplate: SubtypeTemplate = null;
 
+  public Editor = ClassicEditor;
+
   constructor(
     private dataService: DataService, 
     private notification: NotificationsService,
@@ -38,7 +40,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute) { }
 
   goToPreviewSite() {
-    this.saveScreenUpdates();
+    this.saveScreenUpdates(true);
     window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
   } 
 
