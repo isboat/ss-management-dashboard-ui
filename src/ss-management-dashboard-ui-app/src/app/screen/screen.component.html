@@ -118,7 +118,7 @@
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <ckeditor [editor]="Editor" [(ngModel)]="data.externalMediaSource"></ckeditor>
+                        <ckeditor [editor]="Editor" [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }" [(ngModel)]="data.textEditorData"></ckeditor>
                     </div>
                 </div>
                 <div class="card">

@@ -8,6 +8,7 @@ export class ScreenModel
     menuEntityId: string;
     mediaAssetEntityId: string;
     externalMediaSource: string;
+    textEditorData: string;
     layout: LayoutModel
 }
 
