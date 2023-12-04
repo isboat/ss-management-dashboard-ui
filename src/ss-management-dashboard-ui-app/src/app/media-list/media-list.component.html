@@ -7,10 +7,12 @@
                         <h4 class="card-title ">Media Assets</h4>
                         <p class="card-category"> The list of all media assets</p>
                         <p class="card-category">
-                            <a [routerLink]="['/media-new']" mat-raised-button type="button"
-                                class="btn btn-info">Upload New Media</a>
-                                <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button type="button"
-                                    class="btn btn-warning">Generate AI Image</a>
+                            <a [routerLink]="['/media-new']" mat-raised-button type="button" class="btn btn-info">Upload
+                                New Media</a>
+                            <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button type="button"
+                                class="btn btn-warning">Generate AI Image</a>
+                            <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button type="button"
+                                class="btn btn-info">External Media +</a>
                         </p>
                     </div>
                     <div class="card-body">
@@ -31,11 +33,13 @@
                                     <tr *ngFor="let item of listData; index as i; first as isFirst">
                                         <td>
                                             <div>
-                                            <img *ngIf="!IsVideoAsset(item.type)" [src]="item.assetUrl" width="150px" />
-                                            <video *ngIf="IsVideoAsset(item.type)" width="320" height="240" controls>
-                                                <source [src]="item.assetUrl" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                              </video>
+                                                <img *ngIf="!IsVideoAsset(item.type)" [src]="item.assetUrl"
+                                                    width="150px" />
+                                                <video *ngIf="IsVideoAsset(item.type)" width="320" height="240"
+                                                    controls>
+                                                    <source [src]="item.assetUrl" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
                                             </div>
                                         </td>
                                         <td>

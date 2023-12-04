@@ -11,6 +11,8 @@ import { DataService } from 'app/services/data.service';
 import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { DeviceService } from 'app/services/device.service';
+import { DeviceModel } from 'app/models/device-response.model';
 @Component({
   selector: 'app-screen',
   templateUrl: './screen.component.html',
@@ -25,24 +27,27 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   subtypeTemplates: SubtypeTemplate[] = [];
   menus: MenuModel[] = [];
   mediaAssets: MediaAssetModel[] = [];
+  devices: DeviceModel[] = [];
 
   selectedTemplate: TemplateModel = null;
   selectedSubTemplate: SubtypeTemplate = null;
+  selectedDeviceId: string = null;
 
   public Editor = ClassicEditor;
 
   constructor(
-    private dataService: DataService, 
+    private dataService: DataService,
     private notification: NotificationsService,
     private menuService: MenuService,
     private mediaService: MediaService,
     private authService: AuthService,
+    private deviceService: DeviceService,
     private route: ActivatedRoute) { }
 
   goToPreviewSite() {
     this.saveScreenUpdates(true);
     window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
-  } 
+  }
 
   onTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
@@ -55,9 +60,13 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.data.layout.templateKey = value.key;
         this.data.layout.templateProperties = value.requiredProperties
         this.subtypeTemplates = value.subTypes
-        if(!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
+        if (!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
       }
     });
+  }
+
+  onTvScreenChange(evt: any) {
+    this.selectedDeviceId = evt.target.value;
   }
   onsubTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
@@ -84,11 +93,13 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   ngOnInit() {
 
     this.fetchTemplates();
     this.fetchMenus();
     this.fetchMediaAssets();
+    this.fetchDevices();
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -104,8 +115,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.dataService.fetchScreenDetails(this.id).subscribe({
       next: (data) => {
         this.data = data
-        if(this.data && this.data.layout && this.data.layout.templateKey)
-        {
+        if (this.data && this.data.layout && this.data.layout.templateKey) {
           this.updateSelectedTemplate(this.data.layout.templateKey)
         }
       },
@@ -140,6 +150,17 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  fetchDevices() {
+    this.deviceService.fetchDevices().subscribe({
+      next: (data) => {
+        this.devices = data
+      },
+      error: (e) => {
+        if (e.status == 401) this.authService.redirectToLogin(true);
+      }
+    });
+  }
+
   fetchMediaAssets() {
     this.mediaService.fetchMediaAssets().subscribe({
       next: (data) => {
@@ -151,45 +172,20 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       complete: () => console.info('complete')
     });
   }
-  
-  publishScreenUpdates() { 
+
+  publishScreenUpdates() {
     this.saveScreenUpdates(true);
     this.dataService.publishScreen(this.data.id).subscribe(
       {
-        next: () => 
-        {
+        next: () => {
           this.notification.showSuccess("PUBLISHED..")
+          this.linkToDevice();
         },
         error: (e) => {
-          if(e.status == 401) 
-          {
+          if (e.status == 401) {
             this.authService.redirectToLogin(true);
           }
-          else
-          {
-            console.log(e)
-          }
-        },
-        complete: () => console.info('complete')
-      });
-  }
-  saveScreenUpdates(hidePostAction?: boolean) {
-    this.dataService.updateScreen(this.data).subscribe(
-      {
-        next: () => 
-        {
-          if(!hidePostAction)
-          {
-          this.notification.showSuccess("SAVED..")
-          }
-        },
-        error: (e) => {
-          if(e.status == 401) 
-          {
-            this.authService.redirectToLogin(true);
-          }
-          else
-          {
+          else {
             console.log(e)
           }
         },
@@ -197,4 +193,53 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
+  linkToDevice() {
+    if (!this.selectedDeviceId || this.selectedDeviceId == "none") return;
+
+    if (this.selectedDeviceId == "all") {
+      this.devices.forEach((device, index) => {
+        this.linkToDevicePost(device.id, this.data.id)
+      })
+    }
+    else {
+      this.linkToDevicePost(this.selectedDeviceId, this.data.id);
+    }
+  }
+
+  linkToDevicePost(deviceId: string, screenId: string) {
+    if (!deviceId || !screenId) return;
+
+    this.deviceService.updateScreen(deviceId, screenId).subscribe(
+      {
+        next: (data) => { },
+        error: (e) => {
+          if (e.status == 401) {
+            this.authService.redirectToLogin(true);
+          }
+          else {
+            console.log(e)
+          }
+        }
+      });
+  }
+
+  saveScreenUpdates(hidePostAction?: boolean) {
+    this.dataService.updateScreen(this.data).subscribe(
+      {
+        next: () => {
+          if (!hidePostAction) {
+            this.notification.showSuccess("SAVED..")
+          }
+        },
+        error: (e) => {
+          if (e.status == 401) {
+            this.authService.redirectToLogin(true);
+          }
+          else {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
+  }
 }

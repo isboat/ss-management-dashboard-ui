@@ -58,12 +58,6 @@
                                 {{media.name}}
                             </option>
                         </select>
-                        <!-- <div class="input-group-prepend" *ngIf="data.mediaAssetEntityId">
-                            <a [routerLink]="['/media-details', data.mediaAssetEntityId]" mat-raised-button
-                                type="button" class="btn btn-info">
-                                View Media
-                            </a>
-                        </div> -->
                         <div>
                             <a [routerLink]="['/media-upload']" mat-raised-button type="button"
                                 class="btn btn-info">Upload New Media</a>
@@ -90,7 +84,8 @@
                             </select>
                         </div>
                         <div class="input-group mb-3 text-info" *ngIf="subtypeTemplates && subtypeTemplates.length > 0">
-                            <select class="custom-select" id="menuSubtypeTemplates" (change)="onsubTemplateChange($event)">
+                            <select class="custom-select" id="menuSubtypeTemplates"
+                                (change)="onsubTemplateChange($event)">
                                 <option>Choose Sub Type...</option>
                                 <option *ngFor="let template of subtypeTemplates; index as i;"
                                     [selected]="template.key === data.layout.subType" value="{{template.key}}">
@@ -110,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card" *ngIf="data?.layout?.templateKey == 'Text'">
                     <div class="card-header card-header-warning">
                         <h3 class="card-title">Text Editor</h3>
                         <p class="card-category">You can paste url/link for a media, you want to play on this screen.
@@ -118,7 +113,9 @@
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <ckeditor [editor]="Editor" [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }" [(ngModel)]="data.textEditorData"></ckeditor>
+                        <ckeditor [editor]="Editor"
+                            [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
+                            [(ngModel)]="data.textEditorData"></ckeditor>
                     </div>
                 </div>
                 <div class="card">
@@ -157,15 +154,60 @@
                             <div class="col-md-4">
                                 <p class="card-category">Preview changes you've made to screen settings. </p>
                                 <p class="card-category">
-                                    <a  (click)="goToPreviewSite()" class="btn btn-round btn-fill btn-info">Preview
+                                    <a (click)="goToPreviewSite()" class="btn btn-round btn-fill btn-info">Preview
                                         Updates</a>
                                 </p>
                             </div>
                             <div class="col-md-4">
                                 <p class="card-category">Publish changes you've made to screen settings. </p>
                                 <p class="card-category">
-                                    <a (click)="publishScreenUpdates()" class="btn btn-round btn-fill btn-danger">Publish Live</a>
+                                    <button type="button" class="btn btn-round btn-fill btn-danger" data-toggle="modal"
+                                        data-target="#exampleModal">
+                                        Publish Live
+                                    </button>
                                 </p>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Publish to TV Screen</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div><p>Please select which TV device/screen to publish to.</p></div>
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="recipient-name"
+                                                            class="col-form-label">Select Device</label>
+                                                        <select class="custom-select" id="templateSelector"
+                                                            (change)="onTvScreenChange($event)">
+                                                            <option value="none">None</option>
+                                                            <option value="all">All</option>
+                                                            <option *ngFor="let item of devices; index as i;"
+                                                                [selected]="item.screenId === data.id"
+                                                                value="{{item.id}}">
+                                                                {{item.deviceName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                    (click)="publishScreenUpdates()">Save
+                                                    changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
