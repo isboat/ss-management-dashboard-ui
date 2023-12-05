@@ -11,11 +11,64 @@ import { PlaylistService } from 'app/services/playlist.service';
 export class PlaylistsComponent implements OnInit {
 
   listData: PlaylistModel[] = null;
+  newItem: PlaylistModel = {
+    name: '',
+    created: null,
+    modifiedDate: null,
+    id: '',
+    tenantId: '',
+  };
 
   constructor(private playlistService: PlaylistService, private authService: AuthService) { }
 
   ngOnInit() {
     this.fetchListData();
+  }
+
+  addNewItem()
+  {
+    if(this.newItem.name)
+    {
+      this.playlistService.createNew(this.newItem).subscribe(
+        {
+          next: (data) => 
+          {
+            this.fetchListData();
+            this.newItem.name = '';
+          },
+          error: (e) => {
+            if(e.status == 401) 
+            {
+              this.authService.redirectToLogin(true);
+            }
+            else
+            {
+              console.log(e)
+            }
+          }
+        });
+    }
+  }
+
+  saveItem(item: PlaylistModel)
+  {
+    if(item)
+    {
+      this.playlistService.save(item).subscribe(
+        {
+          next: (data) => {},
+          error: (e) => {
+            if(e.status == 401) 
+            {
+              this.authService.redirectToLogin(true);
+            }
+            else
+            {
+              console.log(e)
+            }
+          }
+        });
+    }
   }
 
   fetchListData(){

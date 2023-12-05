@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PlaylistModel } from 'app/models/playlist-response.model';
+import { PlaylistModel, PlaylistWithItemsModel } from 'app/models/playlist-response.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -18,8 +18,8 @@ export class PlaylistService {
     );
   }
 
-  fetchUserDetails(id: string): Observable<PlaylistModel>  {
-    return this.http.get<PlaylistModel>(
+  fetchDetails(id: string): Observable<PlaylistWithItemsModel>  {
+    return this.http.get<PlaylistWithItemsModel>(
       environment.apiBaseUrl + '/v1/tenant/playlists/' + id,
       { responseType: 'json' }
     );
@@ -38,7 +38,7 @@ export class PlaylistService {
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
     
     return this.http.patch<any>(
-      environment.apiBaseUrl + '/v1/tenant/playlists/',
+      environment.apiBaseUrl + '/v1/tenant/playlists/'+data.id,
       JSON.stringify(data),
       { responseType: 'json', headers: headers }
     );

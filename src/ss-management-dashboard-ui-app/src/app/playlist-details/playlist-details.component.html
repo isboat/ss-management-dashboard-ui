@@ -4,8 +4,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-danger">
-                        <h4 class="card-title ">Playlists</h4>
-                        <p class="card-category"> The list of all playlists</p>
+                        <h4 class="card-title ">Playlist</h4>
+                        <p class="card-category"> The list of playlist items</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -19,35 +19,27 @@
                                     </th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of listData; index as i; first as isFirst">
+                                    <tr *ngFor="let item of data.assetItems; index as i; first as isFirst">
                                         <td>
                                             <input [(ngModel)]="item.name" type="text"
                                                 placeholder="add a name" class="form-control" />
                                         </td>
-                                        <td class="text-primary">                                            
-                                            <a (click)="saveItem(item)" mat-raised-button
-                                                type="button" class="btn btn-success">
-                                                Save
-                                            </a>
-                                            <a [routerLink]="['/playlists', item.id]" mat-raised-button
-                                                type="button" class="btn btn-info">
-                                                View Details
-                                            </a>
+                                        <td class="text-primary">  
                                             <a (click)="deleteUser(item.id)" mat-raised-button type="button"
                                                 class="btn btn-danger">
-                                                Delete
+                                                Remove
                                             </a>
                                         </td>
                                     </tr>
                                     
                                     <tr>
                                         <td>
-                                            <input [(ngModel)]="newItem.name" type="text"
+                                            <input type="text"
                                                 placeholder="add a name" class="form-control"
                                                 id="addItem" />
                                         </td>
                                         <td>
-                                            <a (click)="addNewItem()"
+                                            <a
                                                 class="btn btn-fill btn-warning">Add New</a>
                                         </td>
                                     </tr>
