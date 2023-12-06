@@ -28,6 +28,7 @@ import { DeviceListComponent } from 'app/device-list/device-list.component';
 import { MediaListComponent } from 'app/media-list/media-list.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { PlaylistsComponent } from 'app/playlists/playlists.component';
+import { PlaylistComponent } from 'app/playlist-details/playlist-details.component';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { PlaylistsComponent } from 'app/playlists/playlists.component';
     DeviceAuthComponent,
     DeviceListComponent,
     MediaListComponent,
-    PlaylistsComponent
+    PlaylistsComponent,
+    PlaylistComponent
   ],
   providers: [AuthService, GuardPermissionsService]
 })

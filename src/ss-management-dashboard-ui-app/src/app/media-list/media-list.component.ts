@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MediaAssetModel } from 'app/models/media-asset-response.model';
+import { PlaylistModel } from 'app/models/playlist-response.model';
 import { AuthService } from 'app/services/auth.service';
 import { MediaService } from 'app/services/media.service';
+import { PlaylistService } from 'app/services/playlist.service';
 
 @Component({
   selector: 'app-media-list',
@@ -11,16 +13,40 @@ import { MediaService } from 'app/services/media.service';
 export class MediaListComponent implements OnInit {
 
   listData: MediaAssetModel[] = null;
+  playlists: PlaylistModel[] = [];
 
-  constructor(private dataService: MediaService, private authService: AuthService) { }
+  constructor(
+    private dataService: MediaService, 
+    private authService: AuthService,
+    private playlistService: PlaylistService) { }
 
   ngOnInit() {
     this.fetchListData();
+    this.fetchPlaylists();
   }
 
   IsVideoAsset(assetType: number): boolean
   {
     return assetType == 2; // 1= image, 2=video 
+  }
+
+  fetchPlaylists()
+  {
+    this.playlistService.fetchPlaylists().subscribe(
+      {
+        next: (data) => this.playlists = data,
+        error: (e) => {
+          if(e.status == 401) 
+          {
+            this.authService.redirectToLogin(true);
+          }
+          else
+          {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
   }
 
   fetchListData(){

@@ -26,6 +26,9 @@
                                         Name
                                     </th>
                                     <th>
+                                        Select PlayList
+                                    </th>
+                                    <th>
 
                                     </th>
                                 </thead>
@@ -44,6 +47,15 @@
                                         </td>
                                         <td>
                                             {{item.name}}
+                                        </td>
+                                        <td>
+                                            <div>You can optionally add this media to a playlist</div>
+                                            <div>
+                                                <select class="form-control">
+                                                    <option value="">Select playlist</option>
+                                                    <option *ngFor="let pl of playlists" [value]="pl.id">{{pl.name}}</option>
+                                                </select>
+                                            </div>
                                         </td>
                                         <td class="text-primary">
                                             <a (click)="deleteMedia(item.id)" mat-raised-button type="button"

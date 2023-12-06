@@ -1,0 +1,14 @@
+.duration-input
+{
+    width: 45px;
+}
+.separator
+{
+    font-weight: bolder;
+    font-size: 20px;
+    margin: 5px;
+}
+.duration-label
+{
+    margin-right: 10px;;
+}

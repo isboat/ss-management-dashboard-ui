@@ -17,6 +17,8 @@ export class PlaylistsComponent implements OnInit {
     modifiedDate: null,
     id: '',
     tenantId: '',
+    assetIds: [],
+    itemDuration: ''
   };
 
   constructor(private playlistService: PlaylistService, private authService: AuthService) { }

@@ -1,11 +1,41 @@
-<div class="main-content">
+<div class="main-content" *ngIf="data">
     <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title ">Information</h4>
+                        <p class="card-category"> Duration informaiton</p>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Playlist name</label>
+                                <input type="text" [(ngModel)]="data.name" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
+                            </div>
+                            <div class="form-group">
+                                <label class="duration-label" for="exampleInputhh">Each Media Duration : </label>
+                                <input id="plHr" min="0" max="24" type="number" placeholder="00" class="duration-input"
+                                    id="exampleInputhh" placeholder="HH">
+                                <span class="separator">:</span>
+                                <input id="plMin" min="0" max="60" type="number" placeholder="00" class="duration-input"
+                                    id="exampleInputmm" placeholder="mm">
+                                <span class="separator">:</span>
+                                <input id="plSec" min="0" max="60" type="number" placeholder="00" class="duration-input"
+                                    id="exampleInputsec" placeholder="ss">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-danger">
-                        <h4 class="card-title ">Playlist</h4>
-                        <p class="card-category"> The list of playlist items</p>
+                        <h4 class="card-title ">Playlist Media Items</h4>
+                        <p class="card-category"> Media assets of the playlist below</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -14,38 +44,48 @@
                                     <th>
                                         Name
                                     </th>
-                                    <th>
-
-                                    </th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of data.assetItems; index as i; first as isFirst">
                                         <td>
-                                            <input [(ngModel)]="item.name" type="text"
-                                                placeholder="add a name" class="form-control" />
+                                            <div>{{item.name}}</div>
                                         </td>
-                                        <td class="text-primary">  
-                                            <a (click)="deleteUser(item.id)" mat-raised-button type="button"
+                                        <td class="text-primary">
+                                            <a (click)="removeMediaAsset(item.id)" mat-raised-button type="button"
                                                 class="btn btn-danger">
                                                 Remove
                                             </a>
                                         </td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <td>
-                                            <input type="text"
-                                                placeholder="add a name" class="form-control"
-                                                id="addItem" />
-                                        </td>
-                                        <td>
-                                            <a
-                                                class="btn btn-fill btn-warning">Add New</a>
+                                            <div>Add new media asset to the playlist items from below dropdown</div>
+                                            <select class="custom-select" (change)="onMediaSelect($event)">
+                                                <option value="">Select media asset</option>
+                                                <option *ngFor="let med of mediaAssets" value="{{med.id}}">{{med.name}}
+                                                </option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title ">Save Latest Changes</h4>
+                        <p class="card-category">Save the changes you have made.</p>
+                    </div>
+                    <div class="card-body">
+                        <button (click)="saveChanges()" class="btn btn-success">Save Changes</button>
                     </div>
                 </div>
             </div>

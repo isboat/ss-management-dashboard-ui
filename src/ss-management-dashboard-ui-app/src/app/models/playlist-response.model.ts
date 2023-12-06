@@ -7,14 +7,18 @@ export class PlaylistModel
     id: string;
     tenantId: string;
     name: string;
+    assetIds: string[];
+    itemDuration: any;
 }
 
-export class PlaylistWithItemsModel
+export class DurationSpan 
 {
-    created: string;
-    modifiedDate: string;
-    id: string;
-    tenantId: string;
-    name: string;
+    hours: string
+    minutes: string
+    seconds: string
+}
+
+export class PlaylistWithItemsModel extends PlaylistModel
+{
     assetItems: MediaAssetModel[]
 }

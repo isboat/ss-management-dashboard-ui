@@ -3,6 +3,8 @@ import { PlaylistModel, PlaylistWithItemsModel } from 'app/models/playlist-respo
 import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 import { ActivatedRoute } from '@angular/router';
+import { MediaService } from 'app/services/media.service';
+import { MediaAssetModel } from 'app/models/media-asset-response.model';
 
 @Component({
   selector: 'app-playlist-details',
@@ -13,9 +15,16 @@ export class PlaylistComponent implements OnInit {
   id: string;
   private sub: any;
   data: PlaylistWithItemsModel = null
+  mediaAssets: MediaAssetModel[] = [];
 
-  constructor(private playlistService: PlaylistService, private authService: AuthService,
-    private route: ActivatedRoute) { }
+  hrPart = 0;
+  minPart = 0;
+  secPart = 0;
+
+  constructor(private playlistService: PlaylistService, private mediaService: MediaService, private authService: AuthService,
+    private route: ActivatedRoute) {
+      this.fetchMedias();
+    }
 
   ngOnInit() {
     this.fetchData();
@@ -25,24 +34,85 @@ export class PlaylistComponent implements OnInit {
     });
   }
 
+  splitDataDurations()
+  {
+    if(!this.data || !this.data.itemDuration) return;
+    const splits = this.data.itemDuration.split(':')
+    if(splits.length !== 3) return;
+
+    this.hrPart = parseInt(splits[0]);
+    this.minPart = parseInt(splits[1]);
+    this.secPart = parseInt(splits[2]);
+  }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
-  saveItem(item: PlaylistModel)
+  formatDurPart(part)
   {
-    if(item)
+    return part ? (part < 10 ? '0' + part : part) : '00';
+  }
+  saveChanges()
+  {
+    this.data.itemDuration = `${this.formatDurPart(this.hrPart)}:${this.formatDurPart(this.minPart)}:${this.formatDurPart(this.secPart)}`;
+
+    this.playlistService.save(this.data).subscribe(
+      {
+        next: () => {},
+        error: (e) => {
+          if (e.status == 401) {
+            this.authService.redirectToLogin(true);
+          }
+          else {
+            console.log(e)
+          }
+        }
+      });
+  }
+
+  onMediaSelect(evt)
+  {
+    var id = evt.target.value;
+    if(!id) return;
+
+    var exist = this.data?.assetIds?.indexOf(id) > -1;
+    if(!exist) 
     {
-      this.playlistService.save(item).subscribe(
+      if(!this.data?.assetIds) this.data.assetIds = []
+      this.data.assetIds.push(id);
+      var asset = this.mediaAssets.find(x => x.id == id);
+      if(!this.data?.assetItems) this.data.assetItems = [];
+      if(asset) this.data.assetItems.push(asset);
+    }
+  }
+
+  removeMediaAsset(id: string)
+  {
+    if(!id) return;
+
+    var index = this.data?.assetIds?.indexOf(id);
+    if(index < 0) return;
+    this.data.assetIds.splice(index, 1);
+    var assetIndex = this.data.assetItems.findIndex(x => x.id == id);
+
+    if(assetIndex > -1) this.data.assetItems.splice(assetIndex, 1)
+  }
+
+  fetchData() {
+    if (this.id) {
+      this.playlistService.fetchDetails(this.id).subscribe(
         {
-          next: (data) => {},
+          next: (data) => 
+          {
+            this.data = data;
+            this.splitDataDurations();
+          },
           error: (e) => {
-            if(e.status == 401) 
-            {
+            if (e.status == 401) {
               this.authService.redirectToLogin(true);
             }
-            else
-            {
+            else {
               console.log(e)
             }
           }
@@ -50,20 +120,21 @@ export class PlaylistComponent implements OnInit {
     }
   }
 
-  fetchData(){
-    this.playlistService.fetchDetails(this.id).subscribe(
+  fetchMedias()
+  {
+    this.mediaService.fetchMediaAssets().subscribe(
       {
-        next: (data) => this.data = data,
+        next: (data) => {
+          this.mediaAssets = data;
+        },
         error: (e) => {
-          if(e.status == 401) 
-          {
+          if (e.status == 401) {
             this.authService.redirectToLogin(true);
           }
-          else
-          {
+          else {
             console.log(e)
           }
         }
       });
- }
+  }
 }
