@@ -26,6 +26,13 @@ export class MediaService {
     );
   }
 
+  addMediaToPlaylist(mediaId: string, playlistId: string): Observable<any>  {
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/media-assets/' + mediaId + '/playlist/' + playlistId,
+      { responseType: 'json' }
+    );
+  }
+
   deleteMedia(id: string): Observable<any> {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/media-assets/' + id,

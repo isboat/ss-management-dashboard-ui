@@ -30,6 +30,64 @@ export class MediaListComponent implements OnInit {
     return assetType == 2; // 1= image, 2=video 
   }
 
+  playlistContainMediaIds(pl: PlaylistModel, mediaId: string): boolean
+  {
+    if(!pl.assetIds || !mediaId) return false;
+    return pl.assetIds.indexOf(mediaId) > -1;
+  }
+
+  updatePlaylist(evt: any, mediaId: string) {
+    const playlistId = evt.target.value;
+    if(!playlistId || !mediaId) return;
+
+    if(playlistId == "none")
+    {
+      this.removeMediaPlaylist(mediaId)
+    }
+    else
+    {
+      this.addMediaToPlaylist(mediaId, playlistId)
+    }
+
+  }
+
+  addMediaToPlaylist(mediaId, playlistId)
+  {
+    this.dataService.addMediaToPlaylist(mediaId, playlistId).subscribe(
+      {
+        next: () => {},
+        error: (e) => {
+          if(e.status == 401) 
+          {
+            this.authService.redirectToLogin(true);
+          }
+          else
+          {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
+  }
+  removeMediaPlaylist(mediaId: string)
+  {
+    // this.dataService.addMediaToPlaylist(mediaId, "").subscribe(
+    //   {
+    //     next: () => {},
+    //     error: (e) => {
+    //       if(e.status == 401) 
+    //       {
+    //         this.authService.redirectToLogin(true);
+    //       }
+    //       else
+    //       {
+    //         console.log(e)
+    //       }
+    //     },
+    //     complete: () => console.info('complete')
+    //   });
+  }
+
   fetchPlaylists()
   {
     this.playlistService.fetchPlaylists().subscribe(

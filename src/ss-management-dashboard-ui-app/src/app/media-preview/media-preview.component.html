@@ -1,0 +1,17 @@
+<ng-template [ngIf]="data">
+    <div>
+        <div class="asset-media" #mediaEle>
+            <video *ngIf="isVideoMedia(data.type)" [src]="data.assetUrl" autoplay muted loop oncanplay="this.play()"
+                onloadedmetadata="this.muted = true" width="200px">
+                Your device browser does not support the video tag.
+            </video>
+            <img *ngIf="!isVideoMedia(data.type)" [src]="data.assetUrl" width="200px" />
+        </div>
+    </div>
+</ng-template>
+
+<ng-template [ngIf]="!data">
+    <div>
+        No data
+    </div>
+</ng-template>

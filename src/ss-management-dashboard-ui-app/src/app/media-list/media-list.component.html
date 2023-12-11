@@ -51,9 +51,13 @@
                                         <td>
                                             <div>You can optionally add this media to a playlist</div>
                                             <div>
-                                                <select class="form-control">
+                                                <select class="form-control" (change)="updatePlaylist($event, item.id)">
                                                     <option value="">Select playlist</option>
-                                                    <option *ngFor="let pl of playlists" [value]="pl.id">{{pl.name}}</option>
+                                                    <option value="none">None (No playlist</option>
+                                                    <option *ngFor="let pl of playlists" 
+                                                        [value]="pl.id"
+                                                        [selected]="playlistContainMediaIds(pl, item.id)">{{pl.name}}
+                                                    </option>
                                                 </select>
                                             </div>
                                         </td>
