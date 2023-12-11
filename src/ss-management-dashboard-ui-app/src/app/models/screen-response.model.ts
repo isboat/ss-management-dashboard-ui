@@ -7,6 +7,7 @@ export class ScreenModel
     displayName: string;
     menuEntityId: string;
     mediaAssetEntityId: string;
+    playlistId: string;
     externalMediaSource: string;
     textEditorData: string;
     layout: LayoutModel

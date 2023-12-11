@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PlaylistModel } from 'app/models/playlist-response.model';
+import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 
@@ -21,7 +22,7 @@ export class PlaylistsComponent implements OnInit {
     itemDuration: ''
   };
 
-  constructor(private playlistService: PlaylistService, private authService: AuthService) { }
+  constructor(private playlistService: PlaylistService, private authService: AuthService, private notificationService: NotificationsService) { }
 
   ngOnInit() {
     this.fetchListData();
@@ -58,7 +59,7 @@ export class PlaylistsComponent implements OnInit {
     {
       this.playlistService.save(item).subscribe(
         {
-          next: (data) => {},
+          next: (data) => { this.notificationService.showSuccess("SAVED!")},
           error: (e) => {
             if(e.status == 401) 
             {

@@ -4,6 +4,7 @@ import { DeviceService } from 'app/services/device.service';
 import { DeviceModel } from 'app/models/device-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { DataService } from 'app/services/data.service';
+import { NotificationsService } from 'app/notifications';
 
 @Component({
   selector: 'app-device-list',
@@ -20,7 +21,8 @@ export class DeviceListComponent implements OnInit {
   constructor(
     private deviceService: DeviceService,
     private dataService: DataService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private notificationService: NotificationsService) { }
 
   ngOnInit() {
     this.fetchListData();
@@ -59,10 +61,12 @@ export class DeviceListComponent implements OnInit {
       });
   }
 
-  update(id: string, name: string) {
-    this.deviceService.updateName(id, name).subscribe(
+  update(device: DeviceModel) {
+    if(!device) return;
+
+    this.deviceService.updateName(device.id, device.deviceName).subscribe(
       {
-        next: (data) => {},//this.listData = data,
+        next: (data) => { device.editName = false;},
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
@@ -91,7 +95,7 @@ export class DeviceListComponent implements OnInit {
     if (selection) {
       this.deviceService.updateScreen(selection.deviceId, selection.screenId).subscribe(
         {
-          next: (data) => {},
+          next: (data) => { this.notificationService.showSuccess("Successfully set screen to device")},
           error: (e) => {
             if (e.status == 401) {
               this.authService.redirectToLogin(true);

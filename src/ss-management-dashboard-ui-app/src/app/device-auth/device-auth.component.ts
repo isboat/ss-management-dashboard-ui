@@ -33,7 +33,7 @@ export class DeviceAuthComponent implements OnInit {
     const partTwo = this.deviceAuthForm.get('partTwo').value;
     const partThree = this.deviceAuthForm.get('partThree').value;
     if (!partOne || !partTwo || !partThree) {
-      this.notification.showWarning("Enter all part of the code");
+      this.notification.showWarning("Enter all parts of the code");
       return;
     }
     const data: DeviceAuthRequestModel = { userCode: `${partOne}-${partTwo}-${partThree}` };
@@ -58,7 +58,7 @@ export class DeviceAuthComponent implements OnInit {
             default:
               break;
           }
-          if (message) this.notification.showWarning(message)
+          if (message) this.notification.showError(message)
         }
       },
       complete: () => console.info('complete')

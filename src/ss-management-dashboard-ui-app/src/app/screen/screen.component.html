@@ -44,24 +44,19 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="card">
-                    <div class="card-header card-header-info">
-                        <h3 class="card-title">Media Asset</h3>
-                        <p class="card-category">Handcrafted by our friend
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">External Media Source</h3>
+                        <p class="card-category">You can paste url/link for a media, you want to play on this screen.
+                            E.g youtube link
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <select class="custom-select" id="templateSelector" (change)="onMediaChange($event)">
-                            <option>Choose...</option>
-                            <option *ngFor="let media of mediaAssets; index as i;"
-                                [selected]="media.id == data.mediaAssetEntityId" value="{{media.id}}">
-                                {{media.name}}
-                            </option>
-                        </select>
-                        <div>
-                            <a [routerLink]="['/media-upload']" mat-raised-button type="button"
-                                class="btn btn-info">Upload New Media</a>
-                        </div>
+                        <p>
+                            <input type="text" class="form-control" id="displayNameInput" placeholder="youtube link"
+                                [(ngModel)]="data.externalMediaSource">
+                        </p>
                     </div>
                 </div>
             </div>
@@ -73,7 +68,7 @@
                             look on the TV
                         </p>
                     </div>
-                    <div class="card-body" *ngIf="data">
+                    <div class="card-body" *ngIf="data && templates">
                         <div class="input-group mb-3 text-info">
                             <select class="custom-select" id="templateSelector" (change)="onTemplateChange($event)">
                                 <option>Choose Layout Design...</option>
@@ -105,6 +100,27 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="card" *ngIf="SelectedTemplateHasMedia">
+                    <div class="card-header card-header-info">
+                        <h3 class="card-title">Media Asset</h3>
+                        <p class="card-category">Handcrafted by our friend
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <select class="custom-select" id="templateSelector" (change)="onMediaChange($event)">
+                            <option>Choose...</option>
+                            <option *ngFor="let media of mediaAssets; index as i;"
+                                [selected]="media.id == data.mediaAssetEntityId" value="{{media.id}}">
+                                {{media.name}}
+                            </option>
+                        </select>
+                        <div>
+                            <a [routerLink]="['/media-upload']" mat-raised-button type="button"
+                                class="btn btn-info">Upload New Media</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card" *ngIf="data?.layout?.templateKey == 'Text'">
                     <div class="card-header card-header-warning">
                         <h3 class="card-title">Text Editor</h3>
@@ -118,18 +134,21 @@
                             [(ngModel)]="data.textEditorData"></ckeditor>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header card-header-warning">
-                        <h3 class="card-title">External Media Source</h3>
-                        <p class="card-category">You can paste url/link for a media, you want to play on this screen.
-                            E.g youtube link
+                
+                <div class="card" *ngIf="data?.layout?.templateKey == 'MediaPlaylist'">
+                    <div class="card-header card-header-info">
+                        <h3 class="card-title">Playlist Selection</h3>
+                        <p class="card-category">Please select the playlist to use on this screen
                         </p>
                     </div>
-                    <div class="card-body" *ngIf="data">
-                        <p>
-                            <input type="text" class="form-control" id="displayNameInput" placeholder="youtube link"
-                                [(ngModel)]="data.externalMediaSource">
-                        </p>
+                    <div class="card-body" *ngIf="playlists">
+                        <select class="custom-select" (change)="onPlaylistChange($event)">
+                            <option>Choose...</option>
+                            <option *ngFor="let pl of playlists; index as i;"
+                                [selected]="pl.id == data.playlistId" value="{{pl.id}}">
+                                {{pl.name}}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -179,12 +198,14 @@
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <div class="modal-body">
-                                                <div><p>Please select which TV device/screen to publish to.</p></div>
+                                            <div class="modal-body" *ngIf="data && devices">
+                                                <div>
+                                                    <p>Please select which TV device/screen to publish to.</p>
+                                                </div>
                                                 <form>
                                                     <div class="form-group">
-                                                        <label for="templateSelector"
-                                                            class="col-form-label">Select Device</label>
+                                                        <label for="templateSelector" class="col-form-label">Select
+                                                            Device</label>
                                                         <select class="custom-select" id="templateSelector"
                                                             (change)="onTvScreenChange($event)">
                                                             <option value="none">None</option>

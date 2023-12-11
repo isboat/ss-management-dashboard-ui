@@ -5,4 +5,6 @@ export class DeviceModel
     id: string;
     tenantId: string;
     screenId: string;
+
+    editName: boolean // Just ui property - it's ignored in BE
 }

@@ -42,7 +42,11 @@ export class MediaListComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      this.removeMediaPlaylist(mediaId)
+      var playlist = this.playlists.find(x => x.assetIds.indexOf(mediaId) > -1);
+      if(playlist)
+      {
+        this.removeMediaPlaylist(mediaId, playlist.id)
+      }
     }
     else
     {
@@ -69,23 +73,23 @@ export class MediaListComponent implements OnInit {
         complete: () => console.info('complete')
       });
   }
-  removeMediaPlaylist(mediaId: string)
+  removeMediaPlaylist(mediaId: string, playlistId: string)
   {
-    // this.dataService.addMediaToPlaylist(mediaId, "").subscribe(
-    //   {
-    //     next: () => {},
-    //     error: (e) => {
-    //       if(e.status == 401) 
-    //       {
-    //         this.authService.redirectToLogin(true);
-    //       }
-    //       else
-    //       {
-    //         console.log(e)
-    //       }
-    //     },
-    //     complete: () => console.info('complete')
-    //   });
+    this.dataService.removeMediaPlaylist(mediaId, playlistId).subscribe(
+      {
+        next: () => {},
+        error: (e) => {
+          if(e.status == 401) 
+          {
+            this.authService.redirectToLogin(true);
+          }
+          else
+          {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
   }
 
   fetchPlaylists()

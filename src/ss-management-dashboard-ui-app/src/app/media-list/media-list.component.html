@@ -3,73 +3,174 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Media Assets</h4>
-                        <p class="card-category"> The list of all media assets</p>
-                        <p class="card-category">
-                            <a [routerLink]="['/media-new']" mat-raised-button type="button" class="btn btn-info">Upload
-                                New Media</a>
-                            <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button type="button"
-                                class="btn btn-warning">Generate AI Image</a>
-                            <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button type="button"
-                                class="btn btn-info">External Media +</a>
-                        </p>
+                    <div class="card-header card-header-tabs card-header-primary">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <span class="nav-tabs-title">TABS:</span>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                    <li class="nav-item">
+                                        <a mat-button class="nav-link active" href="#uploadedmedia" data-toggle="tab">
+                                            <i class="material-icons">perm_media</i> Media Assets
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a mat-button class="nav-link" href="#externalmedia" data-toggle="tab">
+                                            <i class="material-icons">cloud</i> External Media +
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class=" text-primary">
-                                    <th>
-                                        #
-                                    </th>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Select PlayList
-                                    </th>
-                                    <th>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="uploadedmedia">
+                                <p class="card-category"> The list of all media assets</p>
+                                <p class="card-category">
+                                    <a [routerLink]="['/media-new']" mat-raised-button type="button"
+                                        class="btn btn-info">Upload
+                                        New Media</a>
+                                    <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button
+                                        type="button" class="btn btn-warning">Generate AI Image</a>
+                                </p>
 
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of listData; index as i; first as isFirst">
-                                        <td>
-                                            <div>
-                                                <img *ngIf="!IsVideoAsset(item.type)" [src]="item.assetUrl"
-                                                    width="150px" />
-                                                <video *ngIf="IsVideoAsset(item.type)" width="320" height="240"
-                                                    controls>
-                                                    <source [src]="item.assetUrl" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {{item.name}}
-                                        </td>
-                                        <td>
-                                            <div>You can optionally add this media to a playlist</div>
-                                            <div>
-                                                <select class="form-control" (change)="updatePlaylist($event, item.id)">
-                                                    <option value="">Select playlist</option>
-                                                    <option value="none">None (No playlist</option>
-                                                    <option *ngFor="let pl of playlists" 
-                                                        [value]="pl.id"
-                                                        [selected]="playlistContainMediaIds(pl, item.id)">{{pl.name}}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td class="text-primary">
-                                            <a (click)="deleteMedia(item.id)" mat-raised-button type="button"
-                                                class="btn btn-danger">
-                                                Delete
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class=" text-primary">
+                                            <th>
+                                                #
+                                            </th>
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                Select PlayList
+                                            </th>
+                                            <th>
+
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of listData; index as i; first as isFirst">
+                                                <td>
+                                                    <div>
+                                                        <media-preview [data]="item"></media-preview>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {{item.name}}
+                                                </td>
+                                                <td>
+                                                    <div>You can optionally add this media to a playlist</div>
+                                                    <div>
+                                                        <select class="form-control"
+                                                            (change)="updatePlaylist($event, item.id)">
+                                                            <option value="none">Select playlist</option>
+                                                            <option *ngFor="let pl of playlists" [value]="pl.id"
+                                                                [selected]="playlistContainMediaIds(pl, item.id)">
+                                                                {{pl.name}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="text-primary">
+                                                    <a (click)="deleteMedia(item.id)" mat-raised-button type="button"
+                                                        class="btn btn-danger">
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="externalmedia">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        <span class="form-check-sign">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button type="button" matTooltip="Edit Task"
+                                                    [matTooltipPosition]="'above'"
+                                                    class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button mat-raised-button type="button" matTooltip="Remove"
+                                                    [matTooltipPosition]="'above'"
+                                                    class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                            checked>
+                                                        <span class="form-check-sign">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Flooded: One year later, assessing what was lost and what was found when
+                                                a ravaging rain swept through metro Detroit
+                                            </td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button type="button" matTooltip="Edit Task"
+                                                    [matTooltipPosition]="'above'"
+                                                    class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button mat-raised-button type="button" matTooltip="Remove"
+                                                    [matTooltipPosition]="'above'"
+                                                    class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                            checked>
+                                                        <span class="form-check-sign">
+                                                            <span class="check"></span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Sign contract for "What are conference organizers afraid of?"</td>
+                                            <td class="td-actions text-right">
+                                                <button mat-raised-button type="button" matTooltip="Edit Task"
+                                                    [matTooltipPosition]="'above'"
+                                                    class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">edit</i>
+                                                </button>
+                                                <button mat-raised-button type="button" matTooltip="Remove"
+                                                    [matTooltipPosition]="'above'"
+                                                    class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

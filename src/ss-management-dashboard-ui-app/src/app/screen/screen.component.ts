@@ -13,6 +13,8 @@ import { MenuService } from 'app/services/menu.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { DeviceService } from 'app/services/device.service';
 import { DeviceModel } from 'app/models/device-response.model';
+import { PlaylistService } from 'app/services/playlist.service';
+import { PlaylistModel } from 'app/models/playlist-response.model';
 @Component({
   selector: 'app-screen',
   templateUrl: './screen.component.html',
@@ -28,6 +30,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   menus: MenuModel[] = [];
   mediaAssets: MediaAssetModel[] = [];
   devices: DeviceModel[] = [];
+  playlists: PlaylistModel[] = [];
 
   selectedTemplate: TemplateModel = null;
   selectedSubTemplate: SubtypeTemplate = null;
@@ -42,6 +45,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     private mediaService: MediaService,
     private authService: AuthService,
     private deviceService: DeviceService,
+    private playlistService: PlaylistService,
     private route: ActivatedRoute) { }
 
   goToPreviewSite() {
@@ -94,17 +98,38 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  onPlaylistChange(evt: any) {
+    const newKey = evt.target.value;
+    this.playlists.forEach((value, index) => {
+      if (value.id == newKey) {
+        this.data.playlistId = value.id;
+      }
+    });
+  }
+
   ngOnInit() {
 
     this.fetchTemplates();
     this.fetchMenus();
     this.fetchMediaAssets();
     this.fetchDevices();
+    this.fetchPlaylists();
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
     });
+  }
+
+  get SelectedTemplateHasMedia(): boolean
+  {
+    if(!this.data || !this.data.layout || !this.data.layout.templateKey) return false;
+    
+    // we not looking for MediaPlaylist
+    if(this.data?.layout?.templateKey?.indexOf('MediaPlaylist') > -1) return false;
+
+    // any template with media in it.
+    return this.data?.layout?.templateKey?.indexOf('Media') > -1;
   }
 
   ngOnDestroy() {
@@ -173,24 +198,37 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  fetchPlaylists() {
+    this.playlistService.fetchPlaylists().subscribe({
+      next: (data) => {
+        this.playlists = data
+      },
+      error: (e) => {
+        if (e.status == 401) this.authService.redirectToLogin(true);
+      },
+      complete: () => console.info('complete')
+    });
+  }
+
   publishScreenUpdates() {
-    this.saveScreenUpdates(true);
-    this.dataService.publishScreen(this.data.id).subscribe(
-      {
-        next: () => {
-          this.notification.showSuccess("PUBLISHED..")
-          this.linkToDevice();
-        },
-        error: (e) => {
-          if (e.status == 401) {
-            this.authService.redirectToLogin(true);
-          }
-          else {
-            console.log(e)
-          }
-        },
-        complete: () => console.info('complete')
-      });
+    this.saveScreenUpdates(true, () => {
+      this.dataService.publishScreen(this.data.id).subscribe(
+        {
+          next: () => {
+            this.notification.showSuccess("PUBLISHED..")
+            this.linkToDevice();
+          },
+          error: (e) => {
+            if (e.status == 401) {
+              this.authService.redirectToLogin(true);
+            }
+            else {
+              console.log(e)
+            }
+          },
+          complete: () => console.info('complete')
+        })
+    });
   }
 
   linkToDevice() {
@@ -223,13 +261,15 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  saveScreenUpdates(hidePostAction?: boolean) {
+  saveScreenUpdates(hidePostAction?: boolean, callbkFunc?: Function) {
     this.dataService.updateScreen(this.data).subscribe(
       {
         next: () => {
           if (!hidePostAction) {
             this.notification.showSuccess("SAVED..")
           }
+
+          if (callbkFunc) callbkFunc();
         },
         error: (e) => {
           if (e.status == 401) {
