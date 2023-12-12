@@ -30,6 +30,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { PlaylistsComponent } from 'app/playlists/playlists.component';
 import { PlaylistComponent } from 'app/playlist-details/playlist-details.component';
 import { MediaPreviewComponent } from 'app/media-preview/media-preview.component';
+import { HelpSupportComponent } from 'app/help-support/help-support.component';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { MediaPreviewComponent } from 'app/media-preview/media-preview.component
     MediaListComponent,
     PlaylistsComponent,
     PlaylistComponent,
-    MediaPreviewComponent
+    MediaPreviewComponent,
+    HelpSupportComponent
   ],
   providers: [AuthService, GuardPermissionsService]
 })

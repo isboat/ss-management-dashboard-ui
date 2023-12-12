@@ -13,11 +13,11 @@ export const ROUTES: RouteInfo[] = [
     { path: '/screens', title: 'Screen List',  icon:'content_paste', class: '' },
     { path: '/menus', title: 'Menu List',  icon:'content_paste', class: '' },
     { path: '/users', title: 'User List',  icon:'person', class: '' },
-    { path: '/devices', title: 'TV Screen Apps',  icon:'person', class: '' },
+    { path: '/devices', title: 'TV Screen Apps',  icon:'queue_play_next', class: '' },
     { path: '/device/auth', title: 'TV Client App Setup',  icon:'video_label', class: '' },
-    { path: '/media-list', title: 'Media Assets',  icon:'content_paste', class: '' },
-    { path: '/playlists', title: 'Playlists',  icon:'content_paste', class: '' },
-    { path: '/help-and-support', title: 'Help and Support',  icon:'content_paste', class: '' },
+    { path: '/media-list', title: 'Media Assets',  icon:'play_circle', class: '' },
+    { path: '/playlists', title: 'Playlists',  icon:'playlist_add_check', class: '' },
+    { path: '/help-and-support', title: 'Help and Support',  icon:'help', class: '' },
     { path: '/login', title: 'Login',  icon:'person', class: '' },
 ];
 

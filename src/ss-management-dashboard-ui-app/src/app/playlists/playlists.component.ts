@@ -19,7 +19,8 @@ export class PlaylistsComponent implements OnInit {
     id: '',
     tenantId: '',
     assetIds: [],
-    itemDuration: ''
+    itemDuration: '00:00:00',
+    editName: false
   };
 
   constructor(private playlistService: PlaylistService, private authService: AuthService, private notificationService: NotificationsService) { }

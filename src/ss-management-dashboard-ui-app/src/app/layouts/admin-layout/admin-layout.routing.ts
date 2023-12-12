@@ -18,6 +18,7 @@ import { DeviceListComponent } from 'app/device-list/device-list.component';
 import { MediaListComponent } from 'app/media-list/media-list.component';
 import { PlaylistsComponent } from 'app/playlists/playlists.component';
 import { PlaylistComponent } from 'app/playlist-details/playlist-details.component';
+import { HelpSupportComponent } from 'app/help-support/help-support.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -36,5 +37,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'devices',     component: DeviceListComponent, canActivate: [canActivateUserRoute] },
     { path: 'playlists',     component: PlaylistsComponent, canActivate: [canActivateUserRoute] },
     { path: 'playlists/:id',     component: PlaylistComponent, canActivate: [canActivateUserRoute] },
+    { path: 'help-and-support',     component: HelpSupportComponent, canActivate: [canActivateUserRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
 ];

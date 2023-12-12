@@ -9,6 +9,8 @@ export class PlaylistModel
     name: string;
     assetIds: string[];
     itemDuration: any;
+
+    editName: boolean
 }
 
 export class DurationSpan 

@@ -11,6 +11,8 @@ export class ScreenModel
     externalMediaSource: string;
     textEditorData: string;
     layout: LayoutModel
+
+    editName: boolean; // ui property
 }
 
 export class LayoutModel
