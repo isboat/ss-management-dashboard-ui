@@ -50,7 +50,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
       name: '',
       description: '',
       price: '0',
-      title: '',
+      discountPrice: '',
       iconUrl: ''
     }
   }
@@ -61,7 +61,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   }
 
   addItemToList() {
-    if(!this.itemToAdd.title || !this.itemToAdd.name || !this.itemToAdd.price) return;
+    if(!this.itemToAdd.name || !this.itemToAdd.price) return;
     this.data.menuItems.push(this.itemToAdd);
     this.resetItemToAdd();
   }

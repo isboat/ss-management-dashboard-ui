@@ -11,7 +11,7 @@ declare interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
     { path: '/dashboard', title: 'Dashboard',  icon: 'dashboard', class: '' },
     { path: '/screens', title: 'Screen List',  icon:'content_paste', class: '' },
-    { path: '/menus', title: 'Menu List',  icon:'content_paste', class: '' },
+    { path: '/menus', title: 'Menu List',  icon:'restaurant_menu', class: '' },
     { path: '/users', title: 'User List',  icon:'person', class: '' },
     { path: '/devices', title: 'TV Screen Apps',  icon:'queue_play_next', class: '' },
     { path: '/device/auth', title: 'TV Client App Setup',  icon:'video_label', class: '' },

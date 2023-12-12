@@ -32,7 +32,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Example textarea</label>
+                                    <label for="exampleFormControlTextarea1">Description</label>
                                     <textarea class="form-control" [(ngModel)]="data.description"
                                         id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
@@ -46,8 +46,6 @@
                         <div class="card">
                             <div class="card-header card-header-danger">
                                 <h4 class="card-title">Menu items</h4>
-                                <p class="card-category">Are you looking for more components? Please check our Premium
-                                    Version of Material Dashboard Angular.</p>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive table-upgrade">
@@ -55,8 +53,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Title</th>
                                                 <th>Price</th>
+                                                <th>Discount Price (Optional)</th>
                                                 <th>Description</th>
                                                 <th class="text-center"></th>
                                             </tr>
@@ -68,12 +66,12 @@
                                                         placeholder="add a name" class="form-control"/>
                                                 </td>
                                                 <td>
-                                                    <input [(ngModel)]="item.title" type="text"
-                                                        placeholder="add a title" class="form-control" />
-                                                </td>
-                                                <td>
                                                     <input [(ngModel)]="item.price" type="text"
                                                         placeholder="add a price" class="form-control" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="item.discountPrice" type="text"
+                                                        placeholder="add a discount price" class="form-control" />
                                                 </td>
                                                 <td>
                                                     <textarea class="form-control" [(ngModel)]="item.description" cols="50" rows="3"></textarea>
@@ -88,14 +86,14 @@
                                                         id="addItemName" />
                                                 </td>
                                                 <td>
-                                                    <input [(ngModel)]="itemToAdd.title" type="text"
-                                                        placeholder="add a title" class="form-control"
-                                                        id="addItemTitle" />
-                                                </td>
-                                                <td>
                                                     <input [(ngModel)]="itemToAdd.price" type="text"
                                                         placeholder="add a price" class="form-control"
                                                         id="addItemPrice" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="itemToAdd.discountPrice" type="text"
+                                                        placeholder="add a discount price" class="form-control"
+                                                        id="discountPrice" />
                                                 </td>
                                                 <td>
                                                     <input [(ngModel)]="itemToAdd.description" type="text"

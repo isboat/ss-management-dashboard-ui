@@ -15,7 +15,7 @@ export class MenuItemModel
     id: string;
     name: string;
     description: string;
-    title: string;
     price: string;
+    discountPrice: string;
     iconUrl: string;
 }
