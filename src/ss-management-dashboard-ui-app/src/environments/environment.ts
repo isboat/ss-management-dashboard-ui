@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://localhost:7140/api',
+  apiBaseUrl: 'http://myscreen123service.runasp.net/api' // 'https://localhost:7140/api',
 };
