@@ -107,7 +107,6 @@ export class DeviceListComponent implements OnInit {
           complete: () => console.info('complete')
         });
     }
-    console.log(this.tmpScreenSelection);
   }
 
   deleteDevice(deviceId: string) {
@@ -116,6 +115,7 @@ export class DeviceListComponent implements OnInit {
         {
           next: (data) => {
             this.listData = this.listData.filter(x => x.id != deviceId)
+            this.notificationService.showSuccess("Successfully deleted device")
           },
           error: (e) => {
             if (e.status == 401) {
@@ -128,7 +128,6 @@ export class DeviceListComponent implements OnInit {
           complete: () => console.info('complete')
         });
     }
-    console.log(this.tmpScreenSelection);
   }
 
 }

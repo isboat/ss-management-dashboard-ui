@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
 import { NotificationsService } from 'app/notifications';
+import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
@@ -19,19 +21,40 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   data: MenuModel = null;
 
   currencies: string[] = ["£", "$"]
+  mediaImageAssets: MediaAssetModel[] = []
 
   itemToAdd: MenuItemModel = null;
 
-  constructor(private dataService: MenuService, private route: ActivatedRoute, private notificationService: NotificationsService) { }
+  constructor(
+    private dataService: MenuService, 
+    private route: ActivatedRoute, 
+    private mediaService: MediaService,
+    private notificationService: NotificationsService) { }
 
   ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
+      this.fetchMediaAssets();
     });
 
     this.resetItemToAdd();
+  }
+
+  onMenuIconMediaChange(evt: any) {
+    const newCur = evt.target.value;
+    if(newCur == "none")
+    {
+      this.data.iconUrl = "";
+      return;
+    }
+
+    this.mediaImageAssets.forEach((item, index) => {
+      if (item.assetUrl == newCur) {
+        this.data.iconUrl = item.assetUrl;
+      }
+    });
   }
 
   onMenuCurrencyChange(evt: any) {
@@ -88,6 +111,21 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
         this.data = data
         if (!data.menuItems) {
           data.menuItems = []
+        }
+      },
+      error: (e) => {
+        if (e.status == 401) console.log("ERORR HERE:" + e)
+      },
+      complete: () => console.info('complete')
+    });
+  }
+
+  fetchMediaAssets() {
+    this.mediaService.fetchMediaAssets().subscribe({
+      next: (data) => {
+        if(data)
+        {
+          this.mediaImageAssets = data.filter(x => x.type == 1); // image is 1
         }
       },
       error: (e) => {

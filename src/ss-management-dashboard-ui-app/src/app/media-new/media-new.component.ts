@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'app/services/auth.service';
 import { MediaService } from 'app/services/media.service';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationsService } from 'app/notifications';
 
 @Component({
   selector: 'app-media-new',
@@ -15,7 +16,11 @@ export class MediaNewComponent implements OnInit {
   desc = '';
   aiFlag: boolean = false;
 
-  constructor(private media: MediaService, private authService: AuthService, private router: ActivatedRoute) {
+  constructor(
+    private media: MediaService, 
+    private authService: AuthService, 
+    private router: ActivatedRoute,
+    private notificationService: NotificationsService) {
   }
 
   ngOnInit() {
@@ -30,7 +35,7 @@ export class MediaNewComponent implements OnInit {
   }
   postNew() {
     if (!this.title || !this.desc) {
-      alert("Add title and a short description")
+      this.notificationService.showWarning("Add title and a short description")
       return;
     }
 
@@ -50,13 +55,14 @@ export class MediaNewComponent implements OnInit {
     upload$.subscribe(
       {
         next: () => {
-          // success
+          this.notificationService.showSuccess(this.aiFlag ? "Successfully generated AI media" : "Successfully uploaded media.")
         },
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
           }
           else {
+            this.notificationService.showError("Error occurred while uploading/generating media.")
             console.log(e)
           }
         },

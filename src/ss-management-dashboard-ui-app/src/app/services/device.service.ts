@@ -39,7 +39,7 @@ export class DeviceService {
 
   deleteScreen(deviceId: string): Observable<any>  {
     return this.http.delete<any>(
-      environment.apiBaseUrl + `/v1/tenant/devices/${deviceId}}`,
+      environment.apiBaseUrl + `/v1/tenant/devices/${deviceId}`,
       { responseType: 'json' }
     );
   }

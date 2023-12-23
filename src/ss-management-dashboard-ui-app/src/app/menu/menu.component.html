@@ -36,6 +36,18 @@
                                     <textarea class="form-control" [(ngModel)]="data.description"
                                         id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Icon Image</label>
+                                    <select class="form-control" id="templateSelector"
+                                        (change)="onMenuIconMediaChange($event)">
+                                        <option>Choose...</option>
+                                        <option value="none">None</option>
+                                        <option *ngFor="let item of mediaImageAssets; index as i;"
+                                            [selected]="item.assetUrl == data.iconUrl" value="{{item.assetUrl}}">
+                                            {{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
