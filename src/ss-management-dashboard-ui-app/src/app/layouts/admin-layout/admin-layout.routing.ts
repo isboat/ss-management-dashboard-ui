@@ -19,6 +19,7 @@ import { MediaListComponent } from 'app/media-list/media-list.component';
 import { PlaylistsComponent } from 'app/playlists/playlists.component';
 import { PlaylistComponent } from 'app/playlist-details/playlist-details.component';
 import { HelpSupportComponent } from 'app/help-support/help-support.component';
+import { MediaDetailsComponent } from 'app/media-details/media-details.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -30,6 +31,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'menu-details/:id',     component: MenuDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'media-new',     component: MediaNewComponent, canActivate: [canActivateRoute] },
     { path: 'media-list',     component: MediaListComponent, canActivate: [canActivateRoute] },
+    { path: 'media-details/:id',     component: MediaDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'users',     component: UserListComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },

@@ -60,7 +60,9 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    {{item.name}}
+                                                    <a [routerLink]="['/media-details', item.id]">
+                                                        {{item.name}}
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <div>You can optionally add this media to a playlist</div>

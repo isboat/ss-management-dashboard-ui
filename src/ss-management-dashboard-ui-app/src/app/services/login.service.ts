@@ -14,18 +14,12 @@ export class LoginService {
 
   constructor(private http: HttpClient, private localStorage: LocalStorageService, private router: Router) { }
 
-  public login(username: string, password: string): void {
-    this.loginRequest(username, password).subscribe((tokenResponse) => {
-      localStorage.setItem(this.tokenKey, tokenResponse.token);
-      this.router.navigate(['/']);
-    });
-  }
   public logout(): void {
     this.localStorage.remove(this.tokenKey);
     this.router.navigate(['/login']);
   }
 
-  private loginRequest(username: string, password: string): Observable<TokenResponse> {
+  public login(username: string, password: string): Observable<TokenResponse> {
     return this.http.post<TokenResponse>(
       environment.apiBaseUrl + '/authentication/login',
       {

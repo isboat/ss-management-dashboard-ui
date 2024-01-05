@@ -1,0 +1,61 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row" *ngIf="data">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <media-preview [data]="data" [previewWidth]="previewWidth"></media-preview>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>NAME: You can update media name</div>
+                        <div>
+                            <input [(ngModel)]="data.name" type="text" class="form-control" placeholder="Add Value"
+                                [disabled]="!data.editName">
+
+                            <button mat-raised-button type="button" matTooltip="Edit Name"
+                                [matTooltipPosition]="'above'" (click)="data.editName = true" [hidden]="data.editName"
+                                class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                <i class="material-icons">edit</i>
+                            </button>
+
+                            <button (click)="saveName()" mat-raised-button type="button" [hidden]="!data.editName"
+                                matTooltip="Click to save/update name" [matTooltipPosition]="'above'"
+                                class="btn btn-outline-success btn-link btn-sm btn-just-icon">
+                                <i class="material-icons">check_circle</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div>You can optionally add this media to a playlist</div>
+                        <div>
+                            <select class="form-control" (change)="updatePlaylist($event, data.id)">
+                                <option value="none">Select playlist</option>
+                                <option *ngFor="let pl of playlists" [value]="pl.id"
+                                    [selected]="playlistContainMediaIds(pl, data.id)">
+                                    {{pl.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <a (click)="deleteMedia(data.id)" mat-raised-button type="button" class="btn btn-danger">
+                                Delete Media
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -41,7 +41,8 @@
                                         </td>
                                         <td style="display: inline-flex;">
                                             <select class="form-control" (change)="onScreenChange($event, item.id)">
-                                                <option>Choose...</option>
+                                                <option value="">Choose...</option>
+                                                <option value="none">None</option>
                                                 <option *ngFor="let screen of screens; index as i;"
                                                     [selected]="screen.id == item.screenId" value="{{screen.id}}">
                                                     {{screen.displayName}}

@@ -68,14 +68,15 @@
                                                 <th>Price</th>
                                                 <th>Discount Price (Optional)</th>
                                                 <th>Description</th>
+                                                <th>Icon Image</th>
                                                 <th class="text-center"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of data.menuItems">
                                                 <td>
-                                                    <input [(ngModel)]="item.name" type="text"
-                                                        placeholder="add a name" class="form-control"/>
+                                                    <input [(ngModel)]="item.name" type="text" placeholder="add a name"
+                                                        class="form-control" />
                                                 </td>
                                                 <td>
                                                     <input [(ngModel)]="item.price" type="text"
@@ -86,7 +87,20 @@
                                                         placeholder="add a discount price" class="form-control" />
                                                 </td>
                                                 <td>
-                                                    <textarea class="form-control" [(ngModel)]="item.description" cols="50" rows="3"></textarea>
+                                                    <textarea class="form-control" [(ngModel)]="item.description"
+                                                        cols="50" rows="3"></textarea>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="tttemplateSelector"
+                                                        (change)="onMenuItemIconMediaChange($event, item)">
+                                                        <option>Choose...</option>
+                                                        <option value="none">None</option>
+                                                        <option *ngFor="let media of mediaImageAssets; index as i;"
+                                                            [selected]="media.assetUrl == item.iconUrl"
+                                                            value="{{media.assetUrl}}">
+                                                            {{media.name}}
+                                                        </option>
+                                                    </select>
                                                 </td>
                                                 <td class="text-center"><a (click)="deleteMenuItem(item.id)"
                                                         class="btn btn-round btn-fill btn-default">Delete</a></td>
@@ -111,6 +125,8 @@
                                                     <input [(ngModel)]="itemToAdd.description" type="text"
                                                         placeholder="add a description" class="form-control"
                                                         id="addItemdescription" />
+                                                </td>
+                                                <td>
                                                 </td>
                                                 <td class="text-center">
                                                     <a (click)="addItemToList()"

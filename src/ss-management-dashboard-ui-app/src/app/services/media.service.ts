@@ -18,6 +18,13 @@ export class MediaService {
     );
   }
 
+  fetchMediaAsset(id: string): Observable<MediaAssetModel>  {
+    return this.http.get<MediaAssetModel>(
+      environment.apiBaseUrl + '/v1/tenant/media-assets/' + id,
+      { responseType: 'json' }
+    );
+  }
+
   postNew(data: FormData): Observable<any>  {
     return this.http.post<any>(
       environment.apiBaseUrl + '/v1/tenant/media-assets/',
@@ -43,6 +50,13 @@ export class MediaService {
   deleteMedia(id: string): Observable<any> {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/media-assets/' + id,
+      { responseType: 'json' }
+    );
+  }
+
+  updateMediaName(id: string, name: string): Observable<any> {
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/media-assets/' + id + '/name/' + name,
       { responseType: 'json' }
     );
   }

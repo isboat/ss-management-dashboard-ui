@@ -9,10 +9,13 @@ import { MediaAssetModel } from 'app/models/media-asset-response.model';
 export class MediaPreviewComponent implements OnInit, OnDestroy {
   
   @Input() data: MediaAssetModel;
+  @Input() previewWidth: string;
 
+  mediaWidth: string = "200px";
   constructor() { }
 
   ngOnInit() {
+    if(this.previewWidth) this.mediaWidth = this.previewWidth;
   }
 
   ngOnDestroy() {

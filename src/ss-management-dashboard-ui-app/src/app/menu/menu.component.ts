@@ -57,6 +57,21 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  onMenuItemIconMediaChange(evt: any, menuItem: MenuItemModel) {
+    const newCur = evt.target.value;
+    if(newCur == "none")
+    {
+      menuItem.iconUrl = "";
+      return;
+    }
+
+    this.mediaImageAssets.forEach((item, index) => {
+      if (item.assetUrl == newCur) {
+        menuItem.iconUrl = item.assetUrl;
+      }
+    });
+  }
+
   onMenuCurrencyChange(evt: any) {
     const newCur = evt.target.value;
     this.currencies.forEach((value, index) => {
@@ -84,7 +99,11 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   }
 
   addItemToList() {
-    if(!this.itemToAdd.name || !this.itemToAdd.price) return;
+    if(!this.itemToAdd.name || !this.itemToAdd.price)
+    {
+      this.notificationService.showWarning("Fill at least the name and price fields")
+      return;
+    }
     this.data.menuItems.push(this.itemToAdd);
     this.resetItemToAdd();
   }

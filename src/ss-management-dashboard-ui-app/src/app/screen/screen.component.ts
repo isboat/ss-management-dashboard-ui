@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MediaAssetModel } from 'app/models/media-asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
-import { SubtypeTemplate, TemplateModel } from 'app/models/template-response.model';
+import { SubtypeTemplate, TemplateModel, TemplateProperty } from 'app/models/template-response.model';
 import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
@@ -55,14 +55,14 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   onTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
-    this.updateSelectedTemplate(newTemplateKey)
+    this.updateSelectedTemplate(newTemplateKey, true)
   }
-  updateSelectedTemplate(templateKey: string) {
+  updateSelectedTemplate(templateKey: string, updateVals: boolean) {
     this.templates.forEach((value, index) => {
       if (value.key == templateKey) {
         this.selectedTemplate = value;
         this.data.layout.templateKey = value.key;
-        this.data.layout.templateProperties = value.requiredProperties
+        if(updateVals) this.data.layout.templateProperties = value.requiredProperties
         this.subtypeTemplates = value.subTypes
         if (!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
       }
@@ -125,11 +125,12 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   {
     if(!this.data || !this.data.layout || !this.data.layout.templateKey) return false;
     
+    const templateKey = this.data?.layout?.templateKey;
     // we not looking for MediaPlaylist
-    if(this.data?.layout?.templateKey?.indexOf('MediaPlaylist') > -1) return false;
+    if(templateKey.indexOf('MediaPlaylist') > -1) return false;
 
     // any template with media in it.
-    return this.data?.layout?.templateKey?.indexOf('Media') > -1;
+    return templateKey.indexOf('MenuOverlay') > -1 || templateKey.indexOf('Media') > -1;
   }
 
   ngOnDestroy() {
@@ -141,7 +142,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.data = data
         if (this.data && this.data.layout && this.data.layout.templateKey) {
-          this.updateSelectedTemplate(this.data.layout.templateKey)
+          this.updateSelectedTemplate(this.data.layout.templateKey, false)
         }
       },
       error: (e) => {

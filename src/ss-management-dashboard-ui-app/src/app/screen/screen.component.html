@@ -10,8 +10,8 @@
                     </div>
                     <div class="card-body" *ngIf="data">
                         <p class="card-text">
-                            <input type="text" class="form-control edit-display-name" id="displayNameInput" placeholder="display name"
-                                [disabled]="!data.editName" [(ngModel)]="data.displayName">
+                            <input type="text" class="form-control edit-display-name" id="displayNameInput"
+                                placeholder="display name" [disabled]="!data.editName" [(ngModel)]="data.displayName">
 
                             <button mat-raised-button type="button" matTooltip="Edit display name"
                                 [matTooltipPosition]="'above'" (click)="data.editName = true" [hidden]="data.editName"
@@ -100,8 +100,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{prop.label}}</span>
                                 </div>
-                                <input [(ngModel)]="prop.value" type="text" class="form-control" placeholder="Add Value"
-                                    aria-label="add value" aria-describedby="basic-addon1">
+                                <input [(ngModel)]="prop.value" type="text" class="form-control"
+                                    placeholder="Add Value">
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                 <div class="card" *ngIf="SelectedTemplateHasMedia">
                     <div class="card-header card-header-info">
                         <h3 class="card-title">Media Asset</h3>
-                        <p class="card-category">Handcrafted by our friend
+                        <p class="card-category">Select one of the media asset to use.
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">

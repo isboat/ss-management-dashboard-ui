@@ -6,4 +6,6 @@ export class MediaAssetModel
     description: string;
     assetUrl: string;
     type: number;
+
+    editName: boolean
 }

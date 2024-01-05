@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'app/services/auth.service';
 import { MediaService } from 'app/services/media.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
 
 @Component({
@@ -19,12 +19,13 @@ export class MediaNewComponent implements OnInit {
   constructor(
     private media: MediaService, 
     private authService: AuthService, 
-    private router: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
     private notificationService: NotificationsService) {
   }
 
   ngOnInit() {
-    this.router.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.aiFlag = !!params["ai"];
     });
   }
@@ -54,8 +55,13 @@ export class MediaNewComponent implements OnInit {
 
     upload$.subscribe(
       {
-        next: () => {
-          this.notificationService.showSuccess(this.aiFlag ? "Successfully generated AI media" : "Successfully uploaded media.")
+        next: (data) => {
+          if(data) {
+            this.router.navigate(['/media-details', data.id]);
+          }
+          else{
+            this.notificationService.showError("Error occurred while uploading/generating media.")
+          }
         },
         error: (e) => {
           if (e.status == 401) {

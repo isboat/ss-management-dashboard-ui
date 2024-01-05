@@ -31,6 +31,7 @@ import { PlaylistsComponent } from 'app/playlists/playlists.component';
 import { PlaylistComponent } from 'app/playlist-details/playlist-details.component';
 import { MediaPreviewComponent } from 'app/media-preview/media-preview.component';
 import { HelpSupportComponent } from 'app/help-support/help-support.component';
+import { MediaDetailsComponent } from 'app/media-details/media-details.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { HelpSupportComponent } from 'app/help-support/help-support.component';
     MenuListComponent,
     MenuDetailsComponent,
     MediaNewComponent,
+    MediaDetailsComponent,
     UserListComponent,
     UserCreateComponent,
     UserDetailsComponent,

@@ -2,10 +2,10 @@
     <div>
         <div class="asset-media" #mediaEle>
             <video *ngIf="isVideoMedia(data.type)" [src]="data.assetUrl" autoplay muted loop oncanplay="this.play()"
-                onloadedmetadata="this.muted = true" width="200px">
+                onloadedmetadata="this.muted = true" [attr.width]="mediaWidth">
                 Your device browser does not support the video tag.
             </video>
-            <img *ngIf="!isVideoMedia(data.type)" [src]="data.assetUrl" width="200px" />
+            <img *ngIf="!isVideoMedia(data.type)" [src]="data.assetUrl" [attr.width]="mediaWidth" />
         </div>
     </div>
 </ng-template>
