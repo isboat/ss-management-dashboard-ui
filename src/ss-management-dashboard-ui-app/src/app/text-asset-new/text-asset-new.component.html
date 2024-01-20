@@ -1,0 +1,53 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h3 class="card-title">Create a new Text Asset</h3>
+                <p class="card-category">
+                    This can be used for ad, information, etc
+                </p>
+            </div>
+            <div class="card-body">
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="formtitle" class="form-label">Title</label>
+                            <input [(ngModel)]="title" class="form-control" type="text" id="formtitle">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Text / Information</label>
+                            <ckeditor [editor]="Editor"
+                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
+                                [(ngModel)]="desc"></ckeditor>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="bgColor" class="form-label">Background Color</label>
+                            <input [(ngModel)]="backgroundColor" class="form-control" type="text" id="bgColor">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="bgColor" class="form-label">Text Color</label>
+                            <input [(ngModel)]="textColor" class="form-control" type="text" id="bgColor">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <button (click)="this.postNew()" type="button" class="btn btn-primary mt-3">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

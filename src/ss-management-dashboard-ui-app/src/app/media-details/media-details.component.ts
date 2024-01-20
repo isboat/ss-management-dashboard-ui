@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MediaAssetModel } from 'app/models/media-asset-response.model';
+import { AssetModel } from 'app/models/asset-response.model';
 import { PlaylistModel } from 'app/models/playlist-response.model';
 import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
@@ -15,7 +15,7 @@ import { PlaylistService } from 'app/services/playlist.service';
 export class MediaDetailsComponent implements OnInit {
   id: string;
   private sub: any;
-  data: MediaAssetModel = null;
+  data: AssetModel = null;
   previewWidth: string = "500px";
   playlists: PlaylistModel[] = [];
 

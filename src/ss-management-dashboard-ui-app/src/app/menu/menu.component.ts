@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MediaAssetModel } from 'app/models/media-asset-response.model';
+import { AssetModel } from 'app/models/asset-response.model';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
 import { NotificationsService } from 'app/notifications';
 import { MediaService } from 'app/services/media.service';
@@ -21,7 +21,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   data: MenuModel = null;
 
   currencies: string[] = ["£", "$"]
-  mediaImageAssets: MediaAssetModel[] = []
+  mediaImageAssets: AssetModel[] = []
 
   itemToAdd: MenuItemModel = null;
 

@@ -114,25 +114,15 @@
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <select class="custom-select" id="templateSelector" (change)="onMediaChange($event)">
-                            <option>Choose...</option>
-                            <option *ngFor="let media of mediaAssets; index as i;"
-                                [selected]="media.id == data.mediaAssetEntityId" value="{{media.id}}">
-                                {{media.name}}
-                            </option>
-                        </select>
-                        <div>
-                            <a [routerLink]="['/media-upload']" mat-raised-button type="button"
-                                class="btn btn-info">Upload New Media</a>
-                        </div>
+                        <br />
+                        <media-preview *ngIf="data.mediaAssetEntityId" [data]="getScreenMedia()" [previewWidth]="previewWidth"></media-preview>
+                        <br />
+                        <media-dropdown [mediaAssets]="mediaAssets" (clickEmitter)="onMediaSelect($event)" ></media-dropdown>
                     </div>
                 </div>
                 <div class="card" *ngIf="data?.layout?.templateKey == 'Text'">
                     <div class="card-header card-header-warning">
                         <h3 class="card-title">Text Editor</h3>
-                        <p class="card-category">You can paste url/link for a media, you want to play on this screen.
-                            E.g youtube link
-                        </p>
                     </div>
                     <div class="card-body" *ngIf="data">
                         <ckeditor [editor]="Editor"

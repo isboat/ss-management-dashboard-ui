@@ -20,6 +20,9 @@ import { PlaylistsComponent } from 'app/playlists/playlists.component';
 import { PlaylistComponent } from 'app/playlist-details/playlist-details.component';
 import { HelpSupportComponent } from 'app/help-support/help-support.component';
 import { MediaDetailsComponent } from 'app/media-details/media-details.component';
+import { TextAssetNewComponent } from 'app/text-asset-new/text-asset-new.component';
+import { TextAssetListComponent } from 'app/text-asset-list/text-asset-list.component';
+import { TextAssetComponent } from 'app/text-asset/text-asset.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -31,7 +34,10 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'menu-details/:id',     component: MenuDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'media-new',     component: MediaNewComponent, canActivate: [canActivateRoute] },
     { path: 'media-list',     component: MediaListComponent, canActivate: [canActivateRoute] },
+    { path: 'text-asset-list',     component: TextAssetListComponent, canActivate: [canActivateRoute] },
     { path: 'media-details/:id',     component: MediaDetailsComponent, canActivate: [canActivateRoute] },
+    { path: 'text-asset-new',     component: TextAssetNewComponent, canActivate: [canActivateRoute] },
+    { path: 'text-asset',     component: TextAssetComponent, canActivate: [canActivateRoute] },
     { path: 'users',     component: UserListComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },

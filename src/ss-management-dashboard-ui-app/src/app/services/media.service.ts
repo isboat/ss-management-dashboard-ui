@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MediaAssetModel } from 'app/models/media-asset-response.model';
+import { AssetModel } from 'app/models/asset-response.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -11,15 +11,15 @@ export class MediaService {
 
   constructor(private http: HttpClient) { }
 
-  fetchMediaAssets(): Observable<MediaAssetModel[]>  {
-    return this.http.get<MediaAssetModel[]>(
+  fetchMediaAssets(): Observable<AssetModel[]>  {
+    return this.http.get<AssetModel[]>(
       environment.apiBaseUrl + '/v1/tenant/media-assets',
       { responseType: 'json' }
     );
   }
 
-  fetchMediaAsset(id: string): Observable<MediaAssetModel>  {
-    return this.http.get<MediaAssetModel>(
+  fetchMediaAsset(id: string): Observable<AssetModel>  {
+    return this.http.get<AssetModel>(
       environment.apiBaseUrl + '/v1/tenant/media-assets/' + id,
       { responseType: 'json' }
     );

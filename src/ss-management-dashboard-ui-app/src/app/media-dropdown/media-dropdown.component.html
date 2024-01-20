@@ -1,0 +1,25 @@
+<ng-template [ngIf]="mediaAssets">
+    <div>
+        <button class="btn btn-outline-info nav-link"
+            id="navbarDropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">Select media asset
+        </button>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+            <a (click)="onMediaSelect(med.id)"  class="dropdown-item" *ngFor="let med of mediaAssets" >
+
+                <video *ngIf="isVideoMedia(med.type)" [src]="med.assetUrl" autoplay muted loop oncanplay="this.play()"
+                onloadedmetadata="this.muted = true" width="50px">
+                    Your device browser does not support the video tag.
+                </video>
+                <img *ngIf="!isVideoMedia(med.type)" [src]="med.assetUrl"  width="50px"  [alt]="med.name" />
+            </a>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template [ngIf]="!mediaAssets">
+    <div>
+        No media assets
+    </div>
+</ng-template>

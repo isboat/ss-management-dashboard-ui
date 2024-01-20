@@ -19,11 +19,11 @@
                             <input id="plHr" [(ngModel)]="hrPart" min="0" max="24" type="number" placeholder="00"
                                 class="duration-input" id="exampleInputhh" placeholder="HH">
                             <span class="separator">:</span>
-                            <input id="plMin" [(ngModel)]="minPart" min="0" max="60" type="number" placeholder="00" class="duration-input"
-                                id="exampleInputmm" placeholder="mm">
+                            <input id="plMin" [(ngModel)]="minPart" min="0" max="60" type="number" placeholder="00"
+                                class="duration-input" id="exampleInputmm" placeholder="mm">
                             <span class="separator">:</span>
-                            <input id="plSec" [(ngModel)]="secPart" min="0" max="60" type="number" placeholder="00" class="duration-input"
-                                id="exampleInputsec" placeholder="ss">
+                            <input id="plSec" [(ngModel)]="secPart" min="0" max="60" type="number" placeholder="00"
+                                class="duration-input" id="exampleInputsec" placeholder="ss">
                         </div>
                     </div>
                 </div>
@@ -62,12 +62,10 @@
 
                                     <tr>
                                         <td>
+                                            <hr />
+                                            <hr />
                                             <div>Add new media asset to the playlist items from below dropdown</div>
-                                            <select class="custom-select" (change)="onMediaSelect($event)">
-                                                <option value="">Select media asset</option>
-                                                <option *ngFor="let med of mediaAssets" value="{{med.id}}">{{med.name}}
-                                                </option>
-                                            </select>
+                                            <media-dropdown [mediaAssets]="mediaAssets" (clickEmitter)="onMediaSelect($event)" ></media-dropdown>
                                         </td>
                                     </tr>
                                 </tbody>

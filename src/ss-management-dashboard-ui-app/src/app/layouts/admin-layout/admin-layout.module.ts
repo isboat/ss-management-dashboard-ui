@@ -32,6 +32,10 @@ import { PlaylistComponent } from 'app/playlist-details/playlist-details.compone
 import { MediaPreviewComponent } from 'app/media-preview/media-preview.component';
 import { HelpSupportComponent } from 'app/help-support/help-support.component';
 import { MediaDetailsComponent } from 'app/media-details/media-details.component';
+import { MediaDropdownComponent } from 'app/media-dropdown/media-dropdown.component';
+import { TextAssetNewComponent } from 'app/text-asset-new/text-asset-new.component';
+import { TextAssetListComponent } from 'app/text-asset-list/text-asset-list.component';
+import { TextAssetComponent } from 'app/text-asset/text-asset.component';
 
 @NgModule({
   imports: [
@@ -58,6 +62,9 @@ import { MediaDetailsComponent } from 'app/media-details/media-details.component
     MenuDetailsComponent,
     MediaNewComponent,
     MediaDetailsComponent,
+    TextAssetNewComponent,
+    TextAssetComponent,
+    TextAssetListComponent,
     UserListComponent,
     UserCreateComponent,
     UserDetailsComponent,
@@ -67,6 +74,7 @@ import { MediaDetailsComponent } from 'app/media-details/media-details.component
     PlaylistsComponent,
     PlaylistComponent,
     MediaPreviewComponent,
+    MediaDropdownComponent,
     HelpSupportComponent
   ],
   providers: [AuthService, GuardPermissionsService]

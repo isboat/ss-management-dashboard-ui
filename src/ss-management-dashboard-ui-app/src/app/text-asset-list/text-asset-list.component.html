@@ -1,0 +1,96 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-tabs card-header-primary">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <span class="nav-tabs-title">TABS:</span>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                    <li class="nav-item">
+                                        <a mat-button class="nav-link active" href="#listtextasset" data-toggle="tab">
+                                            <i class="material-icons">perm_media</i> Text Assets
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                    <!-- <li class="nav-item">
+                                        <a mat-button class="nav-link" href="#externalmedia" data-toggle="tab">
+                                            <i class="material-icons">cloud</i> External Media +
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="listtextasset">
+                                <p class="card-category"> The list of all text assets</p>
+                                <p class="card-category">
+                                    <a [routerLink]="['/text-asset-new']" mat-raised-button type="button"
+                                        class="btn btn-info">New Text</a>
+                                </p>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class=" text-primary">
+                                            <th>
+                                                #
+                                            </th>
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                Select PlayList
+                                            </th>
+                                            <th>
+
+                                            </th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of listData; index as i; first as isFirst">
+                                                <td>
+                                                    <div>
+                                                        <media-preview [data]="item"></media-preview>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a [routerLink]="['/text-asset-details', item.id]">
+                                                        {{item.name}}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div>You can optionally add this asset to a playlist</div>
+                                                    <div>
+                                                        <select class="form-control"
+                                                            (change)="updatePlaylist($event, item.id)">
+                                                            <option value="none">Select playlist</option>
+                                                            <option *ngFor="let pl of playlists" [value]="pl.id"
+                                                                [selected]="playlistContainTextIds(pl, item.id)">
+                                                                {{pl.name}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="text-primary">
+                                                    <a (click)="deleteText(item.id)" mat-raised-button type="button"
+                                                        class="btn btn-danger">
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="externalmedia">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MediaAssetModel } from 'app/models/media-asset-response.model';
+import { AssetModel } from 'app/models/asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { SubtypeTemplate, TemplateModel, TemplateProperty } from 'app/models/template-response.model';
@@ -28,7 +27,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   templates: TemplateModel[] = [];
   subtypeTemplates: SubtypeTemplate[] = [];
   menus: MenuModel[] = [];
-  mediaAssets: MediaAssetModel[] = [];
+  mediaAssets: AssetModel[] = [];
   devices: DeviceModel[] = [];
   playlists: PlaylistModel[] = [];
 
@@ -37,6 +36,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   selectedDeviceId: string = null;
 
   public Editor = ClassicEditor;
+  previewWidth: string = "200px";
 
   constructor(
     private dataService: DataService,
@@ -51,6 +51,11 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   goToPreviewSite() {
     this.saveScreenUpdates(true);
     window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
+  }
+
+  getScreenMedia(): AssetModel {
+    if(!this.data.mediaAssetEntityId) return null;
+    return this.mediaAssets.find(x => x.id == this.data.mediaAssetEntityId)
   }
 
   onTemplateChange(evt: any) {
@@ -89,8 +94,10 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
-  onMediaChange(evt: any) {
-    const newMenuKey = evt.target.value;
+  onMediaSelect(evt: any) {
+    const newMenuKey = evt.mediaId;
+    if(!newMenuKey) return;
+
     this.mediaAssets.forEach((value, index) => {
       if (value.id == newMenuKey) {
         this.data.mediaAssetEntityId = value.id;

@@ -1,4 +1,4 @@
-export class MediaAssetModel
+export class AssetModel
 {
     id: string;
     tenantId: string;

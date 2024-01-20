@@ -1,4 +1,4 @@
-import { MediaAssetModel } from "./media-asset-response.model";
+import { AssetModel } from "./asset-response.model";
 
 export class PlaylistModel
 {
@@ -22,5 +22,5 @@ export class DurationSpan
 
 export class PlaylistWithItemsModel extends PlaylistModel
 {
-    assetItems: MediaAssetModel[]
+    assetItems: AssetModel[]
 }

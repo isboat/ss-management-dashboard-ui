@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
-import { MediaAssetModel } from 'app/models/media-asset-response.model';
+import { AssetModel } from 'app/models/asset-response.model';
 
 @Component({
   selector: 'media-preview',
@@ -8,7 +8,7 @@ import { MediaAssetModel } from 'app/models/media-asset-response.model';
 })
 export class MediaPreviewComponent implements OnInit, OnDestroy {
   
-  @Input() data: MediaAssetModel;
+  @Input() data: AssetModel;
   @Input() previewWidth: string;
 
   mediaWidth: string = "200px";

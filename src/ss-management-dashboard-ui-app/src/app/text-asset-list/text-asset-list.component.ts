@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { AssetModel } from 'app/models/asset-response.model';
 import { PlaylistModel } from 'app/models/playlist-response.model';
 import { AuthService } from 'app/services/auth.service';
-import { MediaService } from 'app/services/media.service';
+import { TextAssetService } from 'app/services/text-asset.service';
 import { PlaylistService } from 'app/services/playlist.service';
+import { TextAssetModel } from 'app/models/text-asset-response.model';
 
 @Component({
-  selector: 'app-media-list',
-  templateUrl: './media-list.component.html',
-  styleUrls: ['./media-list.component.css']
+  selector: 'app-text-asset-list',
+  templateUrl: './text-asset-list.component.html',
+  styleUrls: ['./text-asset-list.component.css']
 })
-export class MediaListComponent implements OnInit {
+export class TextAssetListComponent implements OnInit {
 
-  listData: AssetModel[] = null;
+  listData: TextAssetModel[] = null;
   playlists: PlaylistModel[] = [];
 
   constructor(
-    private dataService: MediaService, 
+    private dataService: TextAssetService, 
     private authService: AuthService,
     private playlistService: PlaylistService) { }
 
@@ -25,39 +25,34 @@ export class MediaListComponent implements OnInit {
     this.fetchPlaylists();
   }
 
-  IsVideoAsset(assetType: number): boolean
+  playlistContainTextIds(pl: PlaylistModel, id: string): boolean
   {
-    return assetType == 2; // 1= image, 2=video 
+    if(!pl.assetIds || !id) return false;
+    return pl.assetIds.indexOf(id) > -1;
   }
 
-  playlistContainMediaIds(pl: PlaylistModel, mediaId: string): boolean
-  {
-    if(!pl.assetIds || !mediaId) return false;
-    return pl.assetIds.indexOf(mediaId) > -1;
-  }
-
-  updatePlaylist(evt: any, mediaId: string) {
+  updatePlaylist(evt: any, id: string) {
     const playlistId = evt.target.value;
-    if(!playlistId || !mediaId) return;
+    if(!playlistId || !id) return;
 
     if(playlistId == "none")
     {
-      var playlist = this.playlists.find(x => x.assetIds.indexOf(mediaId) > -1);
+      var playlist = this.playlists.find(x => x.assetIds.indexOf(id) > -1);
       if(playlist)
       {
-        this.removeMediaPlaylist(mediaId, playlist.id)
+        this.removeTextPlaylist(id, playlist.id)
       }
     }
     else
     {
-      this.addMediaToPlaylist(mediaId, playlistId)
+      this.addTextToPlaylist(id, playlistId)
     }
 
   }
 
-  addMediaToPlaylist(mediaId, playlistId)
+  addTextToPlaylist(id, playlistId)
   {
-    this.dataService.addMediaToPlaylist(mediaId, playlistId).subscribe(
+    this.dataService.addTextToPlaylist(id, playlistId).subscribe(
       {
         next: () => {},
         error: (e) => {
@@ -73,9 +68,10 @@ export class MediaListComponent implements OnInit {
         complete: () => console.info('complete')
       });
   }
-  removeMediaPlaylist(mediaId: string, playlistId: string)
+
+  removeTextPlaylist(id: string, playlistId: string)
   {
-    this.dataService.removeMediaPlaylist(mediaId, playlistId).subscribe(
+    this.dataService.removeTextPlaylist(id, playlistId).subscribe(
       {
         next: () => {},
         error: (e) => {
@@ -112,7 +108,7 @@ export class MediaListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchMediaAssets().subscribe(
+    this.dataService.fetchTextAssets().subscribe(
       {
         next: (data) => this.listData = data,
         error: (e) => {
@@ -129,9 +125,9 @@ export class MediaListComponent implements OnInit {
       });
  }
 
- deleteMedia(id: string)
+ deleteText(id: string)
  {
-  this.dataService.deleteMedia(id).subscribe(
+  this.dataService.deleteText(id).subscribe(
     {
       next: () => 
       {
