@@ -37,7 +37,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'text-asset-list',     component: TextAssetListComponent, canActivate: [canActivateRoute] },
     { path: 'media-details/:id',     component: MediaDetailsComponent, canActivate: [canActivateRoute] },
     { path: 'text-asset-new',     component: TextAssetNewComponent, canActivate: [canActivateRoute] },
-    { path: 'text-asset',     component: TextAssetComponent, canActivate: [canActivateRoute] },
+    { path: 'text-asset/:id',     component: TextAssetComponent, canActivate: [canActivateRoute] },
     { path: 'users',     component: UserListComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },

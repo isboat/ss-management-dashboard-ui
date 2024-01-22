@@ -122,12 +122,16 @@
                 </div>
                 <div class="card" *ngIf="data?.layout?.templateKey == 'Text'">
                     <div class="card-header card-header-warning">
-                        <h3 class="card-title">Text Editor</h3>
+                        <h3 class="card-title">AD Text/Information</h3>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <ckeditor [editor]="Editor"
-                            [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
-                            [(ngModel)]="data.textEditorData"></ckeditor>
+                        <select class="form-control" (change)="onTextAssetSelect($event)">
+                            <option value="none">Select Text Ad</option>
+                            <option *ngFor="let ta of textAssets" [value]="ta.id"
+                                [selected]="ta.id == data.textAssetEntityId">
+                                {{ta.name}}
+                            </option>
+                        </select>
                     </div>
                 </div>
 

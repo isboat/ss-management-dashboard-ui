@@ -8,5 +8,8 @@ export class TextAssetModel
     backgroundColor: string;
     textColor: string;
 
+    createdOn: string;
+    updatedOn: string;
+
     editName: boolean
 }

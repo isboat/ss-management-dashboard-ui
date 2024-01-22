@@ -13,6 +13,7 @@ import { TextAssetModel } from 'app/models/text-asset-response.model';
 })
 export class TextAssetComponent implements OnInit {
   id: string;
+  private sub: any;
   data: TextAssetModel = null;
   public Editor = ClassicEditor;
 
@@ -25,7 +26,7 @@ export class TextAssetComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
     });

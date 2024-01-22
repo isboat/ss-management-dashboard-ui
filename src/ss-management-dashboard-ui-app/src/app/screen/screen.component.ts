@@ -9,11 +9,12 @@ import { AuthService } from 'app/services/auth.service';
 import { DataService } from 'app/services/data.service';
 import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { DeviceService } from 'app/services/device.service';
 import { DeviceModel } from 'app/models/device-response.model';
 import { PlaylistService } from 'app/services/playlist.service';
 import { PlaylistModel } from 'app/models/playlist-response.model';
+import { TextAssetService } from 'app/services/text-asset.service';
+import { TextAssetModel } from 'app/models/text-asset-response.model';
 @Component({
   selector: 'app-screen',
   templateUrl: './screen.component.html',
@@ -28,6 +29,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   subtypeTemplates: SubtypeTemplate[] = [];
   menus: MenuModel[] = [];
   mediaAssets: AssetModel[] = [];
+  textAssets: TextAssetModel[] = [];
   devices: DeviceModel[] = [];
   playlists: PlaylistModel[] = [];
 
@@ -35,10 +37,10 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   selectedSubTemplate: SubtypeTemplate = null;
   selectedDeviceId: string = null;
 
-  public Editor = ClassicEditor;
   previewWidth: string = "200px";
 
   constructor(
+    private textAssetService: TextAssetService,
     private dataService: DataService,
     private notification: NotificationsService,
     private menuService: MenuService,
@@ -104,6 +106,16 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
+  onTextAssetSelect(evt: any) {
+    const newId = evt.target.value;
+    if(!newId) return;
+
+    this.textAssets.forEach((value, index) => {
+      if (value.id == newId) {
+        this.data.textAssetEntityId = value.id;
+      }
+    });
+  }
 
   onPlaylistChange(evt: any) {
     const newKey = evt.target.value;
@@ -121,6 +133,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.fetchMediaAssets();
     this.fetchDevices();
     this.fetchPlaylists();
+    this.fetchTextAssets();
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -203,6 +216,17 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         if (e.status == 401) this.authService.redirectToLogin(true);
       },
       complete: () => console.info('complete')
+    });
+  }
+
+  fetchTextAssets() {
+    this.textAssetService.fetchTextAssets().subscribe({
+      next: (data) => {
+        this.textAssets = data
+      },
+      error: (e) => {
+        if (e.status == 401) this.authService.redirectToLogin(true);
+      }
     });
   }
 

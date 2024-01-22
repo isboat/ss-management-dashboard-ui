@@ -37,9 +37,6 @@
                                     <table class="table">
                                         <thead class=" text-primary">
                                             <th>
-                                                #
-                                            </th>
-                                            <th>
                                                 Name
                                             </th>
                                             <th>
@@ -52,12 +49,7 @@
                                         <tbody>
                                             <tr *ngFor="let item of listData; index as i; first as isFirst">
                                                 <td>
-                                                    <div>
-                                                        <media-preview [data]="item"></media-preview>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a [routerLink]="['/text-asset-details', item.id]">
+                                                    <a [routerLink]="['/text-asset', item.id]">
                                                         {{item.name}}
                                                     </a>
                                                 </td>
