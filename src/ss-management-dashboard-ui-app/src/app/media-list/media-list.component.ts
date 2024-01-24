@@ -32,8 +32,8 @@ export class MediaListComponent implements OnInit {
 
   playlistContainMediaIds(pl: PlaylistModel, mediaId: string): boolean
   {
-    if(!pl.assetIds || !mediaId) return false;
-    return pl.assetIds.indexOf(mediaId) > -1;
+    if(!pl.itemIdAndTypePairs || !mediaId) return false;
+    return pl.itemIdAndTypePairs.findIndex(x => x.id == mediaId) > -1;
   }
 
   updatePlaylist(evt: any, mediaId: string) {
@@ -42,7 +42,7 @@ export class MediaListComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      var playlist = this.playlists.find(x => x.assetIds.indexOf(mediaId) > -1);
+      var playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id == mediaId) > -1);
       if(playlist)
       {
         this.removeMediaPlaylist(mediaId, playlist.id)

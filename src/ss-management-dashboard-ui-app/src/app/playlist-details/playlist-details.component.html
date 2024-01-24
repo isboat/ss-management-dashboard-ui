@@ -46,10 +46,14 @@
                                     <th></th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of data.assetItems; index as i; first as isFirst">
+                                    <tr *ngFor="let item of data.items; index as i; first as isFirst">
                                         <td>
-                                            <div>
+                                            <div *ngIf="item.playlistType == 0">
                                                 <media-preview [data]="item"></media-preview>
+                                            </div>
+
+                                            <div *ngIf="item.playlistType == 1">
+                                                <div>{{item.name}}</div>
                                             </div>
                                         </td>
                                         <td class="text-primary">

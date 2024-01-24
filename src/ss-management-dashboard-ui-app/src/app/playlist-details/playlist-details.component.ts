@@ -72,25 +72,28 @@ export class PlaylistComponent implements OnInit {
     let id = $event.mediaId;
     if (!id) return;
 
-    var exist = this.data?.assetIds?.indexOf(id) > -1;
+    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === id) > -1;
     if (!exist) {
-      if (!this.data?.assetIds) this.data.assetIds = []
-      this.data.assetIds.push(id);
+      if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
+      this.data.itemIdAndTypePairs.push({ itemType: 0, id: id});
+      
       var asset = this.mediaAssets.find(x => x.id == id);
-      if (!this.data?.assetItems) this.data.assetItems = [];
-      if (asset) this.data.assetItems.push(asset);
+      if (!this.data?.items) this.data.items = [];
+      if (asset) this.data.items.push(asset);
     }
   }
 
   removeMediaAsset(id: string) {
     if (!id) return;
 
-    var index = this.data?.assetIds?.indexOf(id);
+    var index = this.data?.itemIdAndTypePairs?.findIndex(x => x.id == id);
     if (index < 0) return;
-    this.data.assetIds.splice(index, 1);
-    var assetIndex = this.data.assetItems.findIndex(x => x.id == id);
 
-    if (assetIndex > -1) this.data.assetItems.splice(assetIndex, 1)
+    this.data.itemIdAndTypePairs.splice(index, 1);
+
+    var assetIndex = this.data.items.findIndex(x => x.id == id);
+
+    if (assetIndex > -1) this.data.items.splice(assetIndex, 1)
   }
 
   fetchData() {

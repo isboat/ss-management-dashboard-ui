@@ -7,10 +7,16 @@ export class PlaylistModel
     id: string;
     tenantId: string;
     name: string;
-    assetIds: string[];
+    itemIdAndTypePairs: PlaylistItemIdTypePair[];
     itemDuration: any;
 
     editName: boolean
+}
+
+export class PlaylistItemIdTypePair
+{
+    id: string;
+    itemType: number
 }
 
 export class DurationSpan 
@@ -22,5 +28,5 @@ export class DurationSpan
 
 export class PlaylistWithItemsModel extends PlaylistModel
 {
-    assetItems: AssetModel[]
+    items: any[]
 }

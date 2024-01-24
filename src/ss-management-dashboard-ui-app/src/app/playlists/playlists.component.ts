@@ -18,7 +18,7 @@ export class PlaylistsComponent implements OnInit {
     modifiedDate: null,
     id: '',
     tenantId: '',
-    assetIds: [],
+    itemIdAndTypePairs: [],
     itemDuration: '00:00:00',
     editName: false
   };

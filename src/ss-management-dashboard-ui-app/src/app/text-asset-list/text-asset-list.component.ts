@@ -27,8 +27,8 @@ export class TextAssetListComponent implements OnInit {
 
   playlistContainTextIds(pl: PlaylistModel, id: string): boolean
   {
-    if(!pl.assetIds || !id) return false;
-    return pl.assetIds.indexOf(id) > -1;
+    if(!pl.itemIdAndTypePairs || !id) return false;
+    return pl.itemIdAndTypePairs.findIndex(x => x.id === id) > -1;
   }
 
   updatePlaylist(evt: any, id: string) {
@@ -37,7 +37,7 @@ export class TextAssetListComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      var playlist = this.playlists.find(x => x.assetIds.indexOf(id) > -1);
+      var playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === id) > -1);
       if(playlist)
       {
         this.removeTextPlaylist(id, playlist.id)
