@@ -5,6 +5,9 @@ import { PlaylistService } from 'app/services/playlist.service';
 import { ActivatedRoute } from '@angular/router';
 import { MediaService } from 'app/services/media.service';
 import { AssetModel } from 'app/models/asset-response.model';
+import { TextAssetModel } from 'app/models/text-asset-response.model';
+import { TextAssetService } from 'app/services/text-asset.service';
+import { NotificationsService } from 'app/notifications';
 
 @Component({
   selector: 'app-playlist-details',
@@ -16,14 +19,21 @@ export class PlaylistComponent implements OnInit {
   private sub: any;
   data: PlaylistWithItemsModel = null
   mediaAssets: AssetModel[] = [];
+  textAssets: TextAssetModel[] = [];
 
   hrPart = 0;
   minPart = 0;
   secPart = 0;
 
-  constructor(private playlistService: PlaylistService, private mediaService: MediaService, private authService: AuthService,
+  constructor(
+    private notificationService: NotificationsService,
+    private textAssetService: TextAssetService,
+    private playlistService: PlaylistService,
+    private mediaService: MediaService,
+    private authService: AuthService,
     private route: ActivatedRoute) {
     this.fetchMedias();
+    this.fetchTextAssets();
   }
 
   ngOnInit() {
@@ -56,12 +66,13 @@ export class PlaylistComponent implements OnInit {
 
     this.playlistService.save(this.data).subscribe(
       {
-        next: () => { },
+        next: () => { this.notificationService.showSuccess("Saved!") },
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
           }
           else {
+            this.notificationService.showError("error occurred while saving!")
             console.log(e)
           }
         }
@@ -75,9 +86,23 @@ export class PlaylistComponent implements OnInit {
     var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === id) > -1;
     if (!exist) {
       if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
-      this.data.itemIdAndTypePairs.push({ itemType: 0, id: id});
-      
+      this.data.itemIdAndTypePairs.push({ itemType: 0, id: id }); // 0 is media type
+
       var asset = this.mediaAssets.find(x => x.id == id);
+      if (!this.data?.items) this.data.items = [];
+      if (asset) this.data.items.push(asset);
+    }
+  }
+  onTextAssetSelect($event) {
+    let id = $event.target.value;
+    if (!id) return;
+
+    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === id) > -1;
+    if (!exist) {
+      if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
+      this.data.itemIdAndTypePairs.push({ itemType: 1, id: id }); // 1 is Text type
+
+      var asset = this.textAssets.find(x => x.id == id);
       if (!this.data?.items) this.data.items = [];
       if (asset) this.data.items.push(asset);
     }
@@ -121,6 +146,23 @@ export class PlaylistComponent implements OnInit {
       {
         next: (data) => {
           this.mediaAssets = data;
+        },
+        error: (e) => {
+          if (e.status == 401) {
+            this.authService.redirectToLogin(true);
+          }
+          else {
+            console.log(e)
+          }
+        }
+      });
+  }
+
+  fetchTextAssets() {
+    this.textAssetService.fetchTextAssets().subscribe(
+      {
+        next: (data) => {
+          this.textAssets = data;
         },
         error: (e) => {
           if (e.status == 401) {

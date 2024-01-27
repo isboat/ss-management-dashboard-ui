@@ -40,11 +40,11 @@
                                             </a>
                                         </td>
                                         <td class="text-primary" style="text-align: right;">
-                                            <a (click)="publishScreen(screen.id)" mat-raised-button type="button"
+                                            <a *ngIf="isAdminUser" (click)="publishScreen(screen.id)" mat-raised-button type="button"
                                                 class="btn btn-success">
                                                 Publish
                                             </a>
-                                            <a (click)="deleteScreen(screen.id)" mat-raised-button type="button"
+                                            <a *ngIf="isAdminUser" (click)="deleteScreen(screen.id)" mat-raised-button type="button"
                                                 class="btn btn-danger">
                                                 Delete
                                             </a>

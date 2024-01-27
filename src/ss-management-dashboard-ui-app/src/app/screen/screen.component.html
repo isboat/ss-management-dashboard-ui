@@ -177,7 +177,7 @@
                                         Updates</a>
                                 </p>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" *ngIf="isAdminUser">
                                 <p class="card-category">Publish changes you've made to screen settings. </p>
                                 <p class="card-category">
                                     <button type="button" class="btn btn-round btn-fill btn-danger" data-toggle="modal"
@@ -222,7 +222,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                <button *ngIf="isAdminUser" type="button" class="btn btn-primary" data-dismiss="modal"
                                                     (click)="publishScreenUpdates()">Publish
                                                     changes</button>
                                             </div>

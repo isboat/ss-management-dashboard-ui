@@ -16,7 +16,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/devices', title: 'TV Screen Apps',  icon:'queue_play_next', class: '' },
     { path: '/device/auth', title: 'TV Client App Setup',  icon:'video_label', class: '' },
     { path: '/media-list', title: 'Media Assets',  icon:'play_circle', class: '' },
-    { path: '/text-asset-list', title: 'Text Assets',  icon:'play_circle', class: '' },
+    { path: '/text-asset-list', title: 'ADs / Information',  icon:'play_circle', class: '' },
     { path: '/playlists', title: 'Playlists',  icon:'playlist_add_check', class: '' },
     { path: '/help-and-support', title: 'Help and Support',  icon:'help', class: '' },
     { path: '/login', title: 'Login',  icon:'person', class: '' },

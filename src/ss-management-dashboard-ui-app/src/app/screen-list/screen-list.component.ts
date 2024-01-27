@@ -12,10 +12,14 @@ import { NotificationsService } from 'app/notifications';
 export class ScreenListComponent implements OnInit {
 
   listData: ScreenModel[] = null;
+  isAdminUser = false;
 
-  constructor(private dataService: DataService, private authService: AuthService, private notification: NotificationsService) { }
+  constructor(
+    private auth: AuthService,
+    private dataService: DataService, private authService: AuthService, private notification: NotificationsService) { }
 
   ngOnInit() {
+    this.isAdminUser = this.auth.isAdminUser();
     this.fetchListData();
   }
 

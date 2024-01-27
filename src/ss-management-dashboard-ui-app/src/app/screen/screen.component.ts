@@ -37,9 +37,12 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   selectedSubTemplate: SubtypeTemplate = null;
   selectedDeviceId: string = null;
 
+  isAdminUser = false;
+
   previewWidth: string = "200px";
 
   constructor(
+    private auth: AuthService,
     private textAssetService: TextAssetService,
     private dataService: DataService,
     private notification: NotificationsService,
@@ -127,6 +130,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.isAdminUser = this.auth.isAdminUser();
 
     this.fetchTemplates();
     this.fetchMenus();
