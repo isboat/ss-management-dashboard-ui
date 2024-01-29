@@ -15,8 +15,6 @@ import { PlaylistService } from 'app/services/playlist.service';
 import { PlaylistModel } from 'app/models/playlist-response.model';
 import { TextAssetService } from 'app/services/text-asset.service';
 import { TextAssetModel } from 'app/models/text-asset-response.model';
-import { HistoryService } from 'app/services/history.service';
-import { HistoryModel } from 'app/models/history-response.model';
 @Component({
   selector: 'app-screen',
   templateUrl: './screen.component.html',
@@ -34,7 +32,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   textAssets: TextAssetModel[] = [];
   devices: DeviceModel[] = [];
   playlists: PlaylistModel[] = [];
-  histories: HistoryModel[] = [];
 
   selectedTemplate: TemplateModel = null;
   selectedSubTemplate: SubtypeTemplate = null;
@@ -45,7 +42,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   previewWidth: string = "200px";
 
   constructor(
-    private historyService: HistoryService,
     private auth: AuthService,
     private textAssetService: TextAssetService,
     private dataService: DataService,
@@ -163,16 +159,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-  viewHistory() {
-    this.historyService.fetchDetails(this.id).subscribe({
-      next: (data) => {
-        this.histories = data
-      },
-      error: (e) => {
-        if (e.status == 401) this.authService.redirectToLogin(true);
-      }
-    });
   }
 
   fetchData() {
