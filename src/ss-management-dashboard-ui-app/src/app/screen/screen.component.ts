@@ -15,6 +15,8 @@ import { PlaylistService } from 'app/services/playlist.service';
 import { PlaylistModel } from 'app/models/playlist-response.model';
 import { TextAssetService } from 'app/services/text-asset.service';
 import { TextAssetModel } from 'app/models/text-asset-response.model';
+import { HistoryService } from 'app/services/history.service';
+import { HistoryModel } from 'app/models/history-response.model';
 @Component({
   selector: 'app-screen',
   templateUrl: './screen.component.html',
@@ -32,6 +34,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   textAssets: TextAssetModel[] = [];
   devices: DeviceModel[] = [];
   playlists: PlaylistModel[] = [];
+  histories: HistoryModel[] = [];
 
   selectedTemplate: TemplateModel = null;
   selectedSubTemplate: SubtypeTemplate = null;
@@ -42,6 +45,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   previewWidth: string = "200px";
 
   constructor(
+    private historyService: HistoryService,
     private auth: AuthService,
     private textAssetService: TextAssetService,
     private dataService: DataService,
@@ -59,7 +63,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   getScreenMedia(): AssetModel {
-    if(!this.data.mediaAssetEntityId) return null;
+    if (!this.data.mediaAssetEntityId) return null;
     return this.mediaAssets.find(x => x.id == this.data.mediaAssetEntityId)
   }
 
@@ -72,7 +76,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
       if (value.key == templateKey) {
         this.selectedTemplate = value;
         this.data.layout.templateKey = value.key;
-        if(updateVals) this.data.layout.templateProperties = value.requiredProperties
+        if (updateVals) this.data.layout.templateProperties = value.requiredProperties
         this.subtypeTemplates = value.subTypes
         if (!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
       }
@@ -101,7 +105,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
   onMediaSelect(evt: any) {
     const newMenuKey = evt.mediaId;
-    if(!newMenuKey) return;
+    if (!newMenuKey) return;
 
     this.mediaAssets.forEach((value, index) => {
       if (value.id == newMenuKey) {
@@ -111,7 +115,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
   onTextAssetSelect(evt: any) {
     const newId = evt.target.value;
-    if(!newId) return;
+    if (!newId) return;
 
     this.textAssets.forEach((value, index) => {
       if (value.id == newId) {
@@ -146,13 +150,12 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  get SelectedTemplateHasMedia(): boolean
-  {
-    if(!this.data || !this.data.layout || !this.data.layout.templateKey) return false;
-    
+  get SelectedTemplateHasMedia(): boolean {
+    if (!this.data || !this.data.layout || !this.data.layout.templateKey) return false;
+
     const templateKey = this.data?.layout?.templateKey;
     // we not looking for MediaPlaylist
-    if(templateKey.indexOf('MediaPlaylist') > -1) return false;
+    if (templateKey.indexOf('MediaPlaylist') > -1) return false;
 
     // any template with media in it.
     return templateKey.indexOf('MenuOverlay') > -1 || templateKey.indexOf('Media') > -1;
@@ -160,6 +163,16 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+  viewHistory() {
+    this.historyService.fetchDetails(this.id).subscribe({
+      next: (data) => {
+        this.histories = data
+      },
+      error: (e) => {
+        if (e.status == 401) this.authService.redirectToLogin(true);
+      }
+    });
   }
 
   fetchData() {
