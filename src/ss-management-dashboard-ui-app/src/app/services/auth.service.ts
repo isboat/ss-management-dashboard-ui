@@ -36,6 +36,23 @@ export class AuthService {
     }
   }
 
+  authUserEmail(): string {
+    try {
+      const token = this.getAuthorizationToken();
+      if(!token) return null;
+
+      var parts = token.split('.')
+      if(parts.length != 3) return null;
+
+      const str = Buffer.from(parts[1], 'base64').toString('utf8');
+      const parsedClaims = JSON.parse(str);
+      return parsedClaims["email"];
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   redirectToLogin(force?: boolean) {
     if(force) this.localStorage.remove(this.tokenKey);
     this.router.navigate(['/login']);

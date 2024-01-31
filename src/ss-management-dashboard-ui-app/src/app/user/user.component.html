@@ -1,31 +1,37 @@
 <div class="main-content">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row" *ngIf="allowToView">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header card-header-warning">
-                        <h3 class="card-title">Name</h3>
-                        <p class="card-category">Handcrafted by our friend
+                        <h3 class="card-title">User Details</h3>
+                        <p class="card-category">
+                            Below is the details of the user
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
                         <mat-form-field class="example-full-width">
                             <input matInput placeholder="Name" type="text" [(ngModel)]="data.name">
-                          </mat-form-field>
-                          <mat-form-field class="example-full-width">
-                              <input matInput placeholder="Name" type="email" [(ngModel)]="data.email">
-                            </mat-form-field>
-                          <mat-form-field class="example-full-width">
-                            <select matNativeControl  (change)="onRoleChange($event)">
-                              <option value="0">Editor</option>
-                              <option value="1">Admin</option>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Password" type="password" [(ngModel)]="data.password">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <select matNativeControl (change)="onRoleChange($event)">
+                                <option *ngFor="let item of rolesOption; index as i;" [selected]="item === data.role"
+                                    value="{{i}}">
+                                    {{item}}
+                                </option>
                             </select>
-                          </mat-form-field>
+                        </mat-form-field>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="allowToView">
             <div class="col-md-12">
 
                 <div class="card">
@@ -38,6 +44,20 @@
                         <p class="card-category">
                             <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-danger">Save Updates</a>
                         </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="!allowToView">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h3 class="card-title">Forbidden</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <p class="card-category">You are not allow to view this page. </p>
                     </div>
                 </div>
             </div>

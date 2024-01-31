@@ -15,6 +15,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   private sub: any;
 
   data: UserModel = null;
+  rolesOption: string[] = ["Editor", "Admin"]
+
+  isAdminUser = false;
 
   constructor(
     private dataService: UserService, 
@@ -27,7 +30,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
+
+      this.isAdminUser = this.authService.isAdminUser();
     });
+  }
+
+  get allowToView()
+  {
+    return this.isAdminUser || (this.data && this.authService.authUserEmail() === this.data?.email);
   }
   onRoleChange(evt: any) {
     const newRole = evt.target.value;

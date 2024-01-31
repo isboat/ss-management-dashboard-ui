@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserModel } from 'app/models/user-response.model';
-import { TemplateModel } from 'app/models/template-response.model';
-import { DataService } from 'app/services/data.service';
 import { AuthService } from 'app/services/auth.service';
 import { UserService } from 'app/services/user.service';
 
@@ -14,12 +12,7 @@ import { UserService } from 'app/services/user.service';
 })
 export class UserCreateComponent implements OnInit {
   id: string;
-  private sub: any;
-
   form: FormGroup;
-
-  data: UserModel = null;
-  templates: TemplateModel[] = [];
 
   constructor(
     private dataService: UserService,
@@ -44,6 +37,7 @@ export class UserCreateComponent implements OnInit {
     created: null,
     modifiedDate: null,
     tenantId: null,
+    password: null
   }
 
   this.dataService.createNewUser(data).subscribe({

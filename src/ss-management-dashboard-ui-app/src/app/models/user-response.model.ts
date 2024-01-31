@@ -6,5 +6,6 @@ export class UserModel
     tenantId: string;
     name: string;
     email: string;
+    password: string;
     role: number;
 }

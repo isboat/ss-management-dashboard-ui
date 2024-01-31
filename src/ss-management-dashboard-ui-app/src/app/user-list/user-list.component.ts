@@ -12,10 +12,14 @@ export class UserListComponent implements OnInit {
 
   listData: UserModel[] = null;
 
+  isAdminUser = false;
+
   constructor(private userService: UserService, private authService: AuthService) { }
 
   ngOnInit() {
     this.fetchListData();
+
+    this.isAdminUser = this.authService.isAdminUser();
   }
 
   fetchListData(){

@@ -5,7 +5,8 @@
       <div class="col-md-8">
         <div class="card">
           <div class="card-header card-header-danger">
-            <h4 class="card-title">User Create</h4>
+            <h4 class="card-title">User Create:</h4>
+            <small>Ask the user to login and reset their password!</small>
           </div>
           <div class="card-body">
             <form [formGroup]="form" (ngSubmit)="submit()">
@@ -26,8 +27,15 @@
               <div class="row">
                 <div class="col-md-6">
                   <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Temporary Password" type="text" value="Temporary!" [disabled]="true">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
                     <select matNativeControl formControlName="role">
-                      <option value="0">Editor</option>
+                      <option value="0" selected="true">Editor</option>
                       <option value="1">Admin</option>
                     </select>
                   </mat-form-field>
