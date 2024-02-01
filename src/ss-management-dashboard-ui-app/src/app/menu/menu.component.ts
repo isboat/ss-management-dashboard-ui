@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { appconstants } from 'app/helpers/constants';
 import { AssetModel } from 'app/models/asset-response.model';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
 import { NotificationsService } from 'app/notifications';
@@ -140,11 +141,12 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchMediaAssets() {
-    this.mediaService.fetchMediaAssets().subscribe({
+    this.mediaService.fetchMediaAssets(this.mediaImageAssets.length, appconstants.fetchLimit, 1).subscribe({
       next: (data) => {
         if(data)
         {
-          this.mediaImageAssets = data.filter(x => x.type == 1); // image is 1
+          const images = data.filter(x => x.type == 1); // image is 1
+          this.mediaImageAssets.push(...images)
         }
       },
       error: (e) => {

@@ -11,9 +11,13 @@ export class TextAssetService {
 
   constructor(private http: HttpClient) { }
 
-  fetchTextAssets(): Observable<TextAssetModel[]>  {
+  fetchTextAssets(skip?: number, limit?: number): Observable<TextAssetModel[]>  {
+    let url = environment.apiBaseUrl + '/v1/tenant/text-assets?';
+    if(skip) url += `skip=${skip}&`;
+    if(limit) url += `limit=${limit}`;
+
     return this.http.get<TextAssetModel[]>(
-      environment.apiBaseUrl + '/v1/tenant/text-assets',
+      url,
       { responseType: 'json' }
     );
   }

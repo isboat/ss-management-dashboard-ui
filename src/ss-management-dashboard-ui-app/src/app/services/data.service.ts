@@ -12,9 +12,13 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  fetchScreens(): Observable<ScreenModel[]>  {
+  fetchScreens(skip?: number, limit?: number): Observable<ScreenModel[]>  {
+    let url = environment.apiBaseUrl + '/v1/tenant/screens?';
+    if(skip) url += `skip=${skip}&`;
+    if(limit) url += `limit=${limit}`;
+
     return this.http.get<ScreenModel[]>(
-      environment.apiBaseUrl + '/v1/tenant/screens',
+      url,
       { responseType: 'json' }
     );
   }

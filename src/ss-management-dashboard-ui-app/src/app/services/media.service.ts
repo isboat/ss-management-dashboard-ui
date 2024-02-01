@@ -11,9 +11,14 @@ export class MediaService {
 
   constructor(private http: HttpClient) { }
 
-  fetchMediaAssets(): Observable<AssetModel[]>  {
+  fetchMediaAssets(skip?: number, limit?: number, assetType?: number): Observable<AssetModel[]>  {
+    let url = environment.apiBaseUrl + '/v1/tenant/media-assets?';
+    if(skip) url += `skip=${skip}&`;
+    if(limit) url += `limit=${limit}&`;
+    if(assetType) url += `assetType=${assetType}`;
+
     return this.http.get<AssetModel[]>(
-      environment.apiBaseUrl + '/v1/tenant/media-assets',
+       url,
       { responseType: 'json' }
     );
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { appconstants } from 'app/helpers/constants';
 import { MenuModel } from 'app/models/menu-response.model';
 import { AuthService } from 'app/services/auth.service';
 import { MenuService } from 'app/services/menu.service';
@@ -10,7 +11,7 @@ import { MenuService } from 'app/services/menu.service';
 })
 export class MenuListComponent implements OnInit {
 
-  listData: MenuModel[] = null;
+  listData: MenuModel[] = [];
 
   constructor(private dataService: MenuService, private authService: AuthService) { }
 
@@ -19,9 +20,9 @@ export class MenuListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchMenus().subscribe(
+    this.dataService.fetchMenus(this.listData.length, appconstants.fetchLimit).subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.push(...data),
         error: (e) => {
           if(e.status == 401) 
           {

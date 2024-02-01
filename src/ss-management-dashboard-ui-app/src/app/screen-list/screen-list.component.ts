@@ -3,6 +3,7 @@ import { ScreenModel } from 'app/models/screen-response.model';
 import { DataService } from 'app/services/data.service';
 import { AuthService } from 'app/services/auth.service';
 import { NotificationsService } from 'app/notifications';
+import { appconstants } from 'app/helpers/constants';
 
 @Component({
   selector: 'app-screen-list',
@@ -11,7 +12,7 @@ import { NotificationsService } from 'app/notifications';
 })
 export class ScreenListComponent implements OnInit {
 
-  listData: ScreenModel[] = null;
+  listData: ScreenModel[] = [];
   isAdminUser = false;
 
   constructor(
@@ -24,7 +25,7 @@ export class ScreenListComponent implements OnInit {
   }
 
   fetchListData() {
-    this.dataService.fetchScreens().subscribe(
+    this.dataService.fetchScreens(this.listData.length, appconstants.fetchLimit).subscribe(
       {
         next: (data) => this.listData = data,
         error: (e) => {

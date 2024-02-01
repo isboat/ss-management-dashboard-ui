@@ -12,8 +12,9 @@ import { TextAssetModel } from 'app/models/text-asset-response.model';
 })
 export class TextAssetListComponent implements OnInit {
 
-  listData: TextAssetModel[] = null;
+  listData: TextAssetModel[] = [];
   playlists: PlaylistModel[] = [];
+  fetchLimit: number = 20;
 
   constructor(
     private dataService: TextAssetService, 
@@ -108,9 +109,9 @@ export class TextAssetListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchTextAssets().subscribe(
+    this.dataService.fetchTextAssets(this.listData.length, this.fetchLimit).subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.push(...data),
         error: (e) => {
           if(e.status == 401) 
           {

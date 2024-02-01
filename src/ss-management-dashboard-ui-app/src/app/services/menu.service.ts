@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MenuModel } from 'app/models/menu-response.model';
-import { TemplateModel } from 'app/models/template-response.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 
@@ -12,9 +11,13 @@ export class MenuService {
 
   constructor(private http: HttpClient) { }
 
-  fetchMenus(): Observable<MenuModel[]> {
+  fetchMenus(skip?: number, limit?: number): Observable<MenuModel[]> {
+    let url = environment.apiBaseUrl + '/v1/tenant/menus?';
+    if(skip) url += `skip=${skip}&`;
+    if(limit) url += `limit=${limit}`;
+
     return this.http.get<MenuModel[]>(
-      environment.apiBaseUrl + '/v1/tenant/menus',
+      url,
       { responseType: 'json' }
     );
   }

@@ -12,8 +12,9 @@ import { PlaylistService } from 'app/services/playlist.service';
 })
 export class MediaListComponent implements OnInit {
 
-  listData: AssetModel[] = null;
+  listData: AssetModel[] = [];
   playlists: PlaylistModel[] = [];
+  fetchLimit: number = 20;
 
   constructor(
     private dataService: MediaService, 
@@ -112,9 +113,9 @@ export class MediaListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchMediaAssets().subscribe(
+    this.dataService.fetchMediaAssets(this.listData.length, this.fetchLimit).subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.push(...data),
         error: (e) => {
           if(e.status == 401) 
           {
