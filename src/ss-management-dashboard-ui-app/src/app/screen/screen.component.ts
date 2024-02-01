@@ -28,8 +28,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   templates: TemplateModel[] = [];
   subtypeTemplates: SubtypeTemplate[] = [];
   menus: MenuModel[] = [];
-  mediaAssets: AssetModel[] = [];
-  textAssets: TextAssetModel[] = [];
+  dataMediaAsset: AssetModel = null;
+  dataTextAsset: TextAssetModel = null;
   devices: DeviceModel[] = [];
   playlists: PlaylistModel[] = [];
 
@@ -56,11 +56,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   goToPreviewSite() {
     this.saveScreenUpdates(true);
     window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
-  }
-
-  getScreenMedia(): AssetModel {
-    if (!this.data.mediaAssetEntityId) return null;
-    return this.mediaAssets.find(x => x.id == this.data.mediaAssetEntityId)
   }
 
   onTemplateChange(evt: any) {
@@ -100,24 +95,17 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
   onMediaSelect(evt: any) {
-    const newMenuKey = evt.mediaId;
-    if (!newMenuKey) return;
-
-    this.mediaAssets.forEach((value, index) => {
-      if (value.id == newMenuKey) {
-        this.data.mediaAssetEntityId = value.id;
-      }
-    });
+    const selectedMedia = evt.selectedMedia;
+    if (!selectedMedia) return;
+    this.data.mediaAssetEntityId = selectedMedia.id
+    this.dataMediaAsset = selectedMedia;
   }
-  onTextAssetSelect(evt: any) {
-    const newId = evt.target.value;
-    if (!newId) return;
 
-    this.textAssets.forEach((value, index) => {
-      if (value.id == newId) {
-        this.data.textAssetEntityId = value.id;
-      }
-    });
+  onTextAssetSelect(evt: any) {
+    const selectedAsset = evt.selectedAsset;
+    if (!selectedAsset) return;
+    this.data.textAssetEntityId = selectedAsset.id;
+    this.dataTextAsset = selectedAsset;
   }
 
   onPlaylistChange(evt: any) {
@@ -135,10 +123,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
     this.fetchTemplates();
     this.fetchMenus();
-    this.fetchMediaAssets();
     this.fetchDevices();
     this.fetchPlaylists();
-    this.fetchTextAssets();
 
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -167,6 +153,14 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.data = data
         if (this.data && this.data.layout && this.data.layout.templateKey) {
           this.updateSelectedTemplate(this.data.layout.templateKey, false)
+        }
+        if(this.data && this.data.mediaAssetEntityId)
+        {
+          this.fetchMediaAsset(this.data.mediaAssetEntityId)
+        }
+        if(this.data && this.data.textAssetEntityId)
+        {
+          this.fetchTextAsset(this.data.textAssetEntityId)
         }
       },
       error: (e) => {
@@ -211,22 +205,21 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  fetchMediaAssets() {
-    this.mediaService.fetchMediaAssets().subscribe({
+  fetchMediaAsset(id: string) {
+    this.mediaService.fetchMediaAsset(id).subscribe({
       next: (data) => {
-        this.mediaAssets = data
+        this.dataMediaAsset = data
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
-      },
-      complete: () => console.info('complete')
+      }
     });
   }
 
-  fetchTextAssets() {
-    this.textAssetService.fetchTextAssets().subscribe({
+  fetchTextAsset(id: string) {
+    this.textAssetService.fetchTextAsset(id).subscribe({
       next: (data) => {
-        this.textAssets = data
+        this.dataTextAsset = data
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);

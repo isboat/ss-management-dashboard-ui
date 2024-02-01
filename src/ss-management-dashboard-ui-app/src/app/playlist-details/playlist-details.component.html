@@ -72,8 +72,7 @@
                                                         <div class="card-body">
                                                             <div>Add new media asset to the playlist items from below
                                                                 dropdown</div>
-                                                            <media-dropdown [mediaAssets]="mediaAssets"
-                                                                (clickEmitter)="onMediaSelect($event)"></media-dropdown>
+                                                            <media-dropdown (clickEmitter)="onMediaSelect($event)"></media-dropdown>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -83,13 +82,7 @@
                                                             <div>Add new text ad/Information to the playlist items from
                                                                 below
                                                                 dropdown<br/></div>
-                                                            <select class="form-control"
-                                                                (change)="onTextAssetSelect($event)">
-                                                                <option value="none">Select Text Ad</option>
-                                                                <option *ngFor="let ta of textAssets" [value]="ta.id">
-                                                                    {{ta.name}}
-                                                                </option>
-                                                            </select>
+                                                                <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)"></textassert-dropdown>
                                                         </div>
                                                     </div>
                                                 </div>

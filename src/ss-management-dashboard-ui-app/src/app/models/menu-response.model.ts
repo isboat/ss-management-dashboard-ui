@@ -1,3 +1,5 @@
+import { AssetModel } from "./asset-response.model";
+
 export class MenuModel
 {
     id: string;

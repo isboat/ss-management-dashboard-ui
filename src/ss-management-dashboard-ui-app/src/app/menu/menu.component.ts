@@ -1,11 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { appconstants } from 'app/helpers/constants';
-import { AssetModel } from 'app/models/asset-response.model';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
 import { NotificationsService } from 'app/notifications';
-import { MediaService } from 'app/services/media.service';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
@@ -16,20 +13,20 @@ import { MenuService } from 'app/services/menu.service';
 export class MenuDetailsComponent implements OnInit, OnDestroy {
   id: string;
   private sub: any;
+  previewWidth: string = "50px";
 
   form: FormGroup;
 
   data: MenuModel = null;
 
   currencies: string[] = ["£", "$"]
-  mediaImageAssets: AssetModel[] = []
 
   itemToAdd: MenuItemModel = null;
+  selectButtonText: string = "Choose ..."
 
   constructor(
     private dataService: MenuService, 
     private route: ActivatedRoute, 
-    private mediaService: MediaService,
     private notificationService: NotificationsService) { }
 
   ngOnInit() {
@@ -37,40 +34,21 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.fetchData();
-      this.fetchMediaAssets();
     });
 
     this.resetItemToAdd();
   }
 
-  onMenuIconMediaChange(evt: any) {
-    const newCur = evt.target.value;
-    if(newCur == "none")
-    {
-      this.data.iconUrl = "";
-      return;
-    }
-
-    this.mediaImageAssets.forEach((item, index) => {
-      if (item.assetUrl == newCur) {
-        this.data.iconUrl = item.assetUrl;
-      }
-    });
+  onMenuIconMediaChange(evt:any) {
+    const selectedMedia = evt.selectedMedia;
+    if (!selectedMedia) return;
+    this.data.iconUrl = selectedMedia.assetUrl;
   }
 
-  onMenuItemIconMediaChange(evt: any, menuItem: MenuItemModel) {
-    const newCur = evt.target.value;
-    if(newCur == "none")
-    {
-      menuItem.iconUrl = "";
-      return;
-    }
-
-    this.mediaImageAssets.forEach((item, index) => {
-      if (item.assetUrl == newCur) {
-        menuItem.iconUrl = item.assetUrl;
-      }
-    });
+  onMenuItemIconMediaChange(evt:any, menuItem: MenuItemModel) {
+    const selectedMedia = evt.selectedMedia;
+    if (!selectedMedia) return;
+    menuItem.iconUrl = selectedMedia.assetUrl;
   }
 
   onMenuCurrencyChange(evt: any) {
@@ -131,22 +109,6 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
         this.data = data
         if (!data.menuItems) {
           data.menuItems = []
-        }
-      },
-      error: (e) => {
-        if (e.status == 401) console.log("ERORR HERE:" + e)
-      },
-      complete: () => console.info('complete')
-    });
-  }
-
-  fetchMediaAssets() {
-    this.mediaService.fetchMediaAssets(this.mediaImageAssets.length, appconstants.fetchLimit, 1).subscribe({
-      next: (data) => {
-        if(data)
-        {
-          const images = data.filter(x => x.type == 1); // image is 1
-          this.mediaImageAssets.push(...images)
         }
       },
       error: (e) => {

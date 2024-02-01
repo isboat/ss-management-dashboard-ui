@@ -38,15 +38,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">Icon Image</label>
-                                    <select class="form-control" id="templateSelector"
-                                        (change)="onMenuIconMediaChange($event)">
-                                        <option>Choose...</option>
-                                        <option value="none">None</option>
-                                        <option *ngFor="let item of mediaImageAssets; index as i;"
-                                            [selected]="item.assetUrl == data.iconUrl" value="{{item.assetUrl}}">
-                                            {{item.name}}
-                                        </option>
-                                    </select>
+                                    <media-preview [assetUrl]="data.iconUrl" [assetType]="1" [previewWidth]="previewWidth"></media-preview>
+                                    <media-dropdown (clickEmitter)="onMenuIconMediaChange($event)" [assetType]="'1'" [buttonText]="selectButtonText"></media-dropdown>
                                 </div>
                             </div>
                         </div>
@@ -88,19 +81,14 @@
                                                 </td>
                                                 <td>
                                                     <textarea class="form-control" [(ngModel)]="item.description"
-                                                        cols="50" rows="3"></textarea>
+                                                        cols="40" rows="3"></textarea>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control" id="tttemplateSelector"
-                                                        (change)="onMenuItemIconMediaChange($event, item)">
-                                                        <option>Choose...</option>
-                                                        <option value="none">None</option>
-                                                        <option *ngFor="let media of mediaImageAssets; index as i;"
-                                                            [selected]="media.assetUrl == item.iconUrl"
-                                                            value="{{media.assetUrl}}">
-                                                            {{media.name}}
-                                                        </option>
-                                                    </select>
+                                                    <media-preview style="display: inline-block;" [assetUrl]="item.iconUrl" [assetType]="1" [previewWidth]="previewWidth">
+                                                    </media-preview>
+                                                    <media-dropdown style="display: inline-block;" [assetType]="'1'" [buttonText]="selectButtonText"
+                                                        (clickEmitter)="onMenuItemIconMediaChange($event, item)">
+                                                    </media-dropdown>
                                                 </td>
                                                 <td class="text-center"><a (click)="deleteMenuItem(item.id)"
                                                         class="btn btn-round btn-fill btn-default">Delete</a></td>

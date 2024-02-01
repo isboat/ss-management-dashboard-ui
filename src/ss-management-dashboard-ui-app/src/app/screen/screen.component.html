@@ -115,11 +115,10 @@
                     </div>
                     <div class="card-body" *ngIf="data">
                         <br />
-                        <media-preview *ngIf="data.mediaAssetEntityId" [data]="getScreenMedia()"
+                        <media-preview *ngIf="data.mediaAssetEntityId" [data]="dataMediaAsset"
                             [previewWidth]="previewWidth"></media-preview>
                         <br />
-                        <media-dropdown [mediaAssets]="mediaAssets" (clickEmitter)="onMediaSelect($event)">
-                        </media-dropdown>
+                        <media-dropdown (clickEmitter)="onMediaSelect($event)"></media-dropdown>
                     </div>
                 </div>
                 <div class="card" *ngIf="data?.layout?.templateKey == 'Text'">
@@ -127,13 +126,10 @@
                         <h3 class="card-title">AD Text/Information</h3>
                     </div>
                     <div class="card-body" *ngIf="data">
-                        <select class="form-control" (change)="onTextAssetSelect($event)">
-                            <option value="none">Select Text Ad</option>
-                            <option *ngFor="let ta of textAssets" [value]="ta.id"
-                                [selected]="ta.id == data.textAssetEntityId">
-                                {{ta.name}}
-                            </option>
-                        </select>
+                        <div>
+                            <p>{{dataTextAsset.name}}</p>
+                        </div>
+                        <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)"></textassert-dropdown>
                     </div>
                 </div>
 

@@ -6,13 +6,8 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <input type="text" class="form-control" (keyup)="searchText($event)" placeholder="type to search" />
 
-            <a (click)="onMediaSelect(med.id)"  class="dropdown-item" *ngFor="let med of viewList" >
-
-                <video *ngIf="isVideoMedia(med.type)" [src]="med.assetUrl" width="50px">
-                    Your device browser does not support the video tag.
-                </video>
-                <img *ngIf="!isVideoMedia(med.type)" [src]="med.assetUrl"  width="50px"  [alt]="med.name" />
-                <span style="margin-left: 10px;">{{med.name}}</span>
+            <a (click)="onSelect(med.id)"  class="dropdown-item" *ngFor="let med of viewList" >
+                <span>{{med.name}}</span>
             </a>
             <div>
                 <span style="cursor: pointer;" (click)="fetchListData()">Load more</span>

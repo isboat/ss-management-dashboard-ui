@@ -3,10 +3,6 @@ import { PlaylistWithItemsModel } from 'app/models/playlist-response.model';
 import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 import { ActivatedRoute } from '@angular/router';
-import { MediaService } from 'app/services/media.service';
-import { AssetModel } from 'app/models/asset-response.model';
-import { TextAssetModel } from 'app/models/text-asset-response.model';
-import { TextAssetService } from 'app/services/text-asset.service';
 import { NotificationsService } from 'app/notifications';
 
 @Component({
@@ -18,8 +14,6 @@ export class PlaylistComponent implements OnInit {
   id: string;
   private sub: any;
   data: PlaylistWithItemsModel = null
-  mediaAssets: AssetModel[] = [];
-  textAssets: TextAssetModel[] = [];
 
   hrPart = 0;
   minPart = 0;
@@ -27,13 +21,9 @@ export class PlaylistComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationsService,
-    private textAssetService: TextAssetService,
     private playlistService: PlaylistService,
-    private mediaService: MediaService,
     private authService: AuthService,
     private route: ActivatedRoute) {
-    this.fetchMedias();
-    this.fetchTextAssets();
   }
 
   ngOnInit() {
@@ -80,31 +70,29 @@ export class PlaylistComponent implements OnInit {
   }
 
   onMediaSelect($event) {
-    let id = $event.mediaId;
-    if (!id) return;
+    let selectedMedia = $event.selectedMedia;
+    if (!selectedMedia) return;
 
-    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === id) > -1;
+    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedMedia.id) > -1;
     if (!exist) {
       if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
-      this.data.itemIdAndTypePairs.push({ itemType: 0, id: id }); // 0 is media type
+      this.data.itemIdAndTypePairs.push({ itemType: 0, id: selectedMedia.id }); // 0 is media type
 
-      var asset = this.mediaAssets.find(x => x.id == id);
       if (!this.data?.items) this.data.items = [];
-      if (asset) this.data.items.push(asset);
+      this.data.items.push(selectedMedia);
     }
   }
   onTextAssetSelect($event) {
-    let id = $event.target.value;
-    if (!id) return;
+    let selectedAsset = $event.selectedAsset;
+    if (!selectedAsset) return;
 
-    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === id) > -1;
+    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedAsset.id) > -1;
     if (!exist) {
       if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
-      this.data.itemIdAndTypePairs.push({ itemType: 1, id: id }); // 1 is Text type
+      this.data.itemIdAndTypePairs.push({ itemType: 1, id: selectedAsset.id }); // 1 is Text type
 
-      var asset = this.textAssets.find(x => x.id == id);
       if (!this.data?.items) this.data.items = [];
-      if (asset) this.data.items.push(asset);
+      this.data.items.push(selectedAsset);
     }
   }
 
@@ -139,39 +127,5 @@ export class PlaylistComponent implements OnInit {
           }
         });
     }
-  }
-
-  fetchMedias() {
-    this.mediaService.fetchMediaAssets().subscribe(
-      {
-        next: (data) => {
-          this.mediaAssets = data;
-        },
-        error: (e) => {
-          if (e.status == 401) {
-            this.authService.redirectToLogin(true);
-          }
-          else {
-            console.log(e)
-          }
-        }
-      });
-  }
-
-  fetchTextAssets() {
-    this.textAssetService.fetchTextAssets().subscribe(
-      {
-        next: (data) => {
-          this.textAssets = data;
-        },
-        error: (e) => {
-          if (e.status == 401) {
-            this.authService.redirectToLogin(true);
-          }
-          else {
-            console.log(e)
-          }
-        }
-      });
   }
 }

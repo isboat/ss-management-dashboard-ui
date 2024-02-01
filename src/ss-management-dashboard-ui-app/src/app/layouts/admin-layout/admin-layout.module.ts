@@ -37,6 +37,7 @@ import { TextAssetNewComponent } from 'app/text-asset-new/text-asset-new.compone
 import { TextAssetListComponent } from 'app/text-asset-list/text-asset-list.component';
 import { TextAssetComponent } from 'app/text-asset/text-asset.component';
 import { ItemHistoryComponent } from 'app/item-history/item-history.component';
+import { TextAssertDropdownComponent } from 'app/textassert-dropdown/textassert-dropdown.component';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { ItemHistoryComponent } from 'app/item-history/item-history.component';
     PlaylistComponent,
     MediaPreviewComponent,
     MediaDropdownComponent,
+    TextAssertDropdownComponent,
     ItemHistoryComponent,
     HelpSupportComponent
   ],

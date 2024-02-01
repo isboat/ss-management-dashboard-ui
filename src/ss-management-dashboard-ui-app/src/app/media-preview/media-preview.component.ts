@@ -9,6 +9,8 @@ import { AssetModel } from 'app/models/asset-response.model';
 export class MediaPreviewComponent implements OnInit, OnDestroy {
   
   @Input() data: AssetModel;
+  @Input() assetUrl: string;
+  @Input() assetType: number;
   @Input() previewWidth: string;
 
   mediaWidth: string = "200px";
@@ -16,6 +18,18 @@ export class MediaPreviewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if(this.previewWidth) this.mediaWidth = this.previewWidth;
+    if(this.assetUrl && this.assetType)
+    {
+      this.data = {
+        id: null,
+        assetUrl: this.assetUrl,
+        tenantId: null,
+        type: this.assetType,
+        description: null,
+        editName: null,
+        name: null
+      }
+    }
   }
 
   ngOnDestroy() {
