@@ -127,7 +127,7 @@
                     </div>
                     <div class="card-body" *ngIf="data">
                         <div>
-                            <p>{{dataTextAsset.name}}</p>
+                            <p *ngIf="dataTextAsset">{{dataTextAsset.name}}</p>
                         </div>
                         <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)"></textassert-dropdown>
                     </div>

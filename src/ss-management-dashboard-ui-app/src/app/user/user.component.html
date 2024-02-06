@@ -21,7 +21,7 @@
                         </mat-form-field>
                         <mat-form-field class="example-full-width">
                             <select matNativeControl (change)="onRoleChange($event)">
-                                <option *ngFor="let item of rolesOption; index as i;" [selected]="item === data.role"
+                                <option *ngFor="let item of rolesOption; index as i;" [selected]="i === data.role"
                                     value="{{i}}">
                                     {{item}}
                                 </option>
