@@ -44,6 +44,27 @@ export class UserService {
     );
   }
 
+  updatePasswd(id: string, data: any): Observable<any>  {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/users/' + id + '/updatePasswd',
+      JSON.stringify(data),
+      { responseType: 'json', headers: headers }
+    );
+  }
+
+  resetPasswd(id: string): Observable<any>  {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/users/' + id + '/resetpasswd',
+      { responseType: 'json', headers: headers }
+    );
+  }
+
   deleteUser(id: string): Observable<any>  {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/users/' + id,

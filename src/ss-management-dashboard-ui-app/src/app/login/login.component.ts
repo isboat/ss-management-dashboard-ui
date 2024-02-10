@@ -35,7 +35,12 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       },
       error: (e) => {
+        if(e.status == 401) {
+          this.notificationService.showWarning("Incorrect login details, try again")
+        }
+        else {
           this.notificationService.showError(JSON.stringify(e));
+        }
       }
     })
   }

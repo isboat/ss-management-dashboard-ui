@@ -3,7 +3,7 @@
         <div class="row" *ngIf="allowToView">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header card-header-warning">
+                    <div class="card-header card-header-info">
                         <h3 class="card-title">User Details</h3>
                         <p class="card-category">
                             Below is the details of the user
@@ -17,9 +17,6 @@
                             <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
                         </mat-form-field>
                         <mat-form-field class="example-full-width">
-                            <input matInput placeholder="Password" type="password" [(ngModel)]="data.password">
-                        </mat-form-field>
-                        <mat-form-field class="example-full-width">
                             <select matNativeControl (change)="onRoleChange($event)">
                                 <option *ngFor="let item of rolesOption; index as i;" [selected]="i === data.role"
                                     value="{{i}}">
@@ -27,23 +24,49 @@
                                 </option>
                             </select>
                         </mat-form-field>
+
+                        <p class="card-category">
+                            <br /><br /><br />
+                            Save changes you've made to user's detail.
+                        </p>
+                        <p class="card-category">
+                            <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-info">Save Updates</a>
+                        </p>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row" *ngIf="allowToView">
-            <div class="col-md-12">
-
-                <div class="card">
+            <div class="col-md-6">
+                <div class="card" *ngIf="data && isCurrentUserView">
                     <div class="card-header card-header-danger">
-                        <h3 class="card-title">Save Changes</h3>
+                        <h3 class="card-title">User Password Update</h3>
+                        <p class="card-category">
+                            Fill form below to update user's password
+                        </p>
                     </div>
                     <div class="card-body">
-
-                        <p class="card-category">Save changes you've made to user settings. </p>
+                        
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Password" type="password" [(ngModel)]="passwdUpdateModel.currentPasswd">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="new password" type="password" [(ngModel)]="passwdUpdateModel.newPassword">
+                        </mat-form-field>
+                        <div>
+                            <a (click)="updatePasswd()" class="btn btn-round btn-fill btn-danger">Update User Password</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" *ngIf="data && isAdminUser">
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">Reset User's Password</h3>
                         <p class="card-category">
-                            <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-danger">Save Updates</a>
+                            Click button below to reset user's password
                         </p>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <a (click)="resetPasswd()" class="btn btn-round btn-fill btn-warning">Reset User Password</a>
+                        </div>
                     </div>
                 </div>
             </div>
