@@ -31,8 +31,15 @@ export class DeviceService {
   updateScreen(deviceId: string, screenId: string): Observable<any>  {
     var data = { id: deviceId, screenId: screenId}
     return this.http.patch<any>(
-      environment.apiBaseUrl + `/v1/tenant/devices/${deviceId}/screen`,
+      environment.apiBaseUrl + `/v1/tenant/devices/${deviceId}/link-screen`,
       data,
+      { responseType: 'json' }
+    );
+  }
+
+  unLinkToDeviceScreen(screenId: string): Observable<any>  {
+    return this.http.patch<any>(
+      environment.apiBaseUrl + `/v1/tenant/devices/unlink-screen/${screenId}`,
       { responseType: 'json' }
     );
   }

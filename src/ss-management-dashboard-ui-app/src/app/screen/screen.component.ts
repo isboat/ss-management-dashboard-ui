@@ -261,22 +261,44 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   linkToDevice() {
-    if (!this.selectedDeviceId || this.selectedDeviceId == "none") return;
+    if (!this.selectedDeviceId) return;
+    if (this.selectedDeviceId == "none") 
+    {
+      this.unLinkToDeviceScreen(this.data.id);
+      return;
+    };
 
     if (this.selectedDeviceId == "all") {
       this.devices.forEach((device, index) => {
-        this.linkToDevicePost(device.id, this.data.id)
+        this.linkToDeviceScreen(device.id, this.data.id)
       })
     }
     else {
-      this.linkToDevicePost(this.selectedDeviceId, this.data.id);
+      this.linkToDeviceScreen(this.selectedDeviceId, this.data.id);
     }
   }
 
-  linkToDevicePost(deviceId: string, screenId: string) {
+  linkToDeviceScreen(deviceId: string, screenId: string) {
     if (!deviceId || !screenId) return;
 
     this.deviceService.updateScreen(deviceId, screenId).subscribe(
+      {
+        next: (data) => { },
+        error: (e) => {
+          if (e.status == 401) {
+            this.authService.redirectToLogin(true);
+          }
+          else {
+            console.log(e)
+          }
+        }
+      });
+  }
+
+  unLinkToDeviceScreen(screenId: string) {
+    if (!screenId) return;
+
+    this.deviceService.unLinkToDeviceScreen(screenId).subscribe(
       {
         next: (data) => { },
         error: (e) => {
