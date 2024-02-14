@@ -40,21 +40,66 @@
                                             </a>
                                         </td>
                                         <td class="text-primary" style="text-align: right;">
-                                            <a *ngIf="isAdminUser" (click)="publishScreen(screen.id)" mat-raised-button type="button"
-                                                class="btn btn-success">
+                                            <a *ngIf="isAdminUser" mat-raised-button type="button"
+                                                class="btn btn-success" data-toggle="modal" data-target="#modalpopup"
+                                                (click)="onSelectScreen(screen)">
                                                 Publish
                                             </a>
-                                            <a *ngIf="isAdminUser" (click)="deleteScreen(screen.id)" mat-raised-button type="button"
-                                                class="btn btn-danger">
+                                            <a *ngIf="isAdminUser" (click)="deleteScreen(screen.id)" mat-raised-button
+                                                type="button" class="btn btn-danger">
                                                 Delete
                                             </a>
+
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalpopup" tabindex="-1" role="dialog" *ngIf="selectedScreen"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Publish to TV
+                                                Screen</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <p>Please select which TV device/screen to publish to.
+                                                </p>
+                                            </div>
+                                            <form>
+                                                <div class="form-group">
+                                                    <select class="custom-select" id="templateSelector"
+                                                        (change)="onDeviceSelect($event)">
+                                                        <option value="none">None</option>
+                                                        <option value="all">All</option>
+                                                        <option *ngFor="let item of devices; index as i;"
+                                                            [selected]="item.screenId === selectedScreen.id"
+                                                            value="{{item.id}}">
+                                                            {{item.deviceName}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button *ngIf="isAdminUser" type="button" class="btn btn-primary"
+                                                data-dismiss="modal" (click)="publishScreen(selectedScreen.id)">Publish
+                                                changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        
-                        
+
+
                         <div>
                             <a style="cursor: pointer;" (click)="fetchListData()">Load more</a>
                         </div>

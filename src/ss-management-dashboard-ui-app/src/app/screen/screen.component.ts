@@ -245,7 +245,14 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         {
           next: () => {
             this.notification.showSuccess("PUBLISHED..")
-            this.linkToDevice();
+
+            // if user has selected, default to the preselected device
+            if(!this.selectedDeviceId) {
+              this.devices.forEach(x => {
+                if(x.screenId == this.data.id) this.selectedDeviceId = x.id;
+              });
+            }
+            this.deviceService.linkToDevice(this.selectedDeviceId, this.data.id, this.devices);
           },
           error: (e) => {
             if (e.status == 401) {
@@ -258,58 +265,6 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
           complete: () => console.info('complete')
         })
     });
-  }
-
-  linkToDevice() {
-    if (!this.selectedDeviceId) return;
-    if (this.selectedDeviceId == "none") 
-    {
-      this.unLinkToDeviceScreen(this.data.id);
-      return;
-    };
-
-    if (this.selectedDeviceId == "all") {
-      this.devices.forEach((device, index) => {
-        this.linkToDeviceScreen(device.id, this.data.id)
-      })
-    }
-    else {
-      this.linkToDeviceScreen(this.selectedDeviceId, this.data.id);
-    }
-  }
-
-  linkToDeviceScreen(deviceId: string, screenId: string) {
-    if (!deviceId || !screenId) return;
-
-    this.deviceService.updateScreen(deviceId, screenId).subscribe(
-      {
-        next: (data) => { },
-        error: (e) => {
-          if (e.status == 401) {
-            this.authService.redirectToLogin(true);
-          }
-          else {
-            console.log(e)
-          }
-        }
-      });
-  }
-
-  unLinkToDeviceScreen(screenId: string) {
-    if (!screenId) return;
-
-    this.deviceService.unLinkToDeviceScreen(screenId).subscribe(
-      {
-        next: (data) => { },
-        error: (e) => {
-          if (e.status == 401) {
-            this.authService.redirectToLogin(true);
-          }
-          else {
-            console.log(e)
-          }
-        }
-      });
   }
 
   saveScreenUpdates(hidePostAction?: boolean, callbkFunc?: Function) {

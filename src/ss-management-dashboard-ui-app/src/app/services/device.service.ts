@@ -19,6 +19,42 @@ export class DeviceService {
     );
   }
 
+  linkToDevice(selectedDeviceId, screenId, devices) {
+    if (!selectedDeviceId) return;
+    
+    if (selectedDeviceId == "none") 
+    {
+      this.unLinkToDeviceScreen(screenId);
+      return;
+    };
+
+    if (selectedDeviceId == "all") {
+      devices.forEach((device, index) => {
+        this.linkToDeviceScreen(device.id, screenId)
+      })
+    }
+    else {
+      this.linkToDeviceScreen(selectedDeviceId, screenId);
+    }
+  }  
+
+  linkToDeviceScreen(deviceId: string, screenId: string) {
+    if (!deviceId || !screenId) return;
+
+    this.updateScreen(deviceId, screenId).subscribe(
+      {
+        next: (data) => { },
+        error: (e) => {
+          if (e.status == 401) {
+            //this.authService.redirectToLogin(true);
+          }
+          else {
+            console.log(e)
+          }
+        }
+      });
+  }
+
   updateName(id: string, name: string): Observable<any>  {
     var data = { deviceName: name, id: id}
     return this.http.patch<any>(
