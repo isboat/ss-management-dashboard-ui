@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+.load-more-link:hover {
+    cursor: pointer;
+    color:cadetblue;
+}
+.load-more-link:focus, .load-more-link:active {
+    color: cornflowerblue;
+}

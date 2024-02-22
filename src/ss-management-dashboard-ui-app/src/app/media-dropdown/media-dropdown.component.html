@@ -14,8 +14,8 @@
                 <img *ngIf="!isVideoMedia(med.type)" [src]="med.assetUrl"  width="50px"  [alt]="med.name" />
                 <span style="margin-left: 10px;">{{med.name}}</span>
             </a>
-            <div>
-                <span style="cursor: pointer;" (click)="fetchListData()">Load more</span>
+            <div style="text-align: center;"  >
+                <span class="load-more-link" (click)="fetchListData()">Load more</span>
             </div>
         </div>
     </div>

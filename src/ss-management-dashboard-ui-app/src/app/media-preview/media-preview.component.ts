@@ -12,6 +12,7 @@ export class MediaPreviewComponent implements OnInit, OnDestroy {
   @Input() assetUrl: string;
   @Input() assetType: number;
   @Input() previewWidth: string;
+  @Input() dataAlt: string;
 
   mediaWidth: string = "200px";
   constructor() { }

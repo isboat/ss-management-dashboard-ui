@@ -9,8 +9,8 @@
             <a (click)="onSelect(med.id)"  class="dropdown-item" *ngFor="let med of viewList" >
                 <span>{{med.name}}</span>
             </a>
-            <div>
-                <span style="cursor: pointer;" (click)="fetchListData()">Load more</span>
+            <div style="text-align: center;">
+                <span class="load-more-link" (click)="fetchListData()">Load more</span>
             </div>
         </div>
     </div>

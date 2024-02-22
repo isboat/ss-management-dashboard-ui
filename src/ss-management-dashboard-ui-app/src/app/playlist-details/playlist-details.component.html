@@ -38,7 +38,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-hover">
                                 <thead class=" text-primary">
                                     <th>
                                         Name
@@ -49,48 +49,39 @@
                                     <tr *ngFor="let item of data.items; index as i; first as isFirst">
                                         <td>
                                             <div *ngIf="item.playlistType == 0">
-                                                <media-preview [data]="item"></media-preview>
+                                                <media-preview [data]="item" [previewWidth]="'100px'"></media-preview>
                                             </div>
 
                                             <div *ngIf="item.playlistType == 1">
                                                 <div>{{item.name}}</div>
                                             </div>
                                         </td>
-                                        <td class="text-primary">
+                                        <td class="text-primary" style="text-align: center;">
                                             <a (click)="removeMediaAsset(item.id)" mat-raised-button type="button"
                                                 class="btn btn-danger">
                                                 Remove
                                             </a>
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div>Add new media asset to the playlist items from below
-                                                                dropdown</div>
-                                                            <media-dropdown (clickEmitter)="onMediaSelect($event)"></media-dropdown>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div>Add new text ad/Information to the playlist items from
-                                                                below
-                                                                dropdown<br/></div>
-                                                                <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)"></textassert-dropdown>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div>Add new media asset to the playlist items from below
+                                    dropdown</div>
+                                <media-dropdown (clickEmitter)="onMediaSelect($event)">
+                                </media-dropdown>
+                            </div>
+                            <div class="col-md-6">
+                                <div>Add new text ad/Information to the playlist items from
+                                    below
+                                    dropdown<br /></div>
+                                <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)">
+                                </textassert-dropdown>
+                            </div>
                         </div>
                     </div>
                 </div>

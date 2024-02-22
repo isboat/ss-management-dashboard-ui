@@ -56,7 +56,9 @@
                                             <tr *ngFor="let item of listData; index as i; first as isFirst">
                                                 <td>
                                                     <div>
-                                                        <media-preview [data]="item"></media-preview>
+                                                        <a [routerLink]="['/media-details', item.id]">
+                                                            <media-preview [data]="item"></media-preview>
+                                                        </a>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -88,7 +90,7 @@
                                     </table>
                                 </div>
                                 <div>
-                                    <a style="cursor: pointer;" (click)="fetchListData()">Load more</a>
+                                    <a class="load-more-link" (click)="fetchListData()">Load more</a>
                                 </div>
                             </div>
                             <div class="tab-pane" id="externalmedia">

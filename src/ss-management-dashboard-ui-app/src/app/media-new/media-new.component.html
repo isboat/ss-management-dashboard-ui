@@ -40,7 +40,7 @@
                 <div class="row mt-5">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <button (click)="this.postNew()" type="button" class="btn btn-primary mt-3">{{aiFlag ? 'Generate' : 'Upload'}}</button>
+                            <button (click)="this.postNew()" [disabled]="submitted" type="button" class="btn btn-primary mt-3">{{buttonTxt}}</button>
                         </div>
                     </div>
                 </div>

@@ -2,14 +2,14 @@
     <div class="container-fluid" *ngIf="data">
         <div class="card">
             <div class="card-header card-header-primary">
-                <h3 class="card-title">EditAD or Information Asset</h3>
+                <h3 class="card-title">Edit AD or Information Asset</h3>
                 <p class="card-category">
                     This can be used for ad, information, etc
                 </p>
             </div>
             <div class="card-body">
                 <div class="row mt-5">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="mb-3">
                             <label for="formtitle" class="form-label">Title/Name</label>
                             <input [(ngModel)]="data.name" class="form-control" type="text" id="formtitle">
@@ -17,11 +17,11 @@
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="mb-3">
                             <label for="exampleFormControlTextarea1" class="form-label">Text / Information</label>
                             <ckeditor [editor]="Editor"
-                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
+                                [config]="{ width: '400px', height: '500px', toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
                                 [(ngModel)]="data.description"></ckeditor>
                         </div>
                     </div>
@@ -32,6 +32,8 @@
                             <label for="bgColor" class="form-label">Background Color</label>
                             <input [(ngModel)]="data.backgroundColor" class="form-control" type="text" id="bgColor">
                         </div>
+                    </div>
+                    <div class="col-md-1">
                     </div>
                     <div class="col-md-2">
                         <div class="mb-3">

@@ -53,7 +53,7 @@ export class ScreenListComponent implements OnInit {
   fetchListData() {
     this.dataService.fetchScreens(this.listData.length, appconstants.fetchLimit).subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.push(...data),
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);

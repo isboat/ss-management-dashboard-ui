@@ -38,8 +38,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">Icon Image</label>
-                                    <media-preview [assetUrl]="data.iconUrl" [assetType]="1" [previewWidth]="previewWidth"></media-preview>
-                                    <media-dropdown (clickEmitter)="onMenuIconMediaChange($event)" [assetType]="'1'" [buttonText]="selectButtonText"></media-dropdown>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <media-preview *ngIf="data.iconUrl" [assetUrl]="data.iconUrl" [assetType]="1" [previewWidth]="previewWidth" [dataAlt]="'Menu icon'"></media-preview>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <media-dropdown (clickEmitter)="onMenuIconMediaChange($event)" [assetType]="'1'" [buttonText]="selectButtonText"></media-dropdown>                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -54,12 +60,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive table-upgrade">
-                                    <table class="table">
+                                    <table class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Price</th>
-                                                <th>Discount Price (Optional)</th>
+                                                <th style="width: 10%;">Price</th>
+                                                <th style="width: 10%;">Discount Price <small>(Optional)</small></th>
                                                 <th>Description</th>
                                                 <th>Icon Image</th>
                                                 <th class="text-center"></th>
@@ -71,17 +77,17 @@
                                                     <input [(ngModel)]="item.name" type="text" placeholder="add a name"
                                                         class="form-control" />
                                                 </td>
-                                                <td>
+                                                <td style="width: 10%;">
                                                     <input [(ngModel)]="item.price" type="text"
                                                         placeholder="add a price" class="form-control" />
                                                 </td>
-                                                <td>
+                                                <td style="width: 10%;">
                                                     <input [(ngModel)]="item.discountPrice" type="text"
-                                                        placeholder="add a discount price" class="form-control" />
+                                                        placeholder="discount" class="form-control" />
                                                 </td>
                                                 <td>
-                                                    <textarea class="form-control" [(ngModel)]="item.description"
-                                                        cols="40" rows="3"></textarea>
+                                                    <input [(ngModel)]="item.description" type="text"
+                                                        placeholder="add a description" class="form-control" />
                                                 </td>
                                                 <td>
                                                     <media-preview style="display: inline-block;" [assetUrl]="item.iconUrl" [assetType]="1" [previewWidth]="previewWidth">
@@ -106,7 +112,7 @@
                                                 </td>
                                                 <td>
                                                     <input [(ngModel)]="itemToAdd.discountPrice" type="text"
-                                                        placeholder="add a discount price" class="form-control"
+                                                        placeholder="discount price" class="form-control"
                                                         id="discountPrice" />
                                                 </td>
                                                 <td>

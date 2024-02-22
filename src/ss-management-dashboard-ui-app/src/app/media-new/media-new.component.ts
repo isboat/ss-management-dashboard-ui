@@ -16,6 +16,10 @@ export class MediaNewComponent implements OnInit {
   desc = '';
   aiFlag: boolean = false;
 
+  submitted: boolean = false;
+  buttonTxtInit: string = 'Upload';
+  buttonTxt: string = '';
+
   constructor(
     private media: MediaService, 
     private authService: AuthService, 
@@ -27,6 +31,8 @@ export class MediaNewComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.aiFlag = !!params["ai"];
+      if(this.aiFlag) this.buttonTxtInit = 'Generate'
+      this.buttonTxt = this.buttonTxtInit;
     });
   }
 
@@ -39,6 +45,9 @@ export class MediaNewComponent implements OnInit {
       this.notificationService.showWarning("Add title and a short description")
       return;
     }
+
+    this.submitted = true;
+    this.buttonTxt = this.aiFlag ? 'Generating...' : 'Uploading...'
 
     const formData = new FormData();
 
@@ -62,6 +71,8 @@ export class MediaNewComponent implements OnInit {
           else{
             this.notificationService.showError("Error occurred while uploading/generating media.")
           }
+          this.submitted = false;
+          this.buttonTxt = this.buttonTxtInit;
         },
         error: (e) => {
           if (e.status == 401) {
@@ -71,8 +82,13 @@ export class MediaNewComponent implements OnInit {
             this.notificationService.showError("Error occurred while uploading/generating media.")
             console.log(e)
           }
+          this.submitted = false;
+          this.buttonTxt = this.buttonTxtInit;
         },
-        complete: () => console.info('complete')
+        complete: () => {
+          this.submitted = false;
+          this.buttonTxt = this.buttonTxtInit;
+        }
       }
     )
   }

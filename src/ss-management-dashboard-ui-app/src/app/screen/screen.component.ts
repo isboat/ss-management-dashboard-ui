@@ -88,6 +88,11 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
   onMenuChange(evt: any) {
     const newMenuKey = evt.target.value;
+    if(!newMenuKey)
+    {
+      this.data.menuEntityId = null;
+      return;
+    }
     this.menus.forEach((value, index) => {
       if (value.id == newMenuKey) {
         this.data.menuEntityId = value.id;

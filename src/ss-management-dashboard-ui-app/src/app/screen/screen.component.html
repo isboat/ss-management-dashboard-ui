@@ -24,25 +24,25 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h3 class="card-title">Menu</h3>
-                        <p class="card-category">Handcrafted by our friend
+                        <p class="card-category">List of menus available to choose from, for display.
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data">
 
-                        <div class="input-group mb-3">
-                            <select class="form-control" id="templateSelector" (change)="onMenuChange($event)">
-                                <option>Choose...</option>
+                        <div style="margin-top: 15px; display:flex;">
+                            <select class="form-control" (change)="onMenuChange($event)">
+                                <option value="">Choose...</option>
                                 <option *ngFor="let menu of menus; index as i;"
                                     [selected]="menu.id == data.menuEntityId" value="{{menu.id}}">
                                     {{menu.title}}
                                 </option>
                             </select>
-                            <div class="input-group-append">
+                            <span style="margin-top: -10px;" *ngIf="data.menuEntityId">
                                 <a [routerLink]="['/menu-details', data.menuEntityId]" mat-raised-button type="button"
                                     class="btn btn-info">
-                                    View Menu
+                                    Go to Menu details page
                                 </a>
-                            </div>
+                            </span>
                         </div>
                         <div>
                             <a [routerLink]="['/menu-create']" mat-raised-button type="button"
@@ -75,33 +75,44 @@
                         </p>
                     </div>
                     <div class="card-body" *ngIf="data && templates">
-                        <div class="input-group mb-3 text-info">
-                            <select class="custom-select" id="templateSelector" (change)="onTemplateChange($event)">
-                                <option>Choose Layout Design...</option>
-                                <option *ngFor="let template of templates; index as i;"
-                                    [selected]="template.key === data.layout.templateKey" value="{{template.key}}">
-                                    {{template.label}}
-                                </option>
-                            </select>
+                        <div>
+                            <div>Select what to display on the screen</div>
+                            <div>
+                                <select class="custom-select" id="templateSelector" (change)="onTemplateChange($event)">
+                                    <option>Choose Layout Design...</option>
+                                    <option *ngFor="let template of templates; index as i;"
+                                        [selected]="template.key === data.layout.templateKey" value="{{template.key}}">
+                                        {{template.label}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="input-group mb-3 text-info" *ngIf="subtypeTemplates && subtypeTemplates.length > 0">
-                            <select class="custom-select" id="menuSubtypeTemplates"
-                                (change)="onsubTemplateChange($event)">
-                                <option>Choose Sub Type...</option>
-                                <option *ngFor="let template of subtypeTemplates; index as i;"
-                                    [selected]="template.key === data.layout.subType" value="{{template.key}}">
-                                    {{template.label}}
-                                </option>
-                            </select>
+                        <div style="margin-top: 35px; margin-bottom: 30px;"
+                            *ngIf="subtypeTemplates && subtypeTemplates.length > 0">
+                            <div>
+                                Select from various display designs or types
+                            </div>
+                            <div>
+                                <select class="custom-select" id="menuSubtypeTemplates"
+                                    (change)="onsubTemplateChange($event)">
+                                    <option>Choose ...</option>
+                                    <option *ngFor="let template of subtypeTemplates; index as i;"
+                                        [selected]="template.key === data.layout.subType" value="{{template.key}}">
+                                        {{template.label}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                         <div *ngIf="data.layout.templateKey">
-                            Please add/update these values for the layout fields
-                            <div class="input-group mb-3" *ngFor="let prop of data.layout.templateProperties">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">{{prop.label}}</span>
+                            Please add/update these values for the layout
+                            <div *ngFor="let prop of data.layout.templateProperties">
+                                <div>
+                                    <span class="input-group-text">
+                                        <span style="margin-right: 15px;">{{prop.label}}</span>                                        
+                                        <input [(ngModel)]="prop.value" type="text" class="form-control"
+                                            placeholder="add value">
+                                    </span>
                                 </div>
-                                <input [(ngModel)]="prop.value" type="text" class="form-control"
-                                    placeholder="Add Value">
                             </div>
                         </div>
                     </div>

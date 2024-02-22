@@ -4,8 +4,8 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div>
-                            <media-preview [data]="data" [previewWidth]="previewWidth"></media-preview>
+                        <div title="{{data.description}}">
+                            <media-preview [data]="data" [previewWidth]="previewWidth" [dataAlt]="data.description"></media-preview>
                         </div>
                     </div>
                 </div>
@@ -13,10 +13,10 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div>NAME: You can update media name</div>
+                        <div>You can update media name</div>
                         <div>
                             <input [(ngModel)]="data.name" type="text" class="form-control" placeholder="Add Value"
-                                [disabled]="!data.editName">
+                                [disabled]="!data.editName" style="width: 50%; display:inline-block">
 
                             <button mat-raised-button type="button" matTooltip="Edit Name"
                                 [matTooltipPosition]="'above'" (click)="data.editName = true" [hidden]="data.editName"
@@ -54,6 +54,9 @@
                             </a>
                         </div>
                     </div>
+                </div>
+                <div>
+                    Description: {{data.description}}
                 </div>
             </div>
         </div>

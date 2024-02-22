@@ -19,7 +19,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
 
   data: MenuModel = null;
 
-  currencies: string[] = ["£", "$"]
+  currencies: string[] = ["£", "$", "GHS", "Euro"]
 
   itemToAdd: MenuItemModel = null;
   selectButtonText: string = "Choose ..."

@@ -24,7 +24,19 @@ export class DeviceService {
     
     if (selectedDeviceId == "none") 
     {
-      this.unLinkToDeviceScreen(screenId);
+      this.unLinkToDeviceScreen(screenId).subscribe({
+        next: () => {
+          
+        },
+        error: (e) => {
+          if (e.status == 401) {
+          }
+          else {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
       return;
     };
 
