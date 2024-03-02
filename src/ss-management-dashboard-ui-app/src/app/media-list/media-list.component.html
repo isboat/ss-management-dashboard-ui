@@ -92,6 +92,16 @@
                                 <div>
                                     <a class="load-more-link" (click)="fetchListData()">Load more</a>
                                 </div>
+                                <div>
+                                    <br /><br />
+                                    <p class="card-category">
+                                        <a [routerLink]="['/media-new']" mat-raised-button type="button"
+                                            class="btn btn-info">Upload
+                                            New Media</a>
+                                        <a [routerLink]="['/media-new']" [queryParams]="{ ai: true}" mat-raised-button
+                                            type="button" class="btn btn-warning">Generate AI Image</a>
+                                    </p>
+                                </div>
                             </div>
                             <div class="tab-pane" id="externalmedia">
                                 <table class="table">
