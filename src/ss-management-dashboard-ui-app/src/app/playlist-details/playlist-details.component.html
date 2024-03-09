@@ -37,6 +37,7 @@
                         <p class="card-category"> Media assets of the playlist below</p>
                     </div>
                     <div class="card-body">
+
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead class=" text-primary">
@@ -45,8 +46,8 @@
                                     </th>
                                     <th></th>
                                 </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of data.items; index as i; first as isFirst">
+                                <tbody cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                                    <tr cdkDrag *ngFor="let item of data.items; track item" style="cursor: move;">
                                         <td>
                                             <div *ngIf="item.playlistType == 0">
                                                 <media-preview [data]="item" [previewWidth]="'100px'"></media-preview>

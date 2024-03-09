@@ -41,8 +41,8 @@ export class MediaNewComponent implements OnInit {
     this.file = event.target.files[0]
   }
   postNew() {
-    if (!this.title || !this.desc) {
-      this.notificationService.showWarning("Add title and a short description")
+    if (!this.title) {
+      this.notificationService.showWarning("Give the media a title")
       return;
     }
 

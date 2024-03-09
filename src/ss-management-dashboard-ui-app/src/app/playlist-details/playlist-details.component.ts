@@ -4,6 +4,7 @@ import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
+import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-playlist-details',
@@ -24,6 +25,15 @@ export class PlaylistComponent implements OnInit {
     private playlistService: PlaylistService,
     private authService: AuthService,
     private route: ActivatedRoute) {
+  }
+
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.data.items, event.previousIndex, event.currentIndex);
+    this.data.itemIdAndTypePairs = [];
+    this.data.items.forEach(x => {
+      this.data.itemIdAndTypePairs.push({ itemType: x.playlistType, id: x.id }); // 0 is media type
+    })
   }
 
   ngOnInit() {
