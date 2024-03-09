@@ -44,6 +44,17 @@ export class PlaylistService {
     );
   }
 
+  publishRelatedScreens(id: string): Observable<any>  {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    
+    return this.http.post<any>(
+      environment.apiBaseUrl + '/v1/tenant/playlists/'+ id + 'publish-related-screens',
+      null,
+      { responseType: 'json', headers: headers }
+    );
+  }
+
   delete(id: string): Observable<any>  {
     return this.http.delete<any>(
       environment.apiBaseUrl + '/v1/tenant/playlists/' + id,

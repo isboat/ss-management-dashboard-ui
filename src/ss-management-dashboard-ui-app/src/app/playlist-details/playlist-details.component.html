@@ -94,10 +94,24 @@
                 <div class="card">
                     <div class="card-header card-header-success">
                         <h4 class="card-title ">Save Latest Changes</h4>
-                        <p class="card-category">Save the changes you have made.</p>
+
                     </div>
                     <div class="card-body">
-                        <button (click)="saveChanges()" class="btn btn-success">Save Changes</button>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="card-category">Save the changes you have made.</p>
+                                <p class="card-category">
+                                    <button (click)="saveChanges()" class="btn btn-success">Save Changes</button>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="card-category">Click to publish related screens.</p>
+                                <p class="card-category">
+                                    <button (click)="publishRelatedScreens()" class="btn btn-success">Publish
+                                        Screens</button>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
-import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-playlist-details',
@@ -66,7 +66,38 @@ export class PlaylistComponent implements OnInit {
 
     this.playlistService.save(this.data).subscribe(
       {
-        next: () => { this.notificationService.showSuccess("Saved!") },
+        next: () => {
+          this.notificationService.showSuccess("Saved!")
+        },
+        error: (e) => {
+          if (e.status == 401) {
+            this.authService.redirectToLogin(true);
+          }
+          else {
+            this.notificationService.showError("error occurred while saving!")
+            console.log(e)
+          }
+        }
+      });
+  }
+  publishRelatedScreens() {
+    this.playlistService.save(this.data).subscribe(
+      {
+        next: () => {
+          this.playlistService.publishRelatedScreens(this.data.id).subscribe(
+            {
+              next: () => { this.notificationService.showSuccess("Related Screens published!") },
+              error: (e) => {
+                if (e.status == 401) {
+                  this.authService.redirectToLogin(true);
+                }
+                else {
+                  this.notificationService.showError("error occurred while publishing related screens!")
+                  console.log(e)
+                }
+              }
+            });
+        },
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
