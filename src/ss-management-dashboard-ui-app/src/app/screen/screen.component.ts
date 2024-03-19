@@ -60,14 +60,36 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
   onTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
-    this.updateSelectedTemplate(newTemplateKey, true)
+    this.updateSelectedTemplate(newTemplateKey)
   }
-  updateSelectedTemplate(templateKey: string, updateVals: boolean) {
+
+  updateSelectedTemplate(templateKey: string) {
     this.templates.forEach((value, index) => {
       if (value.key == templateKey) {
         this.selectedTemplate = value;
         this.data.layout.templateKey = value.key;
-        if (updateVals) this.data.layout.templateProperties = value.requiredProperties
+        value.requiredProperties.forEach(rt => {
+          let existingTp = this.data?.layout?.templateProperties?.find(tt=> tt.key == rt.key)
+          if(!existingTp) {
+            this.data.layout.templateProperties.push(rt)
+          }
+        });
+
+        //remove from data props if it's not in templates required
+        if(this.data?.layout?.templateProperties) {
+          var notRequiredDataProps = [];
+          this.data.layout.templateProperties.forEach(ttp => {
+            const existing = value.requiredProperties.find(vrp => vrp.key == ttp.key)
+            if(!existing) {
+              notRequiredDataProps.push(ttp)
+            }
+          }); 
+
+          notRequiredDataProps.forEach(ntr => {
+            this.data.layout.templateProperties = this.data.layout.templateProperties.filter(fil => fil.key != ntr.key)
+          });
+        }
+
         this.subtypeTemplates = value.subTypes
         if (!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
       }
@@ -104,6 +126,11 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     if (!selectedMedia) return;
     this.data.mediaAssetEntityId = selectedMedia.id
     this.dataMediaAsset = selectedMedia;
+  }
+
+  isRange(prop: TemplateProperty) {
+    const fields = ["textFont","backgroundOpacity"]
+    return fields.indexOf(prop.key) > -1 
   }
 
   onTextAssetSelect(evt: any) {
@@ -156,8 +183,15 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.dataService.fetchScreenDetails(this.id).subscribe({
       next: (data) => {
         this.data = data
+        if(!this.data.layout) {
+          this.data.layout = { id: "", subType: "", templateKey: "", templateProperties: []}
+        }
+        if(!this.data.layout.templateProperties) {
+          this.data.layout.templateProperties = []
+        }
+
         if (this.data && this.data.layout && this.data.layout.templateKey) {
-          this.updateSelectedTemplate(this.data.layout.templateKey, false)
+          this.updateSelectedTemplate(this.data.layout.templateKey)
         }
         if(this.data && this.data.mediaAssetEntityId)
         {
@@ -273,6 +307,11 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   saveScreenUpdates(hidePostAction?: boolean, callbkFunc?: Function) {
+    if(this.data?.layout?.templateProperties) {
+      this.data.layout.templateProperties.forEach(t => {
+        t.value = "" + t.value
+      });
+    }
     this.dataService.updateScreen(this.data).subscribe(
       {
         next: () => {

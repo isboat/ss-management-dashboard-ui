@@ -109,8 +109,10 @@
                                 <div>
                                     <span class="input-group-text">
                                         <span style="margin-right: 15px;">{{prop.label}}</span>                                        
-                                        <input [(ngModel)]="prop.value" type="text" class="form-control"
+                                        <input  *ngIf="!isRange(prop)" [(ngModel)]="prop.value" type="text" class="form-control"
                                             placeholder="add value">
+                                        <input *ngIf="isRange(prop)" [(ngModel)]="prop.value" type="range" class="form-range" min="0" max="100" step="1">
+                                        <span *ngIf="isRange(prop)">{{prop.value}}</span>
                                     </span>
                                 </div>
                             </div>
