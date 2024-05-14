@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 
 declare const $: any;
@@ -29,18 +30,30 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[];
+  showMenuLinks = true;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+
+    this.updateMenu();
+    this.router.events.subscribe((event) => {
+      this.updateMenu();
+   });
+  }
+
+  updateMenu()
+  {
     var filtered = [];
-    for (let index = 0; index < ROUTES.length; index++) {
-      const element = ROUTES[index];
-      if(element.path == '/login' && this.auth.isAuthenticated()) continue;
-      if(element.path != '/users' || this.auth.isAdminUser()) filtered.push(element)
-      
-    }
-    this.menuItems = filtered;
+      for (let index = 0; index < ROUTES.length; index++) {
+        const element = ROUTES[index];
+        if(element.path == '/login' && this.auth.isAuthenticated()) continue;
+        if(element.path != '/users' || this.auth.isAdminUser()) filtered.push(element)
+        
+      }
+      this.menuItems = filtered;
+      const pathUrl = this.route['_routerState'].snapshot.url;
+      this.showMenuLinks = !(pathUrl.indexOf("register") > -1);
   }
 
   

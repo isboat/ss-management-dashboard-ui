@@ -29,4 +29,12 @@ export class LoginService {
       { responseType: 'json' }
     );
   }
+
+  public register(formData: any): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(
+      environment.apiBaseUrl + '/authentication/register',
+      formData,
+      { responseType: 'json' }
+    );
+  }
 }

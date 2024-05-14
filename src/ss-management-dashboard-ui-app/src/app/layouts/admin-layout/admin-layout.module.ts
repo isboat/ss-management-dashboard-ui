@@ -39,6 +39,7 @@ import { TextAssetListComponent } from 'app/text-asset-list/text-asset-list.comp
 import { TextAssetComponent } from 'app/text-asset/text-asset.component';
 import { ItemHistoryComponent } from 'app/item-history/item-history.component';
 import { TextAssertDropdownComponent } from 'app/textassert-dropdown/textassert-dropdown.component';
+import { RegisterComponent } from 'app/register/register.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { TextAssertDropdownComponent } from 'app/textassert-dropdown/textassert-
   declarations: [
     DashboardComponent,
     LoginComponent,
+    RegisterComponent,
     ScreenListComponent,
     ScreenDetailsComponent,
     ScreenCreateComponent,

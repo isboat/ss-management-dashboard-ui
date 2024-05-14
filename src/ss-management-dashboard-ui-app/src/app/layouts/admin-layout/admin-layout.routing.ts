@@ -23,6 +23,7 @@ import { MediaDetailsComponent } from 'app/media-details/media-details.component
 import { TextAssetNewComponent } from 'app/text-asset-new/text-asset-new.component';
 import { TextAssetListComponent } from 'app/text-asset-list/text-asset-list.component';
 import { TextAssetComponent } from 'app/text-asset/text-asset.component';
+import { RegisterComponent } from 'app/register/register.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [canActivateRoute] },
@@ -47,4 +48,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'playlists/:id',     component: PlaylistComponent, canActivate: [canActivateUserRoute] },
     { path: 'help-and-support',     component: HelpSupportComponent, canActivate: [canActivateUserRoute] },
     { path: 'login',   component: LoginComponent, canActivate: [canActivateLoginRoute] },
+    { path: 'register',   component: RegisterComponent, canActivate: [canActivateLoginRoute] }
 ];

@@ -8,3 +8,10 @@
 .load-more-link:focus, .load-more-link:active {
     color: cornflowerblue;
 }
+
+.primary-bg-color {
+    background: linear-gradient(130deg, #231a6f, #0f054c) !important;
+}
+form.primary-form-color label {
+    color: #000000;
+}

@@ -1,6 +1,10 @@
 <div class="logo">
     <a href="/" class="simple-text">
-        Management Service
+        <div>
+            <img class="img" src="./assets/img/site-logo.png" width="50px" />
+            <span>onScreenSync</span>
+        </div>
+        <div>Management Service</div>        
     </a>
 </div>
 <div class="sidebar-wrapper">
@@ -43,9 +47,9 @@
         </li>
     </ul>
   </div>
-    <ul class="nav">
+    <ul class="nav sidebar-link" *ngIf="showMenuLinks">
         <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
-            <a class="nav-link" [routerLink]="[menuItem.path]">
+            <a class="nav-link " [routerLink]="[menuItem.path]">
                 <i class="material-icons">{{menuItem.icon}}</i>
                 <p>{{menuItem.title}}</p>
             </a>
