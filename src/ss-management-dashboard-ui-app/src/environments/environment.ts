@@ -5,7 +5,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://myscreen123service.runasp.net/api' // 'https://localhost:7140/api',
+  //apiBaseUrl: 'http://myscreen123service.runasp.net/api' // 'https://localhost:7140/api',
   //apiBaseUrl: 'http://management-dashboard-api.bue5g0hvfpcsdpc5.uksouth.azurecontainer.io/api',
   //apiBaseUrl: 'http://localhost:5096/api',
+  apiBaseUrl: 'https://managementdapi.azurewebsites.net/api',
 };

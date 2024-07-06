@@ -23,9 +23,10 @@
                                 </mat-form-field>
                               </div>
                           </div>
-                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header pull-right">Log in</button>
+                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Log in</button>
                           <div class="clearfix"></div>
                       </form>
+                      <a [routerLink]="['/register']" class="pull-right">No account? Register</a>
                   </div>
               </div>
           </div>
@@ -33,7 +34,7 @@
               <div class="card card-profile">
                   <div class="card-avatar">
                       <a href="javascript:void(0)">
-                          <img class="img" src="./assets/img/faces/marc.jpg" />
+                          <img class="img profile-img" src="./assets/img/site-logo.png" />
                       </a>
                   </div>
                   <div class="card-body">
