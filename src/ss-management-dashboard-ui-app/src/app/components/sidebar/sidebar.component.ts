@@ -53,7 +53,8 @@ export class SidebarComponent implements OnInit {
       }
       this.menuItems = filtered;
       const pathUrl = this.route['_routerState'].snapshot.url;
-      this.showMenuLinks = !(pathUrl.indexOf("register") > -1);
+      const isRegOrLoginPage = pathUrl.indexOf("register") > -1 || pathUrl.indexOf("login") > -1
+      this.showMenuLinks = !(isRegOrLoginPage);
   }
 
   
