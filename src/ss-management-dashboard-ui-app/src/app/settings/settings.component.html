@@ -16,10 +16,25 @@
                         <mat-form-field class="example-full-width">
                             <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
                         </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Address field" type="text" [(ngModel)]="data.address">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="city" type="text" [(ngModel)]="data.city">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="country" type="text" [(ngModel)]="data.country">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="postcode" type="text" [(ngModel)]="data.postcode">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="telephone" type="text" [(ngModel)]="data.telephone">
+                        </mat-form-field>
 
                         <p class="card-category">
                             <br /><br /><br />
-                            Save changes you've made to user's detail.
+                            Save changes you've made to the detail.
                         </p>
                         <p class="card-category">
                             <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-info">Save Updates</a>

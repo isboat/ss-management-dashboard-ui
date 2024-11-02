@@ -18,6 +18,17 @@ export class TenantService {
     );
   }
 
+  saveUpdates(data: TenantModel): Observable<any>  {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json; charset=utf-8');
+    
+    return this.http.patch<any>(
+      environment.apiBaseUrl + '/v1/tenant/settings/',
+      JSON.stringify(data),
+      { responseType: 'json', headers: headers }
+    );
+  }
+
   updatePartnerPermission(permission: boolean): Observable<any>  {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');

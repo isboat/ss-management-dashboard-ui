@@ -17,8 +17,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   isAdminUser = false;
 
-  allowPermission: boolean = false;
-
   constructor(
     private dataService: TenantService, 
     private authService: AuthService,
@@ -35,12 +33,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   get allowToView()
   {
-    return this.isAdminUser || (this.data && this.authService.authUserEmail() === this.data?.email);
-  }
-
-  get isCurrentUserView()
-  {
-    return this.data && this.authService.authUserEmail() === this.data?.email;
+    return this.isAdminUser;
   }
 
   ngOnDestroy() {
@@ -51,13 +44,33 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.dataService.fetchSettings().subscribe({
       next: (data) => {
         this.data = data
-        console.log(this.data)
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
       },
       complete: () => console.info('complete')
     });
+  }
+
+  saveUpdates() { 
+    this.dataService.saveUpdates(this.data).subscribe(
+      {
+        next: () => 
+        {
+          this.notification.showSuccess('Updated successfully.')
+        },
+        error: (e) => {
+          if(e.status == 401) 
+          {
+            this.authService.redirectToLogin(true);
+          }
+          else
+          {
+            console.log(e)
+          }
+        },
+        complete: () => console.info('complete')
+      });
   }
 
   updatePermission() { 
