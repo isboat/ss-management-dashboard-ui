@@ -19,6 +19,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/media-list', title: 'Media Assets',  icon:'play_circle', class: '' },
     { path: '/text-asset-list', title: 'ADs / Information',  icon:'play_circle', class: '' },
     { path: '/playlists', title: 'Playlists',  icon:'playlist_add_check', class: '' },
+    { path: '/settings', title: 'Settings',  icon:'help', class: '' },
     { path: '/help-and-support', title: 'Help and Support',  icon:'help', class: '' },
     { path: '/login', title: 'Login',  icon:'person', class: '' },
 ];

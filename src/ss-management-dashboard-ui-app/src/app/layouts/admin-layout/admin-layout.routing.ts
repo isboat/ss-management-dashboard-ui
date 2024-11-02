@@ -11,6 +11,7 @@ import { MenuCreateComponent } from 'app/menu-create/menu-create.component';
 import { MenuDetailsComponent } from 'app/menu/menu.component';
 import { MediaNewComponent } from 'app/media-new/media-new.component';
 import { UserListComponent } from 'app/user-list/user-list.component';
+import { SettingsComponent } from 'app/settings/settings.component';
 import { UserCreateComponent } from 'app/user-create/user-create.component';
 import { UserDetailsComponent } from 'app/user/user.component';
 import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
@@ -40,6 +41,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'text-asset-new',     component: TextAssetNewComponent, canActivate: [canActivateRoute] },
     { path: 'text-asset/:id',     component: TextAssetComponent, canActivate: [canActivateRoute] },
     { path: 'users',     component: UserListComponent, canActivate: [canActivateUserRoute] },
+    { path: 'settings',     component: SettingsComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-create',     component: UserCreateComponent, canActivate: [canActivateUserRoute] },
     { path: 'user-details/:id',     component: UserDetailsComponent, canActivate: [canActivateUserRoute] },
     { path: 'device/auth',     component: DeviceAuthComponent, canActivate: [canActivateUserRoute] },

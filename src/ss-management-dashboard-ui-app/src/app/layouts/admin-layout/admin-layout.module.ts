@@ -22,6 +22,7 @@ import { MenuCreateComponent } from 'app/menu-create/menu-create.component';
 import { MenuDetailsComponent } from 'app/menu/menu.component';
 import { MediaNewComponent } from 'app/media-new/media-new.component';
 import { UserListComponent } from 'app/user-list/user-list.component';
+import { SettingsComponent } from 'app/settings/settings.component';
 import { UserCreateComponent } from 'app/user-create/user-create.component';
 import { UserDetailsComponent } from 'app/user/user.component';
 import { DeviceAuthComponent } from 'app/device-auth/device-auth.component';
@@ -72,6 +73,7 @@ import { RegisterComponent } from 'app/register/register.component';
     TextAssetComponent,
     TextAssetListComponent,
     UserListComponent,
+    SettingsComponent,
     UserCreateComponent,
     UserDetailsComponent,
     DeviceAuthComponent,
