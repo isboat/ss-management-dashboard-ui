@@ -66,9 +66,53 @@ The dashboard supports the following major feature areas:
   - `isAdminUser()`
   - `authUserEmail()`
   - `redirectToLogin()`
-- `AuthInterceptor` appends `Authorization: Bearer <token>` to outgoing API requests.
-- Route guards in `can-activate-route.service.ts` protect authenticated pages and admin-only pages.
-- The sidebar hides login links for authenticated users and conditionally shows admin pages only to users with the `Admin` role.
+- `LoginService` sends credentials to `/authentication/login` and `/authentication/register`, then stores the returned JWT to local storage.
+- `AuthInterceptor` appends `Authorization: Bearer <token>` to outgoing API requests and redirects to `/login` on HTTP 401 responses.
+- Route guards in `can-activate-route.service.ts` protect authenticated pages and admin-only pages:
+  - `canActivateRoute` for general authenticated access
+  - `canActivateUserRoute` for admin-only pages
+  - `canActivateLoginRoute` prevents authenticated users from visiting login/register pages
+- The sidebar hides login links for authenticated users and filters admin-only menu items based on the JWT `role` claim.
+
+## Routes and Pages
+
+The application defines a dashboard layout with the following routes:
+
+- `/dashboard`
+- `/screens`
+- `/screen-details/:id`
+- `/screen-create`
+- `/menus`
+- `/menu-create`
+- `/menu-details/:id`
+- `/media-new`
+- `/media-list`
+- `/text-asset-list`
+- `/media-details/:id`
+- `/text-asset-new`
+- `/text-asset/:id`
+- `/users`
+- `/settings`
+- `/user-create`
+- `/user-details/:id`
+- `/device/auth`
+- `/devices`
+- `/playlists`
+- `/playlists/:id`
+- `/help-and-support`
+- `/login`
+- `/register`
+
+Most routes are rendered under the `AdminLayoutComponent` and are guarded by the layout route module.
+
+## Application Behavior and UX Flows
+
+- Login collects username/email and password, then stores the returned JWT under the `token` key in local storage.
+- The app uses the JWT payload to determine the current user email and whether the user has the `Admin` role.
+- The `ScreenDetailsComponent` loads templates, menus, devices, playlists, media assets, and text assets, and it updates screen layout metadata before saving.
+- Screen preview is launched by opening a local preview site at `http://localhost:4401/?screenId=<id>&token=<jwt>`.
+- The `ScreenListComponent` includes publish and delete actions and can link a published screen to a selected device.
+- Many components handle 401 errors by forcing a redirect to the login page via `AuthService.redirectToLogin(true)`.
 
 ## API Integration
 
