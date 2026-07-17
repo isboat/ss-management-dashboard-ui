@@ -1,0 +1,111 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger primary-bg-color">
+                        <h4 class="card-title ">Screen List</h4>
+                        <p class="card-category"> The list of all screens</p>
+                        <p class="card-category">
+                            <a [routerLink]="['/screen-create']" mat-raised-button type="button"
+                                class="btn btn-info">Create New Screen</a>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-info">
+                                    <th>
+                                        Preview
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let screen of listData; index as i; first as isFirst">
+                                        <td class="text-primary">
+                                            <button (click)="goToPreviewSite(screen.id)" mat-raised-button type="button"
+                                                matTooltip="Click to preview" [matTooltipPosition]="'above'"
+                                                class="btn btn-primary btn-link btn-just-icon">
+                                                <i class="material-icons">preview</i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <a [routerLink]="['/screen-details', screen.id]">
+                                                {{screen.displayName}}
+                                            </a>
+                                        </td>
+                                        <td class="text-primary" style="text-align: right;">
+                                            <a *ngIf="isAdminUser" mat-raised-button type="button"
+                                                class="btn btn-success" data-toggle="modal" data-target="#modalpopup"
+                                                (click)="onSelectScreen(screen)">
+                                                Publish
+                                            </a>
+                                            <a *ngIf="isAdminUser" (click)="deleteScreen(screen.id)" mat-raised-button
+                                                type="button" class="btn btn-danger">
+                                                Delete
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalpopup" tabindex="-1" role="dialog" *ngIf="selectedScreen"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Publish to TV
+                                                Screen</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <p>Please select which TV device/screen to publish to.
+                                                </p>
+                                            </div>
+                                            <form>
+                                                <div class="form-group">
+                                                    <select class="custom-select" id="templateSelector"
+                                                        (change)="onDeviceSelect($event)">
+                                                        <option value="none">None</option>
+                                                        <option value="all">All</option>
+                                                        <option *ngFor="let item of devices; index as i;"
+                                                            [selected]="item.screenId === selectedScreen.id"
+                                                            value="{{item.id}}">
+                                                            {{item.deviceName}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button *ngIf="isAdminUser" type="button" class="btn btn-primary"
+                                                data-dismiss="modal" (click)="publishScreen(selectedScreen.id)">Publish
+                                                changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <a class="load-more-link" (click)="fetchListData()">Load more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

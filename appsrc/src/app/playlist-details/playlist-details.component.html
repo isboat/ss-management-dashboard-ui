@@ -1,0 +1,120 @@
+<div class="main-content" *ngIf="data">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title ">Information</h4>
+                        <p class="card-category"> Duration informaiton</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Playlist name</label>
+                            <input type="text" [(ngModel)]="data.name" class="form-control" id="exampleInputEmail1"
+                                placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label class="duration-label" for="exampleInputhh">Each Media Duration (HH:MM:SS): </label>
+                            <input id="plHr" [(ngModel)]="hrPart" min="0" max="24" type="number" placeholder="00"
+                                class="duration-input" id="exampleInputhh" placeholder="HH">
+                            <span class="separator">:</span>
+                            <input id="plMin" [(ngModel)]="minPart" min="0" max="60" type="number" placeholder="00"
+                                class="duration-input" id="exampleInputmm" placeholder="mm">
+                            <span class="separator">:</span>
+                            <input id="plSec" [(ngModel)]="secPart" min="0" max="60" type="number" placeholder="00"
+                                class="duration-input" id="exampleInputsec" placeholder="ss">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Playlist Media Items</h4>
+                        <p class="card-category"> Media assets of the playlist below</p>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class=" text-primary">
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th></th>
+                                </thead>
+                                <tbody cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                                    <tr cdkDrag *ngFor="let item of data.items; track item" style="cursor: move;">
+                                        <td>
+                                            <div *ngIf="item.playlistType == 0">
+                                                <media-preview [data]="item" [previewWidth]="'100px'"></media-preview>
+                                            </div>
+
+                                            <div *ngIf="item.playlistType == 1">
+                                                <div>{{item.name}}</div>
+                                            </div>
+                                        </td>
+                                        <td class="text-primary" style="text-align: center;">
+                                            <a (click)="removeMediaAsset(item.id)" mat-raised-button type="button"
+                                                class="btn btn-danger">
+                                                Remove
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div>Add new media asset to the playlist items from below
+                                    dropdown</div>
+                                <media-dropdown (clickEmitter)="onMediaSelect($event)">
+                                </media-dropdown>
+                            </div>
+                            <div class="col-md-6">
+                                <div>Add new text ad/Information to the playlist items from
+                                    below
+                                    dropdown<br /></div>
+                                <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)">
+                                </textassert-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title ">Save Latest Changes</h4>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="card-category">Save the changes you have made.</p>
+                                <p class="card-category">
+                                    <button (click)="saveChanges()" class="btn btn-success">Save Changes</button>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="card-category">Click to publish related screens.</p>
+                                <p class="card-category">
+                                    <button (click)="publishRelatedScreens()" class="btn btn-danger">Publish
+                                        Screens</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

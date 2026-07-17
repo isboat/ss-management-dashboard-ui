@@ -1,0 +1,256 @@
+<div class="main-content">
+    <div class="container-fluid" *ngIf="data">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">Screen Name</h3>
+                        <p class="card-category">Handcrafted by our friend
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <p class="card-text">
+                            <input type="text" class="form-control edit-display-name" id="displayNameInput"
+                                placeholder="display name" [disabled]="!data.editName" [(ngModel)]="data.displayName">
+
+                            <button mat-raised-button type="button" matTooltip="Edit display name"
+                                [matTooltipPosition]="'above'" (click)="data.editName = true" [hidden]="data.editName"
+                                class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                <i class="material-icons">edit</i>
+                            </button>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h3 class="card-title">Menu</h3>
+                        <p class="card-category">List of menus available to choose from, for display.
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+
+                        <div style="margin-top: 15px; display:flex;">
+                            <select class="form-control" (change)="onMenuChange($event)">
+                                <option value="">Choose...</option>
+                                <option *ngFor="let menu of menus; index as i;"
+                                    [selected]="menu.id == data.menuEntityId" value="{{menu.id}}">
+                                    {{menu.title}}
+                                </option>
+                            </select>
+                            <span style="margin-top: -10px;" *ngIf="data.menuEntityId">
+                                <a [routerLink]="['/menu-details', data.menuEntityId]" mat-raised-button type="button"
+                                    class="btn btn-info">
+                                    Go to Menu details page
+                                </a>
+                            </span>
+                        </div>
+                        <div>
+                            <a [routerLink]="['/menu-create']" mat-raised-button type="button"
+                                class="btn btn-primary">Create New Menu</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">External Media Source</h3>
+                        <p class="card-category">You can paste url/link for a media, you want to play on this screen.
+                            E.g youtube link
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <p>
+                            <input type="text" class="form-control" id="displayNameInput" placeholder="youtube link"
+                                [(ngModel)]="data.externalMediaSource">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h3 class="card-title">Screen Design template</h3>
+                        <p class="card-category">Select one of these pre-defined templates of how you want the screen to
+                            look on the TV
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data && templates">
+                        <div>
+                            <div>Select what to display on the screen</div>
+                            <div>
+                                <select class="custom-select" id="templateSelector" (change)="onTemplateChange($event)">
+                                    <option>Choose Layout Design...</option>
+                                    <option *ngFor="let template of templates; index as i;"
+                                        [selected]="template.key === data.layout.templateKey" value="{{template.key}}">
+                                        {{template.label}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="margin-top: 35px; margin-bottom: 30px;"
+                            *ngIf="subtypeTemplates && subtypeTemplates.length > 0">
+                            <div>
+                                Select from various display designs or types
+                            </div>
+                            <div>
+                                <select class="custom-select" id="menuSubtypeTemplates"
+                                    (change)="onsubTemplateChange($event)">
+                                    <option>Choose ...</option>
+                                    <option *ngFor="let template of subtypeTemplates; index as i;"
+                                        [selected]="template.key === data.layout.subType" value="{{template.key}}">
+                                        {{template.label}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div *ngIf="data.layout.templateKey">
+                            Please add/update these values for the layout
+                            <div *ngFor="let prop of data.layout.templateProperties">
+                                <div>
+                                    <span class="input-group-text">
+                                        <span style="margin-right: 15px;">{{prop.label}}</span>                                        
+                                        <input  *ngIf="!isRange(prop)" [(ngModel)]="prop.value" type="text" class="form-control"
+                                            placeholder="add value">
+                                        <input *ngIf="isRange(prop)" [(ngModel)]="prop.value" type="range" class="form-range" min="0" max="100" step="1">
+                                        <span *ngIf="isRange(prop)">{{prop.value}}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" *ngIf="SelectedTemplateHasMedia">
+                    <div class="card-header card-header-info">
+                        <h3 class="card-title">Media Asset</h3>
+                        <p class="card-category">Select one of the media asset to use.
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <br />
+                        <media-preview *ngIf="data.mediaAssetEntityId" [data]="dataMediaAsset"
+                            [previewWidth]="previewWidth"></media-preview>
+                        <br />
+                        <media-dropdown (clickEmitter)="onMediaSelect($event)"></media-dropdown>
+                    </div>
+                </div>
+                <div class="card" *ngIf="data?.layout?.templateKey == 'Text'">
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">AD Text/Information</h3>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <div>
+                            <p *ngIf="dataTextAsset">{{dataTextAsset.name}}</p>
+                        </div>
+                        <textassert-dropdown (clickEmitter)="onTextAssetSelect($event)"></textassert-dropdown>
+                    </div>
+                </div>
+
+                <div class="card" *ngIf="data?.layout?.templateKey == 'MediaPlaylist'">
+                    <div class="card-header card-header-info">
+                        <h3 class="card-title">Playlist Selection</h3>
+                        <p class="card-category">Please select the playlist to use on this screen
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="playlists">
+                        <select class="custom-select" (change)="onPlaylistChange($event)">
+                            <option>Choose...</option>
+                            <option *ngFor="let pl of playlists; index as i;" [selected]="pl.id == data.playlistId"
+                                value="{{pl.id}}">
+                                {{pl.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h3 class="card-title">Preview and Save Changes</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="card-category">Save changes you've made to screen settings. </p>
+                                <p class="card-category">
+                                    <a (click)="saveScreenUpdates()" class="btn btn-round btn-fill btn-success">Save
+                                        Updates</a>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="card-category">Preview changes you've made to screen settings. </p>
+                                <p class="card-category">
+                                    <a (click)="goToPreviewSite()" class="btn btn-round btn-fill btn-info">Preview
+                                        Updates</a>
+                                </p>
+                            </div>
+                            <div class="col-md-4" *ngIf="isAdminUser">
+                                <p class="card-category">Publish changes you've made to screen settings. </p>
+                                <p class="card-category">
+                                    <button type="button" class="btn btn-round btn-fill btn-danger" data-toggle="modal"
+                                        data-target="#exampleModal">
+                                        Publish Live
+                                    </button>
+                                </p>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Publish to TV Screen</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" *ngIf="data && devices">
+                                                <div>
+                                                    <p>Please select which TV device/screen to publish to.</p>
+                                                </div>
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="templateSelector" class="col-form-label">Select
+                                                            Device</label>
+                                                        <select class="custom-select" id="templateSelector"
+                                                            (change)="onTvScreenChange($event)">
+                                                            <option value="none">None</option>
+                                                            <option value="all">All</option>
+                                                            <option *ngFor="let item of devices; index as i;"
+                                                                [selected]="item.screenId === data.id"
+                                                                value="{{item.id}}">
+                                                                {{item.deviceName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button *ngIf="isAdminUser" type="button" class="btn btn-primary"
+                                                    data-dismiss="modal" (click)="publishScreenUpdates()">Publish
+                                                    changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <item-history [itemId]="data.id"></item-history>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<ng-template [ngIf]="show">
+    <div>
+        <button class="btn btn-outline-info" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">{{buttonText}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <input type="text" class="form-control" (keyup)="searchText($event)" placeholder="type to search" />
+
+            <a (click)="onMediaSelect(med.id)"  class="dropdown-item" *ngFor="let med of viewList" >
+
+                <video *ngIf="isVideoMedia(med.type)" [src]="med.assetUrl" width="50px">
+                    Your device browser does not support the video tag.
+                </video>
+                <img *ngIf="!isVideoMedia(med.type)" [src]="med.assetUrl"  width="50px"  [alt]="med.name" />
+                <span style="margin-left: 10px;">{{med.name}}</span>
+            </a>
+            <div style="text-align: center;"  >
+                <span class="load-more-link" (click)="fetchListData()">Load more</span>
+            </div>
+        </div>
+    </div>
+</ng-template>

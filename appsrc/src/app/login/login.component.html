@@ -1,0 +1,51 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-8">
+              <div class="card">
+                  <div class="card-header card-header-info login-card-header">
+                      <h4 class="card-title">Login</h4>
+                      <p class="card-category">Complete your login</p>
+                  </div>
+                  <div class="card-body">
+                      <form  [formGroup]="loginForm" (ngSubmit)="submit()">
+                          <div class="row">
+                              <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Email" type="email" formControlName="email">
+                                </mat-form-field>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Password" type="password" formControlName="password">
+                                </mat-form-field>
+                              </div>
+                          </div>
+                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Log in</button>
+                          <div class="clearfix"></div>
+                      </form>
+                      <a [routerLink]="['/register']" class="pull-right">No account? Register</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="card card-profile">
+                  <div class="card-avatar">
+                      <a href="javascript:void(0)">
+                          <img class="img profile-img" src="./assets/img/site-logo.png" />
+                      </a>
+                  </div>
+                  <div class="card-body">
+                      <h4 class="card-title">onScreenSync.com</h4>
+                      <p class="card-description">
+                        Follow us on all social media platforms. Click the button below
+                      </p>
+                      <a target="_blank" href="https://www.youtube.com/@onScreenSync" class="btn btn-danger login-card-header btn-round">Follow</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

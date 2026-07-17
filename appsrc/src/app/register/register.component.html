@@ -1,0 +1,83 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header card-header-info login-card-header">
+            <h4 class="card-title">REGISTER</h4>
+            <p class="card-category">Ready to use onScreenSync, complete the form below and one of the sales team
+              members will be in touch with you</p>
+          </div>
+          <div class="card-body">
+            <form class="register-form" [formGroup]="registerForm" (ngSubmit)="submit()">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Name/Business name</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="name"
+                  placeholder="Enter name">
+                <small class="form-text text-muted">We'll never share your name or business name with
+                  anyone
+                  else.</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" formControlName="email"
+                  placeholder="Enter email">
+                <small class="form-text text-muted">We'll never share your email with anyone
+                  else.</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Address</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="address"
+                  placeholder="Enter address">
+                <small class="form-text text-muted">We'll never share your address with anyone
+                  else.</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Postcode / Zipcode</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="postcode"
+                  placeholder="Enter Postcode or Zipcode">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">City</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="city"
+                  placeholder="Enter city">
+                <small class="form-text text-muted">We'll never share your city with anyone
+                  else.</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Country</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="country"
+                  placeholder="Enter country">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Telephone</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="telephone"
+                  placeholder="Enter Telephone">
+                <small class="form-text text-muted">We'll never share your telephone with anyone
+                  else.</small>
+              </div>
+              <button type="submit" class="btn btn-primary login-card-header">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card card-profile">
+          <div class="card-avatar">
+            <a href="javascript:void(0)" class="login-card-header">
+              <img class="img profile-img" src="./assets/img/site-logo.png" />
+            </a>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">Already a customer?</h4>
+            <p class="card-description">
+              Click the button below to login
+            </p>
+            <a [routerLink]="['/login']" class="btn btn-danger login-card-header btn-round">Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

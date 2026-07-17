@@ -1,0 +1,158 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card" *ngIf="data">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-danger">
+                                <h4 class="card-title">Menu Details</h4>
+                                <p class="card-category">Extra menu details of information.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInputName">Menu Internal Name</label>
+                                    <input type="text" [(ngModel)]="data.name" class="form-control"
+                                        id="exampleFormControlInputName" placeholder="menu title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Menu Display Title</label>
+                                    <input type="text" [(ngModel)]="data.title" class="form-control"
+                                        id="exampleFormControlInput1" placeholder="menu title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Menu Currency</label>
+                                    <select class="form-control" id="templateSelector"
+                                        (change)="onMenuCurrencyChange($event)">
+                                        <option>Choose...</option>
+                                        <option *ngFor="let item of currencies; index as i;"
+                                            [selected]="item == data.currency" value="{{item}}">
+                                            {{item}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Description</label>
+                                    <textarea class="form-control" [(ngModel)]="data.description"
+                                        id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Icon Image</label>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <media-preview *ngIf="data.iconUrl" [assetUrl]="data.iconUrl" [assetType]="1" [previewWidth]="previewWidth" [dataAlt]="'Menu icon'"></media-preview>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <media-dropdown (clickEmitter)="onMenuIconMediaChange($event)" [assetType]="'1'" [buttonText]="selectButtonText"></media-dropdown>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-danger">
+                                <h4 class="card-title">Menu items</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive table-upgrade">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th style="width: 10%;">Price</th>
+                                                <th style="width: 10%;">Discount Price <small>(Optional)</small></th>
+                                                <th>Description</th>
+                                                <th>Icon Image</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of data.menuItems">
+                                                <td>
+                                                    <input [(ngModel)]="item.name" type="text" placeholder="add a name"
+                                                        class="form-control" />
+                                                </td>
+                                                <td style="width: 10%;">
+                                                    <input [(ngModel)]="item.price" type="text"
+                                                        placeholder="add a price" class="form-control" />
+                                                </td>
+                                                <td style="width: 10%;">
+                                                    <input [(ngModel)]="item.discountPrice" type="text"
+                                                        placeholder="discount" class="form-control" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="item.description" type="text"
+                                                        placeholder="add a description" class="form-control" />
+                                                </td>
+                                                <td>
+                                                    <media-preview style="display: inline-block;" [assetUrl]="item.iconUrl" [assetType]="1" [previewWidth]="previewWidth">
+                                                    </media-preview>
+                                                    <media-dropdown style="display: inline-block;" [assetType]="'1'" [buttonText]="selectButtonText"
+                                                        (clickEmitter)="onMenuItemIconMediaChange($event, item)">
+                                                    </media-dropdown>
+                                                </td>
+                                                <td class="text-center"><a (click)="deleteMenuItem(item.id)"
+                                                        class="btn btn-round btn-fill btn-default">Delete</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input [(ngModel)]="itemToAdd.name" type="text"
+                                                        placeholder="add a name" class="form-control"
+                                                        id="addItemName" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="itemToAdd.price" type="text"
+                                                        placeholder="add a price" class="form-control"
+                                                        id="addItemPrice" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="itemToAdd.discountPrice" type="text"
+                                                        placeholder="discount price" class="form-control"
+                                                        id="discountPrice" />
+                                                </td>
+                                                <td>
+                                                    <input [(ngModel)]="itemToAdd.description" type="text"
+                                                        placeholder="add a description" class="form-control"
+                                                        id="addItemdescription" />
+                                                </td>
+                                                <td>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a (click)="addItemToList()"
+                                                        class="btn btn-round btn-fill btn-info">Add Item</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-success">
+                                <h4 class="card-title">Save changes you've made</h4>
+                                <p class="card-category">Click the button below to save all changes you have made to the
+                                    menu and its menu items</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive table-upgrade">
+                                    <a (click)="saveMenu()" class="btn btn-fill btn-success">Save
+                                        Menu</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

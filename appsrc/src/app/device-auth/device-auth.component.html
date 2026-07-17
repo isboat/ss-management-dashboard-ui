@@ -1,0 +1,30 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row" *ngIf="showForm">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title">Device Authentication</h4>
+                        <p class="card-category">Enter the code displayed on your TV App</p>
+                    </div>
+                    <div class="card-body">
+                        <form  [formGroup]="deviceAuthForm" (ngSubmit)="submit()">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input class="device-code-input" placeholder="ABCD" maxlength="4" minlength="4" matInput type="text" formControlName="partOne">
+                                    <span>-</span>
+                                    <input class="device-code-input" placeholder="EFGH" maxlength="4" minlength="4" matInput type="text" formControlName="partTwo">
+                                    <span>-</span>
+                                    <input class="device-code-input" placeholder="IJKL" maxlength="4" minlength="4" matInput type="text" formControlName="partThree">
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" class="btn btn-danger pull-right">Continue</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,89 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row" *ngIf="allowToView">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h3 class="card-title">User Details</h3>
+                        <p class="card-category">
+                            Below is the details of the user
+                        </p>
+                    </div>
+                    <div class="card-body" *ngIf="data">
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Name" type="text" [(ngModel)]="data.name">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <select matNativeControl (change)="onRoleChange($event)">
+                                <option *ngFor="let item of rolesOption; index as i;" [selected]="i === data.role"
+                                    value="{{i}}">
+                                    {{item}}
+                                </option>
+                            </select>
+                        </mat-form-field>
+
+                        <p class="card-category">
+                            <br /><br /><br />
+                            Save changes you've made to user's detail.
+                        </p>
+                        <p class="card-category">
+                            <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-info">Save Updates</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card" *ngIf="data && isCurrentUserView">
+                    <div class="card-header card-header-danger">
+                        <h3 class="card-title">User Password Update</h3>
+                        <p class="card-category">
+                            Fill form below to update user's password
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Password" type="password" [(ngModel)]="passwdUpdateModel.currentPasswd">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput placeholder="new password" type="password" [(ngModel)]="passwdUpdateModel.newPassword">
+                        </mat-form-field>
+                        <div>
+                            <a (click)="updatePasswd()" class="btn btn-round btn-fill btn-danger">Update User Password</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" *ngIf="data && isAdminUser">
+                    <div class="card-header card-header-warning">
+                        <h3 class="card-title">Reset User's Password</h3>
+                        <p class="card-category">
+                            Click button below to reset user's password
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <a (click)="resetPasswd()" class="btn btn-round btn-fill btn-warning">Reset User Password</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="!allowToView">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h3 class="card-title">Forbidden</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <p class="card-category">You are not allow to view this page. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
