@@ -6,6 +6,7 @@ import { NotificationsService } from 'app/notifications';
 import { TextAssetService } from 'app/services/text-asset.service';
 
 @Component({
+  standalone: false,
   selector: 'app-text-asset-new',
   templateUrl: './text-asset-new.component.html',
   styleUrls: ['./text-asset-new.component.css']

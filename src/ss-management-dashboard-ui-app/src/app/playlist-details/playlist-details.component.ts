@@ -7,6 +7,7 @@ import { NotificationsService } from 'app/notifications';
 import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
+  standalone: false,
   selector: 'app-playlist-details',
   templateUrl: './playlist-details.component.html',
   styleUrls: ['./playlist-details.component.css']
@@ -111,10 +112,10 @@ export class PlaylistComponent implements OnInit {
   }
 
   onMediaSelect($event) {
-    let selectedMedia = $event.selectedMedia;
+    const selectedMedia = $event.selectedMedia;
     if (!selectedMedia) return;
 
-    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedMedia.id) > -1;
+    const exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedMedia.id) > -1;
     if (!exist) {
       if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
       this.data.itemIdAndTypePairs.push({ itemType: 0, id: selectedMedia.id }); // 0 is media type
@@ -124,10 +125,10 @@ export class PlaylistComponent implements OnInit {
     }
   }
   onTextAssetSelect($event) {
-    let selectedAsset = $event.selectedAsset;
+    const selectedAsset = $event.selectedAsset;
     if (!selectedAsset) return;
 
-    var exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedAsset.id) > -1;
+    const exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedAsset.id) > -1;
     if (!exist) {
       if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
       this.data.itemIdAndTypePairs.push({ itemType: 1, id: selectedAsset.id }); // 1 is Text type
@@ -140,12 +141,12 @@ export class PlaylistComponent implements OnInit {
   removeMediaAsset(id: string) {
     if (!id) return;
 
-    var index = this.data?.itemIdAndTypePairs?.findIndex(x => x.id == id);
+    const index = this.data?.itemIdAndTypePairs?.findIndex(x => x.id == id);
     if (index < 0) return;
 
     this.data.itemIdAndTypePairs.splice(index, 1);
 
-    var assetIndex = this.data.items.findIndex(x => x.id == id);
+    const assetIndex = this.data.items.findIndex(x => x.id == id);
 
     if (assetIndex > -1) this.data.items.splice(assetIndex, 1)
   }

@@ -6,6 +6,7 @@ import { PlaylistService } from 'app/services/playlist.service';
 import { TextAssetModel } from 'app/models/text-asset-response.model';
 
 @Component({
+  standalone: false,
   selector: 'app-text-asset-list',
   templateUrl: './text-asset-list.component.html',
   styleUrls: ['./text-asset-list.component.css']
@@ -38,7 +39,7 @@ export class TextAssetListComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      var playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === id) > -1);
+      const playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === id) > -1);
       if(playlist)
       {
         this.removeTextPlaylist(id, playlist.id)

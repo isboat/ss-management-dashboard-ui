@@ -8,6 +8,7 @@ import { DeviceService } from 'app/services/device.service';
 import { DeviceModel } from 'app/models/device-response.model';
 
 @Component({
+  standalone: false,
   selector: 'app-screen-list',
   templateUrl: './screen-list.component.html',
   styleUrls: ['./screen-list.component.css']

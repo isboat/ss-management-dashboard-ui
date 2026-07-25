@@ -4,6 +4,7 @@ import { AuthService } from 'app/services/auth.service';
 import { HistoryService } from 'app/services/history.service';
 
 @Component({
+  standalone: false,
   selector: 'item-history',
   templateUrl: './item-history.component.html',
   styleUrls: ['./item-history.component.css']

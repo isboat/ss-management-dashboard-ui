@@ -6,6 +6,7 @@ import { AuthService } from 'app/services/auth.service';
 import { DeviceService } from 'app/services/device.service';
 
 @Component({
+  standalone: false,
   selector: 'app-screen',
   templateUrl: './device-auth.component.html',
   styleUrls: ['./device-auth.component.css']
@@ -46,7 +47,7 @@ export class DeviceAuthComponent implements OnInit {
         if (e.status == 401) this.authService.redirectToLogin(true);
         if (e.status == 404) this.notification.showWarning('NOT FOUND: Incorrect code, please update.')
         if (e.status == 400) {
-          var message = "";
+          let message = "";
           const error = e.error;
           switch (error) {
             case "device_limit_reached":

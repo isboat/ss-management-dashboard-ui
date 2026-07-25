@@ -25,6 +25,7 @@ export const ROUTES: RouteInfo[] = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
@@ -45,7 +46,7 @@ export class SidebarComponent implements OnInit {
 
   updateMenu()
   {
-    var filtered = [];
+    const filtered = [];
       for (let index = 0; index < ROUTES.length; index++) {
         const element = ROUTES[index];
         if(element.path == '/login' && this.auth.isAuthenticated()) continue;

@@ -6,6 +6,7 @@ import { TemplateModel } from 'app/models/template-response.model';
 import { DataService } from 'app/services/data.service';
 
 @Component({
+  standalone: false,
   selector: 'app-screen',
   templateUrl: './screen-create.component.html',
   styleUrls: ['./screen-create.component.css']
@@ -29,7 +30,7 @@ export class ScreenCreateComponent implements OnInit {
   }
 
  submit(){
-  var data = {
+  const data = {
     displayName: this.form.get("displayName").value
   }
 

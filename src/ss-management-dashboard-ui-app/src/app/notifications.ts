@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-declare var $: any;
+declare let $: any;
 
 @Injectable({
   providedIn: 'root'

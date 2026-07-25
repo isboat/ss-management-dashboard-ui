@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 export class GuardPermissionsService {
   
   canActivate(auth: AuthService): boolean {
-    var authenticated = auth.isAuthenticated();
+    const authenticated = auth.isAuthenticated();
     if(authenticated){
       return true;
     }
@@ -17,7 +17,7 @@ export class GuardPermissionsService {
     }
   }
   canActivateUserRoute(auth: AuthService): boolean {
-    var authenticated = auth.isAdminUser();
+    const authenticated = auth.isAdminUser();
     if(authenticated){
       return true;
     }
@@ -29,7 +29,7 @@ export class GuardPermissionsService {
   }
   
   canActivateLogin(auth: AuthService): boolean {
-    var authenticated = auth.isAuthenticated();
+    const authenticated = auth.isAuthenticated();
     return !authenticated;
   }
 }

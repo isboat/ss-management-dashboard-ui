@@ -5,17 +5,20 @@
     "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2020",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
-    "target": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "strict": false,
+    "ignoreDeprecations": "6.0",
+    "skipLibCheck": true,
+    "lib": ["ES2022", "dom"]
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": false,
+    "strictInjectionParameters": false
   }
 }

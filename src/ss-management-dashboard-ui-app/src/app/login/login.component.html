@@ -1,29 +1,36 @@
-<div class="main-content">
+<div class="main-content login-page">
   <div class="container-fluid">
+      <header class="login-hero">
+          <span class="login-eyebrow">onScreenSync</span>
+          <h1>Manage every screen in one place</h1>
+          <p>Sign in to publish content, coordinate playlists, and monitor your connected displays.</p>
+      </header>
       <div class="row">
           <div class="col-md-8">
               <div class="card">
                   <div class="card-header card-header-info login-card-header">
-                      <h4 class="card-title">Login</h4>
-                      <p class="card-category">Complete your login</p>
+                      <h2 class="card-title">Welcome back</h2>
+                      <p class="card-category">Use your management account to continue</p>
                   </div>
                   <div class="card-body">
                       <form  [formGroup]="loginForm" (ngSubmit)="submit()">
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width">
-                                  <input matInput placeholder="Email" type="email" formControlName="email">
+                                  <mat-label>Email address</mat-label>
+                                  <input matInput type="email" formControlName="email" autocomplete="username">
                                 </mat-form-field>
                               </div>
                           </div>
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width">
-                                  <input matInput placeholder="Password" type="password" formControlName="password">
+                                  <mat-label>Password</mat-label>
+                                  <input matInput type="password" formControlName="password" autocomplete="current-password">
                                 </mat-form-field>
                               </div>
                           </div>
-                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Log in</button>
+                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Sign in</button>
                           <div class="clearfix"></div>
                       </form>
                       <a [routerLink]="['/register']" class="pull-right">No account? Register</a>
@@ -34,7 +41,7 @@
               <div class="card card-profile">
                   <div class="card-avatar">
                       <a href="javascript:void(0)">
-                          <img class="img profile-img" src="./assets/img/site-logo.png" />
+                          <img class="img profile-img" src="./assets/img/site-logo.png" alt="onScreenSync logo" />
                       </a>
                   </div>
                   <div class="card-body">

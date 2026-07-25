@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
 
 @Component({
+  standalone: false,
   selector: 'app-media-new',
   templateUrl: './media-new.component.html',
   styleUrls: ['./media-new.component.css']

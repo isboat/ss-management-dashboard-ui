@@ -5,6 +5,7 @@ import { NotificationsService } from 'app/notifications';
 import { TextAssetService } from 'app/services/text-asset.service';
 
 @Component({
+  standalone: false,
   selector: 'textassert-dropdown',
   templateUrl: './textassert-dropdown.component.html',
   styleUrls: ['./textassert-dropdown.component.css']
@@ -57,7 +58,7 @@ export class TextAssertDropdownComponent implements OnInit, OnDestroy {
   }
 
   onSelect(id: string) {
-    let asset = this.listData.find(x => x.id === id);
+    const asset = this.listData.find(x => x.id === id);
     if(asset)
     {
       this.clickEmitter.emit({ selectedAsset: asset })
