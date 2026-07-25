@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
-  HttpEvent,
   HttpInterceptor,
   HttpErrorResponse,
   HttpStatusCode
 } from '@angular/common/http';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from 'app/services/auth.service';
+import { environment } from 'environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -16,31 +16,20 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private auth: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    // Get the auth token from the service.
     const authToken = this.auth.getAuthorizationToken();
+    const isApiRequest = req.url === environment.apiBaseUrl
+      || req.url.startsWith(`${environment.apiBaseUrl}/`);
+    const authReq = authToken && isApiRequest
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${authToken}` } })
+      : req;
 
-    // Clone the request and replace the original headers with
-    // cloned headers, updated with the authorization.
-    const authReq = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${authToken}`)
-    });
-
-    // Send cloned request with header to the next handler.
     return next.handle(authReq).pipe(
-      map((event: HttpEvent<any>) => {
-        return event;
-      }),
-      catchError(
-        (
-          httpErrorResponse: HttpErrorResponse,
-          _: Observable<HttpEvent<any>>
-        ) => {
-          if (httpErrorResponse.status === HttpStatusCode.Unauthorized) {
-            this.auth.redirectToLogin();
-          }
-          return throwError(httpErrorResponse);
+      catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (httpErrorResponse.status === HttpStatusCode.Unauthorized && isApiRequest) {
+          this.auth.redirectToLogin(true);
         }
-      )
+        return throwError(() => httpErrorResponse);
+      })
     );
   }
 }
