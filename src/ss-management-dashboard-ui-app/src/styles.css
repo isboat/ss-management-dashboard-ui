@@ -15,3 +15,22 @@
 form.primary-form-color label {
     color: #000000;
 }
+/* Accessible, framework-owned notification states. */
+.mat-snack-bar-container.app-notification--success {
+  background: #176b3a;
+  color: #fff;
+}
+
+.mat-snack-bar-container.app-notification--warning {
+  background: #8a4b00;
+  color: #fff;
+}
+
+.mat-snack-bar-container.app-notification--error {
+  background: #a61b1b;
+  color: #fff;
+}
+
+.mat-snack-bar-container[class*='app-notification--'] .mat-simple-snackbar-action {
+  color: #fff;
+}

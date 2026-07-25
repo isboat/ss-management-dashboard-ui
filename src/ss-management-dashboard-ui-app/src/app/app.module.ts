@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { AuthInterceptor } from './http-interceptors/auth.interceptor';
     HttpClientModule,
     ComponentsModule,
     RouterModule,
+    MatSnackBarModule,
     AppRoutingModule,
   ],
   declarations: [
