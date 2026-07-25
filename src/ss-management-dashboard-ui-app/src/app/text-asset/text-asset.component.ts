@@ -7,6 +7,7 @@ import { TextAssetService } from 'app/services/text-asset.service';
 import { TextAssetModel } from 'app/models/text-asset-response.model';
 
 @Component({
+  standalone: false,
   selector: 'app-text-asset',
   templateUrl: './text-asset.component.html',
   styleUrls: ['./text-asset.component.css']

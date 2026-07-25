@@ -5,6 +5,7 @@ import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 
 @Component({
+  standalone: false,
   selector: 'app-playlists',
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.css']

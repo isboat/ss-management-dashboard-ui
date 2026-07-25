@@ -1,0 +1,26 @@
+name: Application CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/ss-management-dashboard-ui-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: src/ss-management-dashboard-ui-app/.nvmrc
+          cache: npm
+          cache-dependency-path: src/ss-management-dashboard-ui-app/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test -- --watch=false --browsers=ChromeHeadless --progress=false
+      - run: npm run build -- --progress=false
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e

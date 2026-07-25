@@ -68,7 +68,7 @@ export class DeviceService {
   }
 
   updateName(id: string, name: string): Observable<any>  {
-    var data = { deviceName: name, id: id}
+    const data = { deviceName: name, id: id}
     return this.http.patch<any>(
       environment.apiBaseUrl + `/v1/tenant/devices/${id}/name`,
       data,
@@ -77,7 +77,7 @@ export class DeviceService {
   }
 
   updateScreen(deviceId: string, screenId: string): Observable<any>  {
-    var data = { id: deviceId, screenId: screenId}
+    const data = { id: deviceId, screenId: screenId}
     return this.http.patch<any>(
       environment.apiBaseUrl + `/v1/tenant/devices/${deviceId}/link-screen`,
       data,

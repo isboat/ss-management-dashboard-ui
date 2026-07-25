@@ -6,6 +6,7 @@ import { LocalStorageService } from 'app/services/localstorage.service';
 import { LoginService } from 'app/services/login.service';
 
 @Component({
+  standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']

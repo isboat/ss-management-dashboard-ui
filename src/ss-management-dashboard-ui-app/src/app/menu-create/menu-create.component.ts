@@ -6,6 +6,7 @@ import { NotificationsService } from 'app/notifications';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
+  standalone: false,
   selector: 'app-menu',
   templateUrl: './menu-create.component.html',
   styleUrls: ['./menu-create.component.css']
@@ -30,7 +31,7 @@ export class MenuCreateComponent implements OnInit {
   }
 
  submit(){
-  var data: MenuModel = {
+  const data: MenuModel = {
     name: this.form.get("name").value,
     title: this.form.get("title").value,
     description: this.form.get("description").value,

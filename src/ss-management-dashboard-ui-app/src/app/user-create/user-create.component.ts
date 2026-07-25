@@ -6,6 +6,7 @@ import { AuthService } from 'app/services/auth.service';
 import { UserService } from 'app/services/user.service';
 
 @Component({
+  standalone: false,
   selector: 'app-user',
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.css']
@@ -29,7 +30,7 @@ export class UserCreateComponent implements OnInit {
   }
 
  submit(){
-  var data: UserModel = {
+  const data: UserModel = {
     name: this.form.get("name").value,
     email: this.form.get("email").value,
     role: this.form.get("role").value == "1" ? 1 : 0,

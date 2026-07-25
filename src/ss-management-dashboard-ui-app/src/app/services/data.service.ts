@@ -47,7 +47,7 @@ export class DataService {
   }
 
   publishScreen(screenId: string): Observable<any>  {
-    var data:any = {}
+    const data:any = {}
     return this.http.post<any>(
       environment.apiBaseUrl + '/v1/tenant/publish/screens/' + screenId,
       data,

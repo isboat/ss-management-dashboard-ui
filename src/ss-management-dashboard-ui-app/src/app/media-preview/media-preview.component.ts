@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { AssetModel } from 'app/models/asset-response.model';
 
 @Component({
+  standalone: false,
   selector: 'media-preview',
   templateUrl: './media-preview.component.html',
   styleUrls: ['./media-preview.component.css']

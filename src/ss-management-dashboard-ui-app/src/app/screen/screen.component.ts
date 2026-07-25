@@ -16,6 +16,7 @@ import { PlaylistModel } from 'app/models/playlist-response.model';
 import { TextAssetService } from 'app/services/text-asset.service';
 import { TextAssetModel } from 'app/models/text-asset-response.model';
 @Component({
+  standalone: false,
   selector: 'app-screen',
   templateUrl: './screen.component.html',
   styleUrls: ['./screen.component.css']
@@ -69,7 +70,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         this.selectedTemplate = value;
         this.data.layout.templateKey = value.key;
         value.requiredProperties.forEach(rt => {
-          let existingTp = this.data?.layout?.templateProperties?.find(tt=> tt.key == rt.key)
+          const existingTp = this.data?.layout?.templateProperties?.find(tt=> tt.key == rt.key)
           if(!existingTp) {
             this.data.layout.templateProperties.push(rt)
           }
@@ -77,7 +78,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
 
         //remove from data props if it's not in templates required
         if(this.data?.layout?.templateProperties) {
-          var notRequiredDataProps = [];
+          const notRequiredDataProps = [];
           this.data.layout.templateProperties.forEach(ttp => {
             const existing = value.requiredProperties.find(vrp => vrp.key == ttp.key)
             if(!existing) {

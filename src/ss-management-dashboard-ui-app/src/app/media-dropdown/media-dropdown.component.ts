@@ -5,6 +5,7 @@ import { NotificationsService } from 'app/notifications';
 import { MediaService } from 'app/services/media.service';
 
 @Component({
+  standalone: false,
   selector: 'media-dropdown',
   templateUrl: './media-dropdown.component.html',
   styleUrls: ['./media-dropdown.component.css']
@@ -63,7 +64,7 @@ export class MediaDropdownComponent implements OnInit, OnDestroy {
   }
 
   onMediaSelect(id: string) {
-    let media = this.listData.find(x => x.id === id);
+    const media = this.listData.find(x => x.id === id);
     if(media)
     {
       this.clickEmitter.emit({ selectedMedia: media })

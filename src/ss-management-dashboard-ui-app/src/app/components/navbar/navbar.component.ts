@@ -6,6 +6,7 @@ import { LoginService } from 'app/services/login.service';
 import { AuthService } from 'app/services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
@@ -29,7 +30,7 @@ export class NavbarComponent implements OnInit {
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
       this.router.events.subscribe((event) => {
         this.sidebarClose();
-         var $layer: any = document.getElementsByClassName('close-layer')[0];
+         const $layer: any = document.getElementsByClassName('close-layer')[0];
          if ($layer) {
            $layer.remove();
            this.mobile_menu_visible = 0;
@@ -64,7 +65,7 @@ export class NavbarComponent implements OnInit {
     sidebarToggle() {
         // const toggleButton = this.toggleButton;
         // const body = document.getElementsByTagName('body')[0];
-        var $toggle = document.getElementsByClassName('navbar-toggler')[0];
+        const $toggle = document.getElementsByClassName('navbar-toggler')[0];
 
         if (this.sidebarVisible === false) {
             this.sidebarOpen();
@@ -76,9 +77,7 @@ export class NavbarComponent implements OnInit {
         if (this.mobile_menu_visible == 1) {
             // $('html').removeClass('nav-open');
             body.classList.remove('nav-open');
-            if ($layer) {
-                $layer.remove();
-            }
+            document.querySelector('.close-layer')?.remove();
             setTimeout(function() {
                 $toggle.classList.remove('toggled');
             }, 400);
@@ -89,7 +88,7 @@ export class NavbarComponent implements OnInit {
                 $toggle.classList.add('toggled');
             }, 430);
 
-            var $layer = document.createElement('div');
+            const $layer = document.createElement('div');
             $layer.setAttribute('class', 'close-layer');
 
 
@@ -120,12 +119,12 @@ export class NavbarComponent implements OnInit {
     };
 
     getTitle(){
-      var titlee = this.location.prepareExternalUrl(this.location.path());
+      let titlee = this.location.prepareExternalUrl(this.location.path());
       if(titlee.charAt(0) === '#'){
           titlee = titlee.slice( 1 );
       }
 
-      for(var item = 0; item < this.listTitles.length; item++){
+      for(let item = 0; item < this.listTitles.length; item++){
           if(this.listTitles[item].path === titlee){
               return this.listTitles[item].title;
           }

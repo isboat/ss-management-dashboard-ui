@@ -6,6 +6,7 @@ import { AuthService } from 'app/services/auth.service';
 import { TenantService } from 'app/services/tenant.service';
 
 @Component({
+  standalone: false,
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']

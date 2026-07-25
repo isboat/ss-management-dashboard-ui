@@ -5,6 +5,7 @@ import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
 
 @Component({
+  standalone: false,
   selector: 'help-support',
   templateUrl: './help-support.component.html',
   styleUrls: ['./help-support.component.css']

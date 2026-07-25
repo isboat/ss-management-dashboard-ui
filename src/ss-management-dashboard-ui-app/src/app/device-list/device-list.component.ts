@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { NotificationsService } from 'app/notifications';
 
 @Component({
+  standalone: false,
   selector: 'app-device-list',
   templateUrl: './device-list.component.html',
   styleUrls: ['./device-list.component.css']
@@ -82,7 +83,7 @@ export class DeviceListComponent implements OnInit {
   onScreenChange(evt, deviceId) {
     const newScreenId = evt.target.value;
     if(!newScreenId) return;
-    var selection = this.tmpScreenSelection.find(x => x.deviceId === deviceId);
+    const selection = this.tmpScreenSelection.find(x => x.deviceId === deviceId);
     if (selection) {
       selection.screenId = newScreenId;
     }
@@ -92,7 +93,7 @@ export class DeviceListComponent implements OnInit {
   }
 
   updateDeviceScreen(deviceId: string) {
-    var selection = this.tmpScreenSelection.find(x => x.deviceId === deviceId);
+    const selection = this.tmpScreenSelection.find(x => x.deviceId === deviceId);
     if (selection) {
       if(selection.screenId == "none") selection.screenId = "";
       this.deviceService.updateScreen(selection.deviceId, selection.screenId).subscribe(

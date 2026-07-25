@@ -8,6 +8,7 @@ import { MediaService } from 'app/services/media.service';
 import { PlaylistService } from 'app/services/playlist.service';
 
 @Component({
+  standalone: false,
   selector: 'app-media-details',
   templateUrl: './media-details.component.html',
   styleUrls: ['./media-details.component.css']
@@ -55,7 +56,7 @@ export class MediaDetailsComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      var playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === mediaId) > -1);
+      const playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === mediaId) > -1);
       if(playlist)
       {
         this.removeMediaPlaylist(mediaId, playlist.id)

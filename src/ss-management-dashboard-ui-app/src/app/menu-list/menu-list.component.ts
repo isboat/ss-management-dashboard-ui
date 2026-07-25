@@ -5,6 +5,7 @@ import { AuthService } from 'app/services/auth.service';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
+  standalone: false,
   selector: 'app-menu-list',
   templateUrl: './menu-list.component.html',
   styleUrls: ['./menu-list.component.css']
