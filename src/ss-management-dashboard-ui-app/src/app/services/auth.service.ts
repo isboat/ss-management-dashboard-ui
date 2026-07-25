@@ -1,60 +1,65 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './localstorage.service';
-import { Buffer } from 'buffer';
+
+interface TokenClaims {
+  email?: string;
+  exp?: number;
+  role?: string | string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenKey: string = "token";
+  private readonly tokenKey = 'token';
 
   constructor(private localStorage: LocalStorageService, private router: Router){}
 
-  getAuthorizationToken(): string {
+  getAuthorizationToken(): string | null {
     return this.localStorage.get(this.tokenKey);
   }
 
   isAuthenticated(): boolean {
-    return !!this.getAuthorizationToken();
+    const claims = this.getTokenClaims();
+    return claims !== null && (claims.exp === undefined || claims.exp * 1000 > Date.now());
   }
 
   isAdminUser(): boolean {
-    try {
-      const token = this.getAuthorizationToken();
-      if(!token) return false;
+    if (!this.isAuthenticated()) return false;
 
-      var parts = token.split('.')
-      if(parts.length != 3) return false;
-
-      const str = Buffer.from(parts[1], 'base64').toString('utf8');
-      const parsedClaims = JSON.parse(str);
-      return parsedClaims["role"] === "Admin";
-      
-    } catch (error) {
-      console.log(error)
-    }
+    const role = this.getTokenClaims()?.role;
+    return role === 'Admin' || (Array.isArray(role) && role.includes('Admin'));
   }
 
-  authUserEmail(): string {
-    try {
-      const token = this.getAuthorizationToken();
-      if(!token) return null;
-
-      var parts = token.split('.')
-      if(parts.length != 3) return null;
-
-      const str = Buffer.from(parts[1], 'base64').toString('utf8');
-      const parsedClaims = JSON.parse(str);
-      return parsedClaims["email"];
-      
-    } catch (error) {
-      console.log(error)
-    }
+  authUserEmail(): string | null {
+    return this.isAuthenticated() ? this.getTokenClaims()?.email ?? null : null;
   }
 
-  redirectToLogin(force?: boolean) {
-    if(force) this.localStorage.remove(this.tokenKey);
+  redirectToLogin(clearSession = false): void {
+    if (clearSession) this.localStorage.remove(this.tokenKey);
     this.router.navigate(['/login']);
-}
+  }
+
+  private getTokenClaims(): TokenClaims | null {
+    const token = this.getAuthorizationToken();
+    if (!token) return null;
+
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+
+    try {
+      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const json = decodeURIComponent(
+        atob(padded)
+          .split('')
+          .map(character => `%${character.charCodeAt(0).toString(16).padStart(2, '0')}`)
+          .join('')
+      );
+      return JSON.parse(json) as TokenClaims;
+    } catch {
+      return null;
+    }
+  }
 }
