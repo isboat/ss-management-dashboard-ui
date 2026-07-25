@@ -24,6 +24,14 @@
               "src/favicon.ico"
             ],
             "styles": [
+              "node_modules/@fontsource/roboto/300.css",
+              "node_modules/@fontsource/roboto/400.css",
+              "node_modules/@fontsource/roboto/700.css",
+              "node_modules/material-icons/iconfont/filled.css",
+              "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/solid.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/brands.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "src/assets/scss/material-dashboard.scss",
               "src/assets/css/demo.css",
@@ -39,11 +47,23 @@
               "node_modules/chartist/dist/chartist.js"
             ],
             "allowedCommonJsDependencies": [
-              "rxjs/add/operator/filter",
+              "@ckeditor/ckeditor5-build-classic",
+              "chartist",
               "jquery",
-              "chartist"
+              "rxjs/add/operator/filter"
             ],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": [
+                  "import",
+                  "global-builtin",
+                  "color-functions",
+                  "if-function",
+                  "abs-percent"
+                ]
+              }
+            }
           },
           "configurations": {
             "production": {
@@ -70,15 +90,8 @@
               "extractLicenses": false,
               "namedChunks": true,
               "sourceMap": true,
-              "optimization": {
-                "scripts": true,
-                "styles": {
-                  "minify": false,
-                  "inlineCritical": true
-                },
-                "fonts": false
-              },
-              "outputHashing": "all"
+              "optimization": false,
+              "outputHashing": "none"
             }
           },
           "defaultConfiguration": "production"
@@ -123,6 +136,14 @@
               "node_modules/chartist/dist/chartist.js"
             ],
             "styles": [
+              "node_modules/@fontsource/roboto/300.css",
+              "node_modules/@fontsource/roboto/400.css",
+              "node_modules/@fontsource/roboto/700.css",
+              "node_modules/material-icons/iconfont/filled.css",
+              "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/solid.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/brands.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "src/assets/scss/material-dashboard.scss",
               "src/assets/css/demo.css"
@@ -130,7 +151,18 @@
             "assets": [
               "src/assets",
               "src/favicon.ico"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": [
+                  "import",
+                  "global-builtin",
+                  "color-functions",
+                  "if-function",
+                  "abs-percent"
+                ]
+              }
+            }
           }
         },
         "lint": {
