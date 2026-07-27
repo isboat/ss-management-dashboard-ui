@@ -49,9 +49,9 @@
     </ul>
   </div>
 }
-@if (showMenuLinks) {
+@if (showMenuLinks()) {
   <ul class="nav sidebar-link">
-    @for (menuItem of menuItems; track menuItem) {
+    @for (menuItem of menuItems(); track menuItem.path) {
       <li routerLinkActive="active" class="{{menuItem.class}} nav-item">
         <a class="nav-link " [routerLink]="[menuItem.path]">
           <i class="material-icons">{{menuItem.icon}}</i>

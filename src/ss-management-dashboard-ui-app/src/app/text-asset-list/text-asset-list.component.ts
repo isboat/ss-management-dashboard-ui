@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { PlaylistModel } from 'app/models/playlist-response.model';
 import { AuthService } from 'app/services/auth.service';
 import { TextAssetService } from 'app/services/text-asset.service';
@@ -13,8 +13,8 @@ import { TextAssetModel } from 'app/models/text-asset-response.model';
 })
 export class TextAssetListComponent implements OnInit {
 
-  listData: TextAssetModel[] = [];
-  playlists: PlaylistModel[] = [];
+  readonly listData = signal<TextAssetModel[]>([]);
+  readonly playlists = signal<PlaylistModel[]>([]);
   fetchLimit: number = 20;
 
   constructor(
@@ -39,7 +39,7 @@ export class TextAssetListComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      const playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === id) > -1);
+      const playlist = this.playlists().find(x => x.itemIdAndTypePairs.findIndex(x => x.id === id) > -1);
       if(playlist)
       {
         this.removeTextPlaylist(id, playlist.id)
@@ -94,7 +94,7 @@ export class TextAssetListComponent implements OnInit {
   {
     this.playlistService.fetchPlaylists().subscribe(
       {
-        next: (data) => this.playlists = data,
+        next: (data) => this.playlists.set(data),
         error: (e) => {
           if(e.status == 401) 
           {
@@ -110,9 +110,9 @@ export class TextAssetListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchTextAssets(this.listData.length, this.fetchLimit).subscribe(
+    this.dataService.fetchTextAssets(this.listData().length, this.fetchLimit).subscribe(
       {
-        next: (data) => this.listData.push(...data),
+        next: (data) => this.listData.update(items => [...items, ...data]),
         error: (e) => {
           if(e.status == 401) 
           {
@@ -133,9 +133,7 @@ export class TextAssetListComponent implements OnInit {
     {
       next: () => 
       {
-        this.listData.forEach((value,index)=>{
-          if(value.id==id) this.listData.splice(index,1);
-        });
+        this.listData.update(items => items.filter(item => item.id !== id));
       },
       error: (e) => {
         if(e.status == 401) 

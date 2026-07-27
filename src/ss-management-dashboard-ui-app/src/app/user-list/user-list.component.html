@@ -1,6 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
-    @if (isAdminUser) {
+    @if (isAdminUser()) {
       <div class="row">
         <div class="col-md-12">
           <div class="card">
@@ -31,7 +31,7 @@
                     </th>
                   </thead>
                   <tbody>
-                    @for (screen of listData; track screen; let i = $index; let isFirst = $first) {
+                    @for (screen of listData(); track screen.id) {
                       <tr>
                         <td>
                           {{screen.name}}
@@ -64,7 +64,7 @@
       </div>
     }
 
-    @if (!isAdminUser) {
+    @if (!isAdminUser()) {
       <div class="row">
         <div class="col-md-12">
           <div class="card">

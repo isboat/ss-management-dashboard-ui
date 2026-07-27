@@ -25,7 +25,7 @@
                   <th>#</th>
                 </thead>
                 <tbody>
-                  @for (item of listData; track item; let i = $index; let isFirst = $first) {
+                  @for (item of listData(); track item.id) {
                     <tr>
                       <td>
                         <input type="text" [(ngModel)]="item.deviceName" [disabled]="!item.editName" />
@@ -48,7 +48,7 @@
                         <select class="form-control" (change)="onScreenChange($event, item.id)">
                           <option value="">Choose...</option>
                           <option value="none">None</option>
-                          @for (screen of screens; track screen; let i = $index) {
+                          @for (screen of screens(); track screen.id) {
                             <option
                               [selected]="screen.id == item.screenId" value="{{screen.id}}">
                               {{screen.displayName}}

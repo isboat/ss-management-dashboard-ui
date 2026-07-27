@@ -19,7 +19,7 @@
                   </th>
                 </thead>
                 <tbody>
-                  @for (item of listData; track item; let i = $index; let isFirst = $first) {
+                  @for (item of listData(); track item.id) {
                     <tr>
                       <td>
                         <input [(ngModel)]="item.name" type="text" placeholder="add a name"

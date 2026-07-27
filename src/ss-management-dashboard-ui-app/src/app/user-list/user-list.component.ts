@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { UserModel } from 'app/models/user-response.model';
 import { AuthService } from 'app/services/auth.service';
 import { UserService } from 'app/services/user.service';
@@ -11,22 +11,20 @@ import { UserService } from 'app/services/user.service';
 })
 export class UserListComponent implements OnInit {
 
-  listData: UserModel[] = null;
-
-  isAdminUser = false;
+  readonly listData = signal<UserModel[]>([]);
+  readonly isAdminUser = this.authService.adminUser;
 
   constructor(private userService: UserService, private authService: AuthService) { }
 
   ngOnInit() {
     this.fetchListData();
 
-    this.isAdminUser = this.authService.isAdminUser();
   }
 
   fetchListData(){
     this.userService.fetchUsers().subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.set(data),
         error: (e) => {
           if(e.status == 401) 
           {
@@ -47,9 +45,7 @@ export class UserListComponent implements OnInit {
     {
       next: () => 
       {
-        this.listData.forEach((value,index)=>{
-          if(value.id==id) this.listData.splice(index,1);
-      });
+        this.listData.update(items => items.filter(item => item.id !== id));
       },
       error: (e) => {
         if(e.status == 401) 

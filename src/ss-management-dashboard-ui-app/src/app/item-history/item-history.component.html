@@ -1,4 +1,4 @@
-@if (itemId) {
+@if (itemId()) {
   <br /><br />
   <a style="cursor: pointer;" (click)="viewHistory()" data-toggle="modal" data-target="#historyModal">
     View Historical Changes
@@ -14,7 +14,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        @if (histories) {
+        @if (histories().length) {
           <div class="modal-body">
             <div class="table-responsive">
               <table class="table table-hover">
@@ -24,7 +24,7 @@
                   <th>History</th>
                 </thead>
                 <tbody>
-                  @for (item of histories; track item; let i = $index) {
+                  @for (item of histories(); track item.createdOn) {
                     <tr>
                       <td>{{toDate(item.createdOn) | date:'medium'}}</td>
                       <td>{{item.user}}</td>
@@ -45,7 +45,7 @@
   </div>
 }
 
-@if (!itemId) {
+@if (!itemId()) {
   <div>
     No data
   </div>

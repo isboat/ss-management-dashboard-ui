@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, signal } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
@@ -17,7 +17,8 @@ export class NavbarComponent implements OnInit {
       mobile_menu_visible: any = 0;
     private toggleButton: any;
     private sidebarVisible: boolean;
-    showLogoutBtn: boolean = true;
+    readonly showLogoutBtn = this.authService.authenticated;
+    private readonly sidebarOpenState = signal(false);
 
     constructor(location: Location,  private element: ElementRef, private router: Router, private loginService: LoginService, private authService: AuthService) {
       this.location = location;
@@ -35,14 +36,7 @@ export class NavbarComponent implements OnInit {
            $layer.remove();
            this.mobile_menu_visible = 0;
          }
-         this.onAuthentication();
      });
-     this.onAuthentication();
-    }
-
-    onAuthentication()
-    {
-        this.showLogoutBtn = this.authService.isAuthenticated();
     }
 
     sidebarOpen() {
@@ -55,11 +49,13 @@ export class NavbarComponent implements OnInit {
         body.classList.add('nav-open');
 
         this.sidebarVisible = true;
+        this.sidebarOpenState.set(true);
     };
     sidebarClose() {
         const body = document.getElementsByTagName('body')[0];
         this.toggleButton.classList.remove('toggled');
         this.sidebarVisible = false;
+        this.sidebarOpenState.set(false);
         body.classList.remove('nav-open');
     };
     sidebarToggle() {
@@ -67,7 +63,7 @@ export class NavbarComponent implements OnInit {
         // const body = document.getElementsByTagName('body')[0];
         const $toggle = document.getElementsByClassName('navbar-toggler')[0];
 
-        if (this.sidebarVisible === false) {
+        if (!this.sidebarOpenState()) {
             this.sidebarOpen();
         } else {
             this.sidebarClose();

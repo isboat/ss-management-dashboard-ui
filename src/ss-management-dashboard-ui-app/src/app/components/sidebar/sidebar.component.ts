@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 
@@ -31,8 +31,8 @@ export const ROUTES: RouteInfo[] = [
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  menuItems: any[];
-  showMenuLinks = true;
+  readonly menuItems = signal<RouteInfo[]>([]);
+  readonly showMenuLinks = signal(true);
 
   constructor(private auth: AuthService, private route: ActivatedRoute, private router: Router) { }
 
@@ -53,10 +53,10 @@ export class SidebarComponent implements OnInit {
         if(element.path != '/users' || this.auth.isAdminUser()) filtered.push(element)
         
       }
-      this.menuItems = filtered;
+      this.menuItems.set(filtered);
       const pathUrl = this.route['_routerState'].snapshot.url;
       const isRegOrLoginPage = pathUrl.indexOf("register") > -1 || pathUrl.indexOf("login") > -1
-      this.showMenuLinks = !(isRegOrLoginPage);
+      this.showMenuLinks.set(!isRegOrLoginPage);
   }
 
   

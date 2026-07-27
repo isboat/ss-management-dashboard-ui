@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DeviceAuthRequestModel } from 'app/models/device-auth-request.model';
 import { NotificationsService } from 'app/notifications';
@@ -24,7 +24,7 @@ export class DeviceAuthComponent implements OnInit {
     partThree: new FormControl(''),
   });
 
-  showForm: boolean = true;
+  readonly showForm = signal(true);
 
   ngOnInit() {
   }
@@ -40,7 +40,7 @@ export class DeviceAuthComponent implements OnInit {
     const data: DeviceAuthRequestModel = { userCode: `${partOne}-${partTwo}-${partThree}` };
     this.dataService.post(data).subscribe({
       next: (data) => {
-        this.showForm = false;
+        this.showForm.set(false);
         this.notification.showSuccess('Success: TV App authenticated.');
       },
       error: (e) => {

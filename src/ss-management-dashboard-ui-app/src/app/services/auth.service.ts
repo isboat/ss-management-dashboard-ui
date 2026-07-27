@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './localstorage.service';
 
@@ -13,36 +13,57 @@ interface TokenClaims {
 })
 export class AuthService {
   private readonly tokenKey = 'token';
+  private readonly authorizationToken = signal<string | null>(null);
+  readonly authenticated = computed(() => {
+    const claims = this.getTokenClaims(this.authorizationToken());
+    return claims !== null && (claims.exp === undefined || claims.exp * 1000 > Date.now());
+  });
+  readonly adminUser = computed(() => {
+    if (!this.authenticated()) return false;
 
-  constructor(private localStorage: LocalStorageService, private router: Router){}
+    const role = this.getTokenClaims(this.authorizationToken())?.role;
+    return role === 'Admin' || (Array.isArray(role) && role.includes('Admin'));
+  });
+  readonly userEmail = computed(() =>
+    this.authenticated() ? this.getTokenClaims(this.authorizationToken())?.email ?? null : null
+  );
+
+  constructor(private localStorage: LocalStorageService, private router: Router){
+    this.authorizationToken.set(this.localStorage.get(this.tokenKey));
+  }
 
   getAuthorizationToken(): string | null {
-    return this.localStorage.get(this.tokenKey);
+    return this.authorizationToken();
+  }
+
+  setAuthorizationToken(token: string): void {
+    this.localStorage.set(this.tokenKey, token);
+    this.authorizationToken.set(token);
   }
 
   isAuthenticated(): boolean {
-    const claims = this.getTokenClaims();
-    return claims !== null && (claims.exp === undefined || claims.exp * 1000 > Date.now());
+    return this.authenticated();
   }
 
   isAdminUser(): boolean {
-    if (!this.isAuthenticated()) return false;
-
-    const role = this.getTokenClaims()?.role;
-    return role === 'Admin' || (Array.isArray(role) && role.includes('Admin'));
+    return this.adminUser();
   }
 
   authUserEmail(): string | null {
-    return this.isAuthenticated() ? this.getTokenClaims()?.email ?? null : null;
+    return this.userEmail();
   }
 
   redirectToLogin(clearSession = false): void {
-    if (clearSession) this.localStorage.remove(this.tokenKey);
+    if (clearSession) this.clearAuthorizationToken();
     this.router.navigate(['/login']);
   }
 
-  private getTokenClaims(): TokenClaims | null {
-    const token = this.getAuthorizationToken();
+  clearAuthorizationToken(): void {
+    this.localStorage.remove(this.tokenKey);
+    this.authorizationToken.set(null);
+  }
+
+  private getTokenClaims(token: string | null): TokenClaims | null {
     if (!token) return null;
 
     const parts = token.split('.');
