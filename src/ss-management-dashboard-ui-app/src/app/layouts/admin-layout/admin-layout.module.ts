@@ -12,8 +12,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { GuardPermissionsService } from 'app/services/can-activate-route.service';
-import { AuthService } from 'app/services/auth.service';
 import { ScreenListComponent } from 'app/screen-list/screen-list.component';
 import { ScreenDetailsComponent } from 'app/screen/screen.component';
 import { ScreenCreateComponent } from 'app/screen-create/screen-create.component';
@@ -86,8 +84,7 @@ import { RegisterComponent } from 'app/register/register.component';
     TextAssertDropdownComponent,
     ItemHistoryComponent,
     HelpSupportComponent
-  ],
-  providers: [AuthService, GuardPermissionsService]
+  ]
 })
 
 export class AdminLayoutModule {}
