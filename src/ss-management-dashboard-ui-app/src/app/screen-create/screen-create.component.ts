@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ScreenModel } from 'app/models/screen-response.model';
@@ -11,38 +11,30 @@ import { DataService } from 'app/services/data.service';
   templateUrl: './screen-create.component.html',
   styleUrls: ['./screen-create.component.css']
 })
-export class ScreenCreateComponent implements OnInit {
-  id: string;
-  private sub: any;
-
-  form: FormGroup;
-
-  data: ScreenModel = null;
-  templates: TemplateModel[] = [];
+export class ScreenCreateComponent {
+  readonly submitting = signal(false);
+  readonly form = new FormGroup({
+    displayName: new FormControl('')
+  });
 
   constructor(private dataService: DataService, private router: Router) { }
-
-  ngOnInit() {
-    
-    this.form = new FormGroup({
-      displayName: new FormControl()
-    })
-  }
 
  submit(){
   const data = {
     displayName: this.form.get("displayName").value
   }
 
+  this.submitting.set(true);
   this.dataService.createNewScreen(data).subscribe({
     next: (data) => 
     {
       this.router.navigate(['/screens']);
     },
     error: (e) => {
+      this.submitting.set(false);
       if(e.status == 401) console.log("ERORR HERE:" + e)
     },
-    complete: () => console.info('complete') 
+    complete: () => this.submitting.set(false)
   });
  }
 

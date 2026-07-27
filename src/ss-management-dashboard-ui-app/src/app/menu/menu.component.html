@@ -1,15 +1,15 @@
 <div class="main-content">
   <div class="container-fluid">
-    @if (isLoading) {
+    @if (isLoading()) {
       <div class="alert alert-info" role="status">Loading menu details...</div>
     }
-    @if (loadError) {
+    @if (loadError()) {
       <div class="alert alert-danger" role="alert">
-        {{loadError}}
+        {{loadError()}}
         <button type="button" class="btn btn-sm btn-white" (click)="fetchData()">Try again</button>
       </div>
     }
-    @if (data) {
+    @if (data(); as menu) {
       <div class="card">
         <div class="card-body">
           <div class="row">
@@ -22,12 +22,12 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleFormControlInputName">Menu Internal Name</label>
-                    <input type="text" [(ngModel)]="data.name" class="form-control"
+                    <input type="text" [(ngModel)]="menu.name" class="form-control"
                       id="exampleFormControlInputName" placeholder="menu title">
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlInput1">Menu Display Title</label>
-                    <input type="text" [(ngModel)]="data.title" class="form-control"
+                    <input type="text" [(ngModel)]="menu.title" class="form-control"
                       id="exampleFormControlInput1" placeholder="menu title">
                   </div>
                   <div class="form-group">
@@ -37,7 +37,7 @@
                       <option>Choose...</option>
                       @for (item of currencies; track item; let i = $index) {
                         <option
-                          [selected]="item == data.currency" value="{{item}}">
+                          [selected]="item == menu.currency" value="{{item}}">
                           {{item}}
                         </option>
                       }
@@ -45,15 +45,15 @@
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlTextarea1">Description</label>
-                    <textarea class="form-control" [(ngModel)]="data.description"
+                    <textarea class="form-control" [(ngModel)]="menu.description"
                     id="exampleFormControlTextarea1" rows="3"></textarea>
                   </div>
                   <div class="form-group">
                     <label for="exampleFormControlTextarea1">Icon Image</label>
                     <div class="row">
                       <div class="col-md-1">
-                        @if (data.iconUrl) {
-                          <media-preview [assetUrl]="data.iconUrl" [assetType]="1" [previewWidth]="previewWidth" [dataAlt]="'Menu icon'"></media-preview>
+                        @if (menu.iconUrl) {
+                          <media-preview [assetUrl]="menu.iconUrl" [assetType]="1" [previewWidth]="previewWidth" [dataAlt]="'Menu icon'"></media-preview>
                         }
                       </div>
                       <div class="col-md-2">
@@ -85,7 +85,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @for (item of data.menuItems; track item) {
+                        @for (item of menu.menuItems; track item) {
                           <tr>
                             <td>
                               <input [(ngModel)]="item.name" type="text" placeholder="add a name"
@@ -116,22 +116,22 @@
                         }
                         <tr>
                           <td>
-                            <input [(ngModel)]="itemToAdd.name" type="text"
+                            <input [ngModel]="itemToAdd().name" (ngModelChange)="updateItemToAdd('name', $event)" type="text"
                               placeholder="add a name" class="form-control"
                               id="addItemName" />
                           </td>
                           <td>
-                            <input [(ngModel)]="itemToAdd.price" type="text"
+                            <input [ngModel]="itemToAdd().price" (ngModelChange)="updateItemToAdd('price', $event)" type="text"
                               placeholder="add a price" class="form-control"
                               id="addItemPrice" />
                           </td>
                           <td>
-                            <input [(ngModel)]="itemToAdd.discountPrice" type="text"
+                            <input [ngModel]="itemToAdd().discountPrice" (ngModelChange)="updateItemToAdd('discountPrice', $event)" type="text"
                               placeholder="discount price" class="form-control"
                               id="discountPrice" />
                           </td>
                           <td>
-                            <input [(ngModel)]="itemToAdd.description" type="text"
+                            <input [ngModel]="itemToAdd().description" (ngModelChange)="updateItemToAdd('description', $event)" type="text"
                               placeholder="add a description" class="form-control"
                               id="addItemdescription" />
                           </td>

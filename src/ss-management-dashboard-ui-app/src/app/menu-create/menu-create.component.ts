@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MenuModel } from 'app/models/menu-response.model';
@@ -11,24 +11,15 @@ import { MenuService } from 'app/services/menu.service';
   templateUrl: './menu-create.component.html',
   styleUrls: ['./menu-create.component.css']
 })
-export class MenuCreateComponent implements OnInit {
-  id: string;
-  private sub: any;
-
-  form: FormGroup;
-
-  data: MenuModel = null;
+export class MenuCreateComponent {
+  readonly submitting = signal(false);
+  readonly form = new FormGroup({
+    name: new FormControl(''),
+    title: new FormControl(''),
+    description: new FormControl('')
+  });
 
   constructor(private dataService: MenuService, private router: Router, private notificationService: NotificationsService) { }
-
-  ngOnInit() {
-    
-    this.form = new FormGroup({
-      name: new FormControl(),
-      title: new FormControl(),
-      description: new FormControl()
-    })
-  }
 
  submit(){
   const data: MenuModel = {
@@ -48,15 +39,17 @@ export class MenuCreateComponent implements OnInit {
     return;
   }
 
+  this.submitting.set(true);
   this.dataService.createNewMenu(data).subscribe({
     next: (data) => 
     {
       this.router.navigate(['/menus']);
     },
     error: (e) => {
+      this.submitting.set(false);
       if(e.status == 401) console.log("ERORR HERE:" + e)
     },
-    complete: () => console.info('complete') 
+    complete: () => this.submitting.set(false)
   });
  }
 

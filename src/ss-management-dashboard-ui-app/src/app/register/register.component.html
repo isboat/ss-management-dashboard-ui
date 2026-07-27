@@ -56,7 +56,7 @@
                 <small class="form-text text-muted">We'll never share your telephone with anyone
                   else.</small>
               </div>
-              <button type="submit" class="btn btn-primary login-card-header">Submit</button>
+              <button type="submit" [disabled]="submitting()" class="btn btn-primary login-card-header">{{submitting() ? 'Submitting...' : 'Submit'}}</button>
             </form>
           </div>
         </div>

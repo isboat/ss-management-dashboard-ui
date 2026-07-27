@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { AuthService } from 'app/services/auth.service';
 import { MediaService } from 'app/services/media.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,16 +10,16 @@ import { NotificationsService } from 'app/notifications';
   templateUrl: './media-new.component.html',
   styleUrls: ['./media-new.component.css']
 })
-export class MediaNewComponent implements OnInit {
-  file: File = null;
-  fileName = '';
-  title = '';
-  desc = '';
-  aiFlag: boolean = false;
-
-  submitted: boolean = false;
-  buttonTxtInit: string = 'Upload';
-  buttonTxt: string = '';
+export class MediaNewComponent {
+  readonly file = signal<File | null>(null);
+  readonly title = signal('');
+  readonly desc = signal('');
+  readonly aiFlag = signal(false);
+  readonly submitted = signal(false);
+  readonly buttonText = computed(() => {
+    if (this.submitted()) return this.aiFlag() ? 'Generating...' : 'Uploading...';
+    return this.aiFlag() ? 'Generate' : 'Upload';
+  });
 
   constructor(
     private media: MediaService, 
@@ -31,35 +31,31 @@ export class MediaNewComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.aiFlag = !!params["ai"];
-      if(this.aiFlag) this.buttonTxtInit = 'Generate'
-      this.buttonTxt = this.buttonTxtInit;
+      this.aiFlag.set(!!params["ai"]);
     });
   }
 
   onFilechange(event: any) {
-    console.log(event.target.files[0])
-    this.file = event.target.files[0]
+    this.file.set(event.target.files[0] ?? null);
   }
   postNew() {
-    if (!this.title) {
+    if (!this.title()) {
       this.notificationService.showWarning("Give the media a title")
       return;
     }
 
-    this.submitted = true;
-    this.buttonTxt = this.aiFlag ? 'Generating...' : 'Uploading...'
+    this.submitted.set(true);
 
     const formData = new FormData();
 
-    if (this.file) {
-      this.fileName = this.file.name;
-      formData.append("file", this.file);
+    const file = this.file();
+    if (file) {
+      formData.append("file", file);
     }
 
-    formData.append("title", this.title);
-    formData.append("description", this.desc);
-    formData.append("isAi", `${this.aiFlag}`);
+    formData.append("title", this.title());
+    formData.append("description", this.desc());
+    formData.append("isAi", `${this.aiFlag()}`);
 
     const upload$ = this.media.postNew(formData);
 
@@ -72,8 +68,7 @@ export class MediaNewComponent implements OnInit {
           else{
             this.notificationService.showError("Error occurred while uploading/generating media.")
           }
-          this.submitted = false;
-          this.buttonTxt = this.buttonTxtInit;
+          this.submitted.set(false);
         },
         error: (e) => {
           if (e.status == 401) {
@@ -83,12 +78,10 @@ export class MediaNewComponent implements OnInit {
             this.notificationService.showError("Error occurred while uploading/generating media.")
             console.log(e)
           }
-          this.submitted = false;
-          this.buttonTxt = this.buttonTxtInit;
+          this.submitted.set(false);
         },
         complete: () => {
-          this.submitted = false;
-          this.buttonTxt = this.buttonTxtInit;
+          this.submitted.set(false);
         }
       }
     )

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
@@ -11,8 +11,8 @@ import { LoginService } from 'app/services/login.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
-  private tokenKey = 'token';
+export class RegisterComponent {
+  readonly submitting = signal(false);
   constructor(
     private loginService: LoginService, 
     private localStorage: LocalStorageService, 
@@ -27,9 +27,6 @@ export class RegisterComponent implements OnInit {
     country: new FormControl(''),
     telephone: new FormControl(''),
   });
-
-  ngOnInit() {
-  }
 
   submit() {
     const form = {
@@ -47,13 +44,16 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    this.submitting.set(true);
     this.loginService.register(form).subscribe({
       next: () => {
         this.notificationService.showSuccess("Registration form submitted successfully, one of the sales team members will be in touch with you.")
       },
       error: (e) => {
+        this.submitting.set(false);
         this.notificationService.showError("Error occured while submitted the form, refresh the page and try again.");
-      }
+      },
+      complete: () => this.submitting.set(false)
     })
   }
 

@@ -30,7 +30,7 @@
                               </mat-form-field>
                             </div>
                         </div>
-                        <button mat-raised-button type="submit" class="btn btn-danger pull-right">Create</button>
+                        <button mat-raised-button type="submit" [disabled]="submitting()" class="btn btn-danger pull-right">{{submitting() ? 'Creating...' : 'Create'}}</button>
                         <div class="clearfix"></div>
                     </form>
                 </div>
