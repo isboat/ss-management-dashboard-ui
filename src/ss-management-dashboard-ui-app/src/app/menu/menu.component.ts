@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
 import { NotificationsService } from 'app/notifications';
+import { AuthService } from 'app/services/auth.service';
 import { MenuService } from 'app/services/menu.service';
 
 @Component({
@@ -19,6 +20,8 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   data: MenuModel = null;
+  isLoading = true;
+  loadError = '';
 
   currencies: string[] = ["£", "$", "GHS", "Euro"]
 
@@ -28,7 +31,8 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: MenuService, 
     private route: ActivatedRoute, 
-    private notificationService: NotificationsService) { }
+    private notificationService: NotificationsService,
+    private authService: AuthService) { }
 
   ngOnInit() {
 
@@ -105,6 +109,8 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchData() {
+    this.isLoading = true;
+    this.loadError = '';
     this.dataService.fetchMenuDetails(this.id).subscribe({
       next: (data) => {
         this.data = data
@@ -113,9 +119,17 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
-        if (e.status == 401) console.log("ERORR HERE:" + e)
+        this.isLoading = false;
+        if (e.status == 401) {
+          this.authService.redirectToLogin(true);
+          return;
+        }
+        this.loadError = 'We could not load this menu. Please try again.';
       },
-      complete: () => console.info('complete')
+      complete: () => {
+        this.isLoading = false;
+        console.info('complete');
+      }
     });
   }
 }

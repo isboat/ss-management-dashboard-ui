@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { TemplateModel } from 'app/models/template-response.model';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class DataService {
     return this.http.get<ScreenModel>(
       environment.apiBaseUrl + '/v1/tenant/screens/' + id,
       { responseType: 'json' }
-    );
+    ).pipe(timeout(15000));
   }
 
   createNewScreen(data: any): Observable<any>  {
