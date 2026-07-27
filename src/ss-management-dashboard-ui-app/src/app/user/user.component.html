@@ -1,6 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
-    @if (allowToView) {
+    @if (allowToView()) {
       <div class="row">
         <div class="col-md-6">
           <div class="card">
@@ -10,18 +10,18 @@
                 Below is the details of the user
               </p>
             </div>
-            @if (data) {
+            @if (data(); as user) {
               <div class="card-body">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Name" type="text" [(ngModel)]="data.name">
+                  <input matInput placeholder="Name" type="text" [(ngModel)]="user.name">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
+                  <input matInput placeholder="Email" type="email" [(ngModel)]="user.email">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                   <select matNativeControl (change)="onRoleChange($event)">
                     @for (item of rolesOption; track item; let i = $index) {
-                      <option [selected]="i === data.role"
+                      <option [selected]="i === user.role"
                         value="{{i}}">
                         {{item}}
                       </option>
@@ -33,14 +33,14 @@
                   Save changes you've made to user's detail.
                 </p>
                 <p class="card-category">
-                  <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-info">Save Updates</a>
+                  <button (click)="saveUpdates()" [disabled]="saving()" class="btn btn-round btn-fill btn-info">{{saving() ? 'Saving...' : 'Save Updates'}}</button>
                 </p>
               </div>
             }
           </div>
         </div>
         <div class="col-md-6">
-          @if (data && isCurrentUserView) {
+          @if (data() && isCurrentUserView()) {
             <div class="card">
               <div class="card-header card-header-danger">
                 <h3 class="card-title">User Password Update</h3>
@@ -50,18 +50,18 @@
               </div>
               <div class="card-body">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Password" type="password" [(ngModel)]="passwdUpdateModel.currentPasswd">
+                  <input matInput placeholder="Password" type="password" [ngModel]="passwdUpdateModel().currentPasswd" (ngModelChange)="updatePasswordField('currentPasswd', $event)">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="new password" type="password" [(ngModel)]="passwdUpdateModel.newPassword">
+                  <input matInput placeholder="new password" type="password" [ngModel]="passwdUpdateModel().newPassword" (ngModelChange)="updatePasswordField('newPassword', $event)">
                 </mat-form-field>
                 <div>
-                  <a (click)="updatePasswd()" class="btn btn-round btn-fill btn-danger">Update User Password</a>
+                  <button (click)="updatePasswd()" [disabled]="updatingPassword()" class="btn btn-round btn-fill btn-danger">{{updatingPassword() ? 'Updating...' : 'Update User Password'}}</button>
                 </div>
               </div>
             </div>
           }
-          @if (data && isAdminUser) {
+          @if (data() && isAdminUser()) {
             <div class="card">
               <div class="card-header card-header-warning">
                 <h3 class="card-title">Reset User's Password</h3>
@@ -71,7 +71,7 @@
               </div>
               <div class="card-body">
                 <div>
-                  <a (click)="resetPasswd()" class="btn btn-round btn-fill btn-warning">Reset User Password</a>
+                  <button (click)="resetPasswd()" [disabled]="resettingPassword()" class="btn btn-round btn-fill btn-warning">{{resettingPassword() ? 'Resetting...' : 'Reset User Password'}}</button>
                 </div>
               </div>
             </div>
@@ -79,7 +79,7 @@
         </div>
       </div>
     }
-    @if (!allowToView) {
+    @if (!allowToView()) {
       <div class="row">
         <div class="col-md-12">
           <div class="card">

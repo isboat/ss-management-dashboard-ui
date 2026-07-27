@@ -1,6 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
-    @if (allowToView) {
+    @if (allowToView()) {
       <div class="row">
         <div class="col-md-6">
           <div class="card">
@@ -10,42 +10,42 @@
                 Below is the details
               </p>
             </div>
-            @if (data) {
+            @if (data(); as settings) {
               <div class="card-body">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Name" type="text" [(ngModel)]="data.name">
+                  <input matInput placeholder="Name" type="text" [(ngModel)]="settings.name">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
+                  <input matInput placeholder="Email" type="email" [(ngModel)]="settings.email">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Address field" type="text" [(ngModel)]="data.address">
+                  <input matInput placeholder="Address field" type="text" [(ngModel)]="settings.address">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="city" type="text" [(ngModel)]="data.city">
+                  <input matInput placeholder="city" type="text" [(ngModel)]="settings.city">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="country" type="text" [(ngModel)]="data.country">
+                  <input matInput placeholder="country" type="text" [(ngModel)]="settings.country">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="postcode" type="text" [(ngModel)]="data.postcode">
+                  <input matInput placeholder="postcode" type="text" [(ngModel)]="settings.postcode">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="telephone" type="text" [(ngModel)]="data.telephone">
+                  <input matInput placeholder="telephone" type="text" [(ngModel)]="settings.telephone">
                 </mat-form-field>
                 <p class="card-category">
                   <br /><br /><br />
                   Save changes you've made to the detail.
                 </p>
                 <p class="card-category">
-                  <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-info">Save Updates</a>
+                  <button (click)="saveUpdates()" [disabled]="saving()" class="btn btn-round btn-fill btn-info">{{saving() ? 'Saving...' : 'Save Updates'}}</button>
                 </p>
               </div>
             }
           </div>
         </div>
         <div class="col-md-6">
-          @if (data && isAdminUser) {
+          @if (data(); as settings) {
             <div class="card">
               <div class="card-header card-header-warning">
                 <h3 class="card-title">Permissions</h3>
@@ -55,14 +55,14 @@
               </div>
               <div class="card-body">
                 <div class="form-check">
-                  <input class="" type="checkbox" id="flexCheckChecked" [(ngModel)]="data.allowedPartnerPermission">
+                  <input class="" type="checkbox" id="flexCheckChecked" [(ngModel)]="settings.allowedPartnerPermission">
                   <!-- <input type="checkbox" [checked]="data.allowedPartnerPermission" (change)="data.allowedPartnerPermission = !data.allowedPartnerPermission"/> -->
                   <label class="form-check-label" for="flexCheckChecked">
                     Allow permission
                   </label>
                 </div>
                 <div>
-                  <a (click)="updatePermission()" class="btn btn-round btn-fill btn-warning">Save Permission</a>
+                  <button (click)="updatePermission()" [disabled]="updatingPermission()" class="btn btn-round btn-fill btn-warning">{{updatingPermission() ? 'Saving...' : 'Save Permission'}}</button>
                 </div>
               </div>
             </div>
@@ -70,7 +70,7 @@
         </div>
       </div>
     }
-    @if (!allowToView) {
+    @if (!allowToView()) {
       <div class="row">
         <div class="col-md-12">
           <div class="card">

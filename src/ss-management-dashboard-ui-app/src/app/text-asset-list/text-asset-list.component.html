@@ -70,10 +70,10 @@
                           </div>
                         </td>
                         <td class="text-primary">
-                          <a (click)="deleteText(item.id)" mat-raised-button type="button"
+                          <button (click)="deleteText(item.id)" [disabled]="deletingId() === item.id" mat-raised-button type="button"
                             class="btn btn-danger">
-                            Delete
-                          </a>
+                            {{deletingId() === item.id ? 'Deleting...' : 'Delete'}}
+                          </button>
                         </td>
                       </tr>
                     }
@@ -82,7 +82,7 @@
               </div>
 
               <div>
-                <a class="load-more-link" (click)="fetchListData()">Load more</a>
+                <button class="btn btn-link load-more-link" [disabled]="loading()" (click)="fetchListData()">{{loading() ? 'Loading...' : 'Load more'}}</button>
               </div>
             </div>
             <div class="tab-pane" id="externalmedia">

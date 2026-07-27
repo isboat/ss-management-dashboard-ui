@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { AuthService } from 'app/services/auth.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,11 +11,12 @@ import { TextAssetService } from 'app/services/text-asset.service';
   templateUrl: './text-asset-new.component.html',
   styleUrls: ['./text-asset-new.component.css']
 })
-export class TextAssetNewComponent implements OnInit {
-  title = '';
-  desc = '';
-  backgroundColor = '';
-  textColor = '';
+export class TextAssetNewComponent {
+  readonly title = signal('');
+  readonly desc = signal('');
+  readonly backgroundColor = signal('');
+  readonly textColor = signal('');
+  readonly submitting = signal(false);
 
   public Editor = ClassicEditor;
 
@@ -27,24 +28,20 @@ export class TextAssetNewComponent implements OnInit {
     private notificationService: NotificationsService) {
   }
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-    });
-  }
-
   postNew() {
-    if (!this.title || !this.desc) {
+    if (!this.title() || !this.desc()) {
       this.notificationService.showWarning("Add title and description")
       return;
     }
 
     const data = {
-      title: this.title,
-      description: this.desc,
-      backgroundColor: this.backgroundColor,
-      textColor: this.textColor
+      title: this.title(),
+      description: this.desc(),
+      backgroundColor: this.backgroundColor(),
+      textColor: this.textColor()
     }
 
+    this.submitting.set(true);
     const upload$ = this.assetService.postNew(data);
 
     upload$.subscribe(
@@ -53,6 +50,7 @@ export class TextAssetNewComponent implements OnInit {
             this.router.navigate(['/text-asset-list']);
         },
         error: (e) => {
+          this.submitting.set(false);
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
           }
@@ -61,7 +59,7 @@ export class TextAssetNewComponent implements OnInit {
             console.log(e)
           }
         },
-        complete: () => console.info('complete')
+        complete: () => this.submitting.set(false)
       }
     )
   }

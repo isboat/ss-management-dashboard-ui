@@ -1,5 +1,5 @@
 <div class="main-content">
-  @if (data) {
+  @if (data(); as asset) {
     <div class="container-fluid">
       <div class="card">
         <div class="card-header card-header-primary">
@@ -13,7 +13,7 @@
             <div class="col-md-5">
               <div class="mb-3">
                 <label for="formtitle" class="form-label">Title/Name</label>
-                <input [(ngModel)]="data.name" class="form-control" type="text" id="formtitle">
+                <input [(ngModel)]="asset.name" class="form-control" type="text" id="formtitle">
               </div>
             </div>
           </div>
@@ -23,7 +23,7 @@
                 <label for="exampleFormControlTextarea1" class="form-label">Text / Information</label>
                 <ckeditor [editor]="Editor"
                   [config]="{ width: '400px', height: '500px', toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
-                [(ngModel)]="data.description"></ckeditor>
+                [(ngModel)]="asset.description"></ckeditor>
               </div>
             </div>
           </div>
@@ -31,7 +31,7 @@
             <div class="col-md-2">
               <div class="mb-3">
                 <label for="bgColor" class="form-label">Background Color</label>
-                <input [(ngModel)]="data.backgroundColor" class="form-control" type="text" id="bgColor">
+                <input [(ngModel)]="asset.backgroundColor" class="form-control" type="text" id="bgColor">
               </div>
             </div>
             <div class="col-md-1">
@@ -39,20 +39,20 @@
             <div class="col-md-2">
               <div class="mb-3">
                 <label for="bgColor" class="form-label">Text Color</label>
-                <input [(ngModel)]="data.textColor" class="form-control" type="text" id="bgColor">
+                <input [(ngModel)]="asset.textColor" class="form-control" type="text" id="bgColor">
               </div>
             </div>
           </div>
           <div class="row mt-5">
             <div class="col-md-4">
               <div class="mb-3">
-                <button (click)="this.save()" type="button" class="btn btn-primary mt-3">Save</button>
+                <button (click)="save()" [disabled]="saving()" type="button" class="btn btn-primary mt-3">{{saving() ? 'Saving...' : 'Save'}}</button>
               </div>
             </div>
           </div>
           <div class="row mt-5">
             <div class="col-md-12">
-              <div><small>Created on: {{data.createdOn}}, Last updated on: {{data.updatedOn}}</small></div>
+              <div><small>Created on: {{asset.createdOn}}, Last updated on: {{asset.updatedOn}}</small></div>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TenantModel } from 'app/models/tenant-response.model';
 import { NotificationsService } from 'app/notifications';
@@ -14,9 +14,11 @@ import { TenantService } from 'app/services/tenant.service';
 export class SettingsComponent implements OnInit, OnDestroy {
   private sub: any;
 
-  data: TenantModel = null;
-
-  isAdminUser = false;
+  readonly data = signal<TenantModel | null>(null);
+  readonly isAdminUser = signal(false);
+  readonly allowToView = computed(() => this.isAdminUser());
+  readonly saving = signal(false);
+  readonly updatingPermission = signal(false);
 
   constructor(
     private dataService: TenantService, 
@@ -28,13 +30,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.sub = this.route.params.subscribe(params => {
       this.fetchData();
-      this.isAdminUser = this.authService.isAdminUser();
+      this.isAdminUser.set(this.authService.isAdminUser());
     });
-  }
-
-  get allowToView()
-  {
-    return this.isAdminUser;
   }
 
   ngOnDestroy() {
@@ -44,7 +41,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   fetchData() {
     this.dataService.fetchSettings().subscribe({
       next: (data) => {
-        this.data = data
+        this.data.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -54,13 +51,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   saveUpdates() { 
-    this.dataService.saveUpdates(this.data).subscribe(
+    const data = this.data();
+    if (!data) return;
+    this.saving.set(true);
+    this.dataService.saveUpdates(data).subscribe(
       {
         next: () => 
         {
           this.notification.showSuccess('Updated successfully.')
         },
         error: (e) => {
+          this.saving.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -70,19 +71,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
             console.log(e)
           }
         },
-        complete: () => console.info('complete')
+        complete: () => this.saving.set(false)
       });
   }
 
   updatePermission() { 
-
-    this.dataService.updatePartnerPermission(this.data.allowedPartnerPermission).subscribe(
+    const data = this.data();
+    if (!data) return;
+    this.updatingPermission.set(true);
+    this.dataService.updatePartnerPermission(data.allowedPartnerPermission).subscribe(
       {
         next: () => 
         {
           this.notification.showSuccess('Permission Updated.')
         },
         error: (e) => {
+          this.updatingPermission.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -91,7 +95,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
           {
             console.log(e)
           }
-        }
+        },
+        complete: () => this.updatingPermission.set(false)
       });
   }
 }
