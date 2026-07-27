@@ -26,6 +26,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   private sub: any;
 
   data: ScreenModel = null;
+  isLoading = true;
+  loadError = '';
   templates: TemplateModel[] = [];
   subtypeTemplates: SubtypeTemplate[] = [];
   menus: MenuModel[] = [];
@@ -181,6 +183,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchData() {
+    this.isLoading = true;
+    this.loadError = '';
     this.dataService.fetchScreenDetails(this.id).subscribe({
       next: (data) => {
         this.data = data
@@ -204,9 +208,17 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         }
       },
       error: (e) => {
-        if (e.status == 401) this.authService.redirectToLogin(true);
+        this.isLoading = false;
+        if (e.status == 401) {
+          this.authService.redirectToLogin(true);
+          return;
+        }
+        this.loadError = 'We could not load this screen. Please try again.';
       },
-      complete: () => console.info('complete')
+      complete: () => {
+        this.isLoading = false;
+        console.info('complete');
+      }
     });
   }
 

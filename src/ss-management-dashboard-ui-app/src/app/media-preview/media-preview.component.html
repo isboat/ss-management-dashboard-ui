@@ -1,17 +1,21 @@
-<ng-template [ngIf]="data">
-    <div>
-        <div class="asset-media" #mediaEle>
-            <video *ngIf="isVideoMedia(data.type)" [src]="data.assetUrl" autoplay muted loop oncanplay="this.play()"
-                onloadedmetadata="this.muted = true" [attr.width]="mediaWidth">
-                Your device browser does not support the video tag.
-            </video>
-            <img *ngIf="!isVideoMedia(data.type)" [src]="data.assetUrl" [attr.width]="mediaWidth"  [attr.alt]="dataAlt" />
-        </div>
+@if (data) {
+  <div>
+    <div class="asset-media" #mediaEle>
+      @if (isVideoMedia(data.type)) {
+        <video [src]="data.assetUrl" autoplay muted loop oncanplay="this.play()"
+          onloadedmetadata="this.muted = true" [attr.width]="mediaWidth">
+          Your device browser does not support the video tag.
+        </video>
+      }
+      @if (!isVideoMedia(data.type)) {
+        <img [src]="data.assetUrl" [attr.width]="mediaWidth"  [attr.alt]="dataAlt" />
+      }
     </div>
-</ng-template>
+  </div>
+}
 
-<ng-template [ngIf]="!data">
-    <div>
-        No media
-    </div>
-</ng-template>
+@if (!data) {
+  <div>
+    No media
+  </div>
+}

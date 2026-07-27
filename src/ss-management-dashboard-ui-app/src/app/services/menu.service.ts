@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MenuModel } from 'app/models/menu-response.model';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class MenuService {
     return this.http.get<MenuModel>(
       environment.apiBaseUrl + '/v1/tenant/menus/' + id,
       { responseType: 'json' }
-    );
+    ).pipe(timeout(15000));
   }
 
   createNewMenu(data: MenuModel): Observable<any> {
