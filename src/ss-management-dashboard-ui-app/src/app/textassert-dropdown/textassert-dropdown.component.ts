@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, computed, input, OnInit, output, signal } from '@angular/core';
 import { appconstants } from 'app/helpers/constants';
 import { TextAssetModel } from 'app/models/text-asset-response.model';
 import { NotificationsService } from 'app/notifications';
@@ -10,16 +10,17 @@ import { TextAssetService } from 'app/services/text-asset.service';
   templateUrl: './textassert-dropdown.component.html',
   styleUrls: ['./textassert-dropdown.component.css']
 })
-export class TextAssertDropdownComponent implements OnInit, OnDestroy {
+export class TextAssertDropdownComponent implements OnInit {
 
-  @Output() clickEmitter = new EventEmitter();
+  readonly clickEmitter = output<{ selectedAsset: TextAssetModel }>();
+  readonly buttonText = input('Select text AD');
 
-  @Input() buttonText: string;
-
-  listData: TextAssetModel[] = [];
-  viewList: TextAssetModel[] = [];
-  show: boolean = true;
-  search: string = "";
+  readonly listData = signal<TextAssetModel[]>([]);
+  readonly search = signal('');
+  readonly viewList = computed(() => {
+    const search = this.search();
+    return search ? this.listData().filter(asset => asset.name.includes(search)) : this.listData();
+  });
 
   constructor(
     private dataService: TextAssetService, private notificationService: NotificationsService) {
@@ -27,26 +28,17 @@ export class TextAssertDropdownComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchListData();
-    if(!this.buttonText) this.buttonText = "Select text AD"
-  }
-
-  ngOnDestroy() {
   }
 
   searchText(evt) {
-    this.viewList = this.listData;
-    this.search = evt && evt.target ? evt.target.value: this.search;
-    if (this.search) {
-      this.viewList = this.listData.filter(x => x.name.indexOf(this.search) > -1)
-    }
+    this.search.set(evt?.target?.value ?? '');
   }
 
   fetchListData() {
-    this.dataService.fetchTextAssets(this.listData.length, appconstants.fetchLimit).subscribe(
+    this.dataService.fetchTextAssets(this.listData().length, appconstants.fetchLimit).subscribe(
       {
         next: (data) => {
-          this.listData.push(...data)
-          this.searchText(null)
+          this.listData.update(items => [...items, ...data]);
         },
         error: (e) => {
 
@@ -58,7 +50,7 @@ export class TextAssertDropdownComponent implements OnInit, OnDestroy {
   }
 
   onSelect(id: string) {
-    const asset = this.listData.find(x => x.id === id);
+    const asset = this.listData().find(x => x.id === id);
     if(asset)
     {
       this.clickEmitter.emit({ selectedAsset: asset })

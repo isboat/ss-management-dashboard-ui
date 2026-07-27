@@ -53,7 +53,7 @@
                       </th>
                     </thead>
                     <tbody>
-                      @for (item of listData; track item; let i = $index; let isFirst = $first) {
+                      @for (item of listData(); track item.id) {
                         <tr>
                           <td>
                             <div>
@@ -73,7 +73,7 @@
                               <select class="form-control"
                                 (change)="updatePlaylist($event, item.id)">
                                 <option value="none">Select playlist</option>
-                                @for (pl of playlists; track pl) {
+                                @for (pl of playlists(); track pl.id) {
                                   <option [value]="pl.id"
                                     [selected]="playlistContainMediaIds(pl, item.id)">
                                     {{pl.name}}

@@ -1,9 +1,10 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, DestroyRef, OnInit, ElementRef, signal } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 import { LoginService } from 'app/services/login.service';
 import { AuthService } from 'app/services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -16,33 +17,26 @@ export class NavbarComponent implements OnInit {
     location: Location;
       mobile_menu_visible: any = 0;
     private toggleButton: any;
-    private sidebarVisible: boolean;
-    showLogoutBtn: boolean = true;
+    readonly showLogoutBtn = this.authService.authenticated;
+    private readonly sidebarOpenState = signal(false);
 
-    constructor(location: Location,  private element: ElementRef, private router: Router, private loginService: LoginService, private authService: AuthService) {
+    constructor(location: Location, private element: ElementRef, private router: Router,
+      private loginService: LoginService, private authService: AuthService, private destroyRef: DestroyRef) {
       this.location = location;
-          this.sidebarVisible = false;
     }
 
     ngOnInit(){
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
-      this.router.events.subscribe((event) => {
+      this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         this.sidebarClose();
          const $layer: any = document.getElementsByClassName('close-layer')[0];
          if ($layer) {
            $layer.remove();
            this.mobile_menu_visible = 0;
          }
-         this.onAuthentication();
      });
-     this.onAuthentication();
-    }
-
-    onAuthentication()
-    {
-        this.showLogoutBtn = this.authService.isAuthenticated();
     }
 
     sidebarOpen() {
@@ -54,12 +48,12 @@ export class NavbarComponent implements OnInit {
 
         body.classList.add('nav-open');
 
-        this.sidebarVisible = true;
+        this.sidebarOpenState.set(true);
     };
     sidebarClose() {
         const body = document.getElementsByTagName('body')[0];
         this.toggleButton.classList.remove('toggled');
-        this.sidebarVisible = false;
+        this.sidebarOpenState.set(false);
         body.classList.remove('nav-open');
     };
     sidebarToggle() {
@@ -67,7 +61,7 @@ export class NavbarComponent implements OnInit {
         // const body = document.getElementsByTagName('body')[0];
         const $toggle = document.getElementsByClassName('navbar-toggler')[0];
 
-        if (this.sidebarVisible === false) {
+        if (!this.sidebarOpenState()) {
             this.sidebarOpen();
         } else {
             this.sidebarClose();
@@ -105,6 +99,7 @@ export class NavbarComponent implements OnInit {
             $layer.onclick = function() { //asign a function
               body.classList.remove('nav-open');
               this.mobile_menu_visible = 0;
+              this.sidebarOpenState.set(false);
               $layer.classList.remove('visible');
               setTimeout(function() {
                   $layer.remove();

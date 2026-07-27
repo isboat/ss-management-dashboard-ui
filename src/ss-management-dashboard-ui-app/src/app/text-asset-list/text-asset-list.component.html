@@ -47,7 +47,7 @@
                     </th>
                   </thead>
                   <tbody>
-                    @for (item of listData; track item; let i = $index; let isFirst = $first) {
+                    @for (item of listData(); track item.id) {
                       <tr>
                         <td>
                           <a [routerLink]="['/text-asset', item.id]">
@@ -60,7 +60,7 @@
                             <select class="form-control"
                               (change)="updatePlaylist($event, item.id)">
                               <option value="none">Select playlist</option>
-                              @for (pl of playlists; track pl) {
+                              @for (pl of playlists(); track pl.id) {
                                 <option [value]="pl.id"
                                   [selected]="playlistContainTextIds(pl, item.id)">
                                   {{pl.name}}

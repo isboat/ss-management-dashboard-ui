@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { PlaylistModel } from 'app/models/playlist-response.model';
 import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
@@ -12,7 +12,7 @@ import { PlaylistService } from 'app/services/playlist.service';
 })
 export class PlaylistsComponent implements OnInit {
 
-  listData: PlaylistModel[] = null;
+  readonly listData = signal<PlaylistModel[]>([]);
   newItem: PlaylistModel = {
     name: '',
     created: null,
@@ -79,7 +79,7 @@ export class PlaylistsComponent implements OnInit {
   fetchListData(){
     this.playlistService.fetchPlaylists().subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.set(data),
         error: (e) => {
           if(e.status == 401) 
           {
@@ -99,9 +99,7 @@ export class PlaylistsComponent implements OnInit {
     {
       next: () => 
       {
-        this.listData.forEach((value,index)=>{
-          if(value.id==id) this.listData.splice(index,1);
-      });
+        this.listData.update(items => items.filter(item => item.id !== id));
       },
       error: (e) => {
         if(e.status == 401) 

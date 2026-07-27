@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 
@@ -31,15 +32,16 @@ export const ROUTES: RouteInfo[] = [
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  menuItems: any[];
-  showMenuLinks = true;
+  readonly menuItems = signal<RouteInfo[]>([]);
+  readonly showMenuLinks = signal(true);
 
-  constructor(private auth: AuthService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private auth: AuthService, private route: ActivatedRoute, private router: Router,
+    private destroyRef: DestroyRef) { }
 
   ngOnInit() {
 
     this.updateMenu();
-    this.router.events.subscribe((event) => {
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.updateMenu();
    });
   }
@@ -53,10 +55,10 @@ export class SidebarComponent implements OnInit {
         if(element.path != '/users' || this.auth.isAdminUser()) filtered.push(element)
         
       }
-      this.menuItems = filtered;
+      this.menuItems.set(filtered);
       const pathUrl = this.route['_routerState'].snapshot.url;
       const isRegOrLoginPage = pathUrl.indexOf("register") > -1 || pathUrl.indexOf("login") > -1
-      this.showMenuLinks = !(isRegOrLoginPage);
+      this.showMenuLinks.set(!isRegOrLoginPage);
   }
 
   

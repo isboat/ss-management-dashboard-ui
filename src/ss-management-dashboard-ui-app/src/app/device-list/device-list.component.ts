@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { AuthService } from 'app/services/auth.service';
 import { DeviceService } from 'app/services/device.service';
 import { DeviceModel } from 'app/models/device-response.model';
@@ -14,10 +14,9 @@ import { NotificationsService } from 'app/notifications';
 })
 export class DeviceListComponent implements OnInit {
 
-  listData: DeviceModel[] = null;
-  screens: ScreenModel[] = null;
-
-  tmpScreenSelection = [];
+  readonly listData = signal<DeviceModel[]>([]);
+  readonly screens = signal<ScreenModel[]>([]);
+  readonly screenSelections = signal<Record<string, string>>({});
 
   constructor(
     private deviceService: DeviceService,
@@ -33,7 +32,7 @@ export class DeviceListComponent implements OnInit {
   fetchScreenList() {
     this.dataService.fetchScreens().subscribe(
       {
-        next: (data) => this.screens = data,
+        next: (data) => this.screens.set(data),
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
@@ -49,7 +48,7 @@ export class DeviceListComponent implements OnInit {
   fetchListData() {
     this.deviceService.fetchDevices().subscribe(
       {
-        next: (data) => this.listData = data,
+        next: (data) => this.listData.set(data),
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
@@ -83,20 +82,14 @@ export class DeviceListComponent implements OnInit {
   onScreenChange(evt, deviceId) {
     const newScreenId = evt.target.value;
     if(!newScreenId) return;
-    const selection = this.tmpScreenSelection.find(x => x.deviceId === deviceId);
-    if (selection) {
-      selection.screenId = newScreenId;
-    }
-    else {
-      this.tmpScreenSelection.push({ deviceId: deviceId, screenId: newScreenId })
-    }
+    this.screenSelections.update(selections => ({ ...selections, [deviceId]: newScreenId }));
   }
 
   updateDeviceScreen(deviceId: string) {
-    const selection = this.tmpScreenSelection.find(x => x.deviceId === deviceId);
-    if (selection) {
-      if(selection.screenId == "none") selection.screenId = "";
-      this.deviceService.updateScreen(selection.deviceId, selection.screenId).subscribe(
+    const selectedScreenId = this.screenSelections()[deviceId];
+    if (selectedScreenId) {
+      const screenId = selectedScreenId === "none" ? "" : selectedScreenId;
+      this.deviceService.updateScreen(deviceId, screenId).subscribe(
         {
           next: (data) => { this.notificationService.showSuccess("Successfully set screen to device")},
           error: (e) => {
@@ -117,7 +110,7 @@ export class DeviceListComponent implements OnInit {
       this.deviceService.deleteScreen(deviceId).subscribe(
         {
           next: (data) => {
-            this.listData = this.listData.filter(x => x.id != deviceId)
+            this.listData.update(devices => devices.filter(device => device.id !== deviceId));
             this.notificationService.showSuccess("Successfully deleted device")
           },
           error: (e) => {

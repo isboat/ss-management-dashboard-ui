@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, computed, input, OnInit, output, signal } from '@angular/core';
 import { appconstants } from 'app/helpers/constants';
 import { AssetModel } from 'app/models/asset-response.model';
 import { NotificationsService } from 'app/notifications';
@@ -10,17 +10,18 @@ import { MediaService } from 'app/services/media.service';
   templateUrl: './media-dropdown.component.html',
   styleUrls: ['./media-dropdown.component.css']
 })
-export class MediaDropdownComponent implements OnInit, OnDestroy {
+export class MediaDropdownComponent implements OnInit {
 
-  @Output() clickEmitter = new EventEmitter();
+  readonly clickEmitter = output<{ selectedMedia: AssetModel }>();
+  readonly buttonText = input('Select media asset');
+  readonly assetType = input<string>();
 
-  @Input() buttonText: string;
-  @Input() assetType: string;
-
-  listData: AssetModel[] = [];
-  viewList: AssetModel[] = [];
-  show: boolean = true;
-  search: string = "";
+  readonly listData = signal<AssetModel[]>([]);
+  readonly search = signal('');
+  readonly viewList = computed(() => {
+    const search = this.search();
+    return search ? this.listData().filter(asset => asset.name.includes(search)) : this.listData();
+  });
 
   constructor(
     private dataService: MediaService, private notificationService: NotificationsService) {
@@ -28,27 +29,22 @@ export class MediaDropdownComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchListData();
-    if(!this.buttonText) this.buttonText = "Select media asset"
-  }
-
-  ngOnDestroy() {
   }
 
   searchText(evt) {
-    this.viewList = this.listData;
-    this.search = evt && evt.target ? evt.target.value: this.search;
-    if (this.search) {
-      this.viewList = this.listData.filter(x => x.name.indexOf(this.search) > -1)
-    }
+    this.search.set(evt?.target?.value ?? '');
   }
 
   fetchListData() {
-    this.dataService.fetchMediaAssets(this.listData.length, appconstants.fetchLimit).subscribe(
+    const assetType = this.assetType();
+    this.dataService.fetchMediaAssets(
+      this.listData().length,
+      appconstants.fetchLimit,
+      assetType ? Number(assetType) : undefined
+    ).subscribe(
       {
         next: (data) => {
-          if(this.assetType) data = data.filter(x => x.type.toString() === this.assetType)
-          this.listData.push(...data)
-          this.searchText(null)
+          this.listData.update(items => [...items, ...data]);
         },
         error: (e) => {
 
@@ -64,7 +60,7 @@ export class MediaDropdownComponent implements OnInit, OnDestroy {
   }
 
   onMediaSelect(id: string) {
-    const media = this.listData.find(x => x.id === id);
+    const media = this.listData().find(x => x.id === id);
     if(media)
     {
       this.clickEmitter.emit({ selectedMedia: media })

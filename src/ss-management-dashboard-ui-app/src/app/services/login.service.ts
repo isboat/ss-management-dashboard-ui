@@ -3,19 +3,17 @@ import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { LocalStorageService } from './localstorage.service';
 import { TokenResponse } from 'app/models/token-response.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private tokenKey = 'token';
-
-  constructor(private http: HttpClient, private localStorage: LocalStorageService, private router: Router) { }
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   public logout(): void {
-    this.localStorage.remove(this.tokenKey);
+    this.authService.clearAuthorizationToken();
     this.router.navigate(['/login']);
   }
 

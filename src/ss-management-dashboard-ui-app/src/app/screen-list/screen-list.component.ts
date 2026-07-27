@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { ScreenModel } from 'app/models/screen-response.model';
 import { DataService } from 'app/services/data.service';
 import { AuthService } from 'app/services/auth.service';
@@ -15,11 +15,18 @@ import { DeviceModel } from 'app/models/device-response.model';
 })
 export class ScreenListComponent implements OnInit {
 
-  listData: ScreenModel[] = [];
-  isAdminUser = false;
-  devices: DeviceModel[] = [];
-  selectedScreen: ScreenModel = null;
-  selectedDeviceId: string = null;
+  readonly listData = signal<ScreenModel[]>([]);
+  readonly isAdminUser = signal(false);
+  readonly devices = signal<DeviceModel[]>([]);
+  readonly selectedScreen = signal<ScreenModel | null>(null);
+  readonly selectedDeviceId = signal<string | null>(null);
+  readonly deviceIdForPublish = computed(() => {
+    const selectedDeviceId = this.selectedDeviceId();
+    if (selectedDeviceId) return selectedDeviceId;
+
+    const selectedScreen = this.selectedScreen();
+    return this.devices().find(device => device.screenId === selectedScreen?.id)?.id ?? null;
+  });
 
   constructor(
     private auth: AuthService,
@@ -27,23 +34,24 @@ export class ScreenListComponent implements OnInit {
     private dataService: DataService, private authService: AuthService, private notification: NotificationsService) { }
 
   ngOnInit() {
-    this.isAdminUser = this.auth.isAdminUser();
+    this.isAdminUser.set(this.auth.isAdminUser());
     this.fetchListData();
     this.fetchDevices();
   }
 
   onSelectScreen(screen: ScreenModel){
-    this.selectedScreen = screen;
+    this.selectedScreen.set(screen);
+    this.selectedDeviceId.set(null);
   }
   
   onDeviceSelect(evt: any) {
-    this.selectedDeviceId = evt.target.value;
+    this.selectedDeviceId.set(evt.target.value);
   }
 
   fetchDevices() {
     this.deviceService.fetchDevices().subscribe({
       next: (data) => {
-        this.devices = data
+        this.devices.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -52,9 +60,9 @@ export class ScreenListComponent implements OnInit {
   }
 
   fetchListData() {
-    this.dataService.fetchScreens(this.listData.length, appconstants.fetchLimit).subscribe(
+    this.dataService.fetchScreens(this.listData().length, appconstants.fetchLimit).subscribe(
       {
-        next: (data) => this.listData.push(...data),
+        next: (data) => this.listData.update(screens => [...screens, ...data]),
         error: (e) => {
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
@@ -77,14 +85,7 @@ export class ScreenListComponent implements OnInit {
         next: () => {
           this.notification.showSuccess("PUBLISHED..")
 
-          // if user has selected, default to the preselected device
-          if(!this.selectedDeviceId) {
-
-            this.devices.forEach(x => {
-              if(x.screenId == this.selectedScreen.id) this.selectedDeviceId = x.id;
-            });
-          }
-          this.deviceService.linkToDevice(this.selectedDeviceId, this.selectedScreen.id, this.devices);
+          this.deviceService.linkToDevice(this.deviceIdForPublish(), id, this.devices());
         },
         error: (e) => {
           if (e.status == 401) {
@@ -102,9 +103,7 @@ export class ScreenListComponent implements OnInit {
     this.dataService.deleteScreen(id).subscribe(
       {
         next: () => {
-          this.listData.forEach((value, index) => {
-            if (value.id == id) this.listData.splice(index, 1);
-          });
+          this.listData.update(screens => screens.filter(screen => screen.id !== id));
         },
         error: (e) => {
           if (e.status == 401) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { appconstants } from 'app/helpers/constants';
 import { MenuModel } from 'app/models/menu-response.model';
 import { AuthService } from 'app/services/auth.service';
@@ -12,7 +12,7 @@ import { MenuService } from 'app/services/menu.service';
 })
 export class MenuListComponent implements OnInit {
 
-  listData: MenuModel[] = [];
+  readonly listData = signal<MenuModel[]>([]);
 
   constructor(private dataService: MenuService, private authService: AuthService) { }
 
@@ -21,9 +21,9 @@ export class MenuListComponent implements OnInit {
   }
 
   fetchListData(){
-    this.dataService.fetchMenus(this.listData.length, appconstants.fetchLimit).subscribe(
+    this.dataService.fetchMenus(this.listData().length, appconstants.fetchLimit).subscribe(
       {
-        next: (data) => this.listData.push(...data),
+        next: (data) => this.listData.update(items => [...items, ...data]),
         error: (e) => {
           if(e.status == 401) 
           {
@@ -44,9 +44,7 @@ export class MenuListComponent implements OnInit {
     {
       next: () => 
       {
-        this.listData.forEach((value,index)=>{
-          if(value.id==id) this.listData.splice(index,1);
-        });
+        this.listData.update(items => items.filter(item => item.id !== id));
       },
       error: (e) => {
         if(e.status == 401) 

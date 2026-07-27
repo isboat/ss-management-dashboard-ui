@@ -1,11 +1,10 @@
-@if (show) {
   <div>
     <button class="btn btn-outline-info" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">{{buttonText}}
+      aria-haspopup="true" aria-expanded="false">{{buttonText()}}
     </button>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <input type="text" class="form-control" (keyup)="searchText($event)" placeholder="type to search" />
-      @for (med of viewList; track med) {
+      @for (med of viewList(); track med.id) {
         <a (click)="onMediaSelect(med.id)"  class="dropdown-item" >
           @if (isVideoMedia(med.type)) {
             <video [src]="med.assetUrl" width="50px">
@@ -23,4 +22,3 @@
       </div>
     </div>
   </div>
-}

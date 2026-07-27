@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { AssetModel } from 'app/models/asset-response.model';
 
 @Component({
@@ -7,35 +7,26 @@ import { AssetModel } from 'app/models/asset-response.model';
   templateUrl: './media-preview.component.html',
   styleUrls: ['./media-preview.component.css']
 })
-export class MediaPreviewComponent implements OnInit, OnDestroy {
-  
-  @Input() data: AssetModel;
-  @Input() assetUrl: string;
-  @Input() assetType: number;
-  @Input() previewWidth: string;
-  @Input() dataAlt: string;
-
-  mediaWidth: string = "200px";
-  constructor() { }
-
-  ngOnInit() {
-    if(this.previewWidth) this.mediaWidth = this.previewWidth;
-    if(this.assetUrl && this.assetType)
-    {
-      this.data = {
+export class MediaPreviewComponent {
+  readonly data = input<AssetModel>();
+  readonly assetUrl = input<string>();
+  readonly assetType = input<number>();
+  readonly previewWidth = input('200px');
+  readonly dataAlt = input('');
+  readonly media = computed(() => {
+    if(this.assetUrl() && this.assetType()) {
+      return {
         id: null,
-        assetUrl: this.assetUrl,
+        assetUrl: this.assetUrl(),
         tenantId: null,
-        type: this.assetType,
+        type: this.assetType(),
         description: null,
         editName: null,
         name: null
-      }
+      } as AssetModel;
     }
-  }
-
-  ngOnDestroy() {
-  }
+    return this.data();
+  });
 
   isVideoMedia(mediaType: number): boolean
   {

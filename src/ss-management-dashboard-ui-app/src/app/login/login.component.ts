@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
-import { LocalStorageService } from 'app/services/localstorage.service';
+import { AuthService } from 'app/services/auth.service';
 import { LoginService } from 'app/services/login.service';
 
 @Component({
@@ -12,10 +12,9 @@ import { LoginService } from 'app/services/login.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private tokenKey = 'token';
   constructor(
     private loginService: LoginService, 
-    private localStorage: LocalStorageService, 
+    private authService: AuthService,
     private notificationService: NotificationsService,
     private router: Router) { }
 
@@ -32,7 +31,7 @@ export class LoginComponent implements OnInit {
     const passwd = this.loginForm.get('password').value;
     this.loginService.login(email, passwd).subscribe({
       next: (tokenResponse) => {
-        localStorage.setItem(this.tokenKey, tokenResponse.token);
+        this.authService.setAuthorizationToken(tokenResponse.token);
         this.router.navigate(['/']);
       },
       error: (e) => {

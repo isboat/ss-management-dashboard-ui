@@ -26,7 +26,7 @@
                   </th>
                 </thead>
                 <tbody>
-                  @for (screen of listData; track screen; let i = $index; let isFirst = $first) {
+                  @for (screen of listData(); track screen.id) {
                     <tr>
                       <td>
                         {{screen.id}}

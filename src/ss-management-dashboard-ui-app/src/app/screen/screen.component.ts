@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssetModel } from 'app/models/asset-response.model';
 import { MenuModel } from 'app/models/menu-response.model';
@@ -25,40 +25,51 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   id: string;
   private sub: any;
 
-  data: ScreenModel = null;
-  isLoading = true;
-  loadError = '';
-  templates: TemplateModel[] = [];
-  subtypeTemplates: SubtypeTemplate[] = [];
-  menus: MenuModel[] = [];
-  dataMediaAsset: AssetModel = null;
-  dataTextAsset: TextAssetModel = null;
-  devices: DeviceModel[] = [];
-  playlists: PlaylistModel[] = [];
+  readonly data = signal<ScreenModel | null>(null);
+  readonly isLoading = signal(true);
+  readonly loadError = signal('');
+  readonly templates = signal<TemplateModel[]>([]);
+  readonly subtypeTemplates = signal<SubtypeTemplate[]>([]);
+  readonly menus = signal<MenuModel[]>([]);
+  readonly dataMediaAsset = signal<AssetModel | null>(null);
+  readonly dataTextAsset = signal<TextAssetModel | null>(null);
+  readonly devices = signal<DeviceModel[]>([]);
+  readonly playlists = signal<PlaylistModel[]>([]);
 
-  selectedTemplate: TemplateModel = null;
-  selectedSubTemplate: SubtypeTemplate = null;
-  selectedDeviceId: string = null;
+  readonly selectedTemplate = signal<TemplateModel | null>(null);
+  readonly selectedSubTemplate = signal<SubtypeTemplate | null>(null);
+  readonly selectedDeviceId = signal<string | null>(null);
 
-  isAdminUser = false;
+  readonly isAdminUser = this.authService.adminUser;
 
-  previewWidth: string = "200px";
+  readonly previewWidth = "200px";
+  readonly selectedTemplateHasMedia = computed(() => {
+    const templateKey = this.selectedTemplate()?.key ?? '';
+    return !templateKey.includes('MediaPlaylist') &&
+      (templateKey.includes('MenuOverlay') || templateKey.includes('Media'));
+  });
+  readonly deviceIdForPublish = computed(() => {
+    const selectedDeviceId = this.selectedDeviceId();
+    if (selectedDeviceId) return selectedDeviceId;
+
+    const screenId = this.data()?.id;
+    return this.devices().find(device => device.screenId === screenId)?.id ?? null;
+  });
 
   constructor(
-    private auth: AuthService,
+    private authService: AuthService,
     private textAssetService: TextAssetService,
     private dataService: DataService,
     private notification: NotificationsService,
     private menuService: MenuService,
     private mediaService: MediaService,
-    private authService: AuthService,
     private deviceService: DeviceService,
     private playlistService: PlaylistService,
     private route: ActivatedRoute) { }
 
   goToPreviewSite() {
     this.saveScreenUpdates(true);
-    window.open(`http://localhost:4401/?screenId=${this.data.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
+    window.open(`http://localhost:4401/?screenId=${this.data()?.id}&token=${this.authService.getAuthorizationToken()}`, "newwindow", 'width=1100,height=850');
   }
 
   onTemplateChange(evt: any) {
@@ -67,68 +78,50 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   updateSelectedTemplate(templateKey: string) {
-    this.templates.forEach((value, index) => {
-      if (value.key == templateKey) {
-        this.selectedTemplate = value;
-        this.data.layout.templateKey = value.key;
-        value.requiredProperties.forEach(rt => {
-          const existingTp = this.data?.layout?.templateProperties?.find(tt=> tt.key == rt.key)
-          if(!existingTp) {
-            this.data.layout.templateProperties.push(rt)
-          }
-        });
+    const screen = this.data();
+    const template = this.templates().find(value => value.key === templateKey);
+    if (!screen || !template) return;
 
-        //remove from data props if it's not in templates required
-        if(this.data?.layout?.templateProperties) {
-          const notRequiredDataProps = [];
-          this.data.layout.templateProperties.forEach(ttp => {
-            const existing = value.requiredProperties.find(vrp => vrp.key == ttp.key)
-            if(!existing) {
-              notRequiredDataProps.push(ttp)
-            }
-          }); 
-
-          notRequiredDataProps.forEach(ntr => {
-            this.data.layout.templateProperties = this.data.layout.templateProperties.filter(fil => fil.key != ntr.key)
-          });
-        }
-
-        this.subtypeTemplates = value.subTypes
-        if (!value.subTypes || value.subTypes.length == 0) this.data.layout.subType = "";
-      }
-    });
+    this.selectedTemplate.set(template);
+    const existingProperties = screen.layout.templateProperties ?? [];
+    screen.layout.templateKey = template.key;
+    screen.layout.templateProperties = template.requiredProperties.map(required =>
+      existingProperties.find(property => property.key === required.key) ?? { ...required }
+    );
+    this.subtypeTemplates.set(template.subTypes ?? []);
+    if (!template.subTypes?.length) screen.layout.subType = '';
+    this.data.set({ ...screen, layout: { ...screen.layout } });
   }
 
   onTvScreenChange(evt: any) {
-    this.selectedDeviceId = evt.target.value;
+    this.selectedDeviceId.set(evt.target.value);
   }
   onsubTemplateChange(evt: any) {
     const newTemplateKey = evt.target.value;
-    this.subtypeTemplates.forEach((value, index) => {
-      if (value.key == newTemplateKey) {
-        this.selectedSubTemplate = value;
-        this.data.layout.subType = value.key;
-      }
-    });
+    const screen = this.data();
+    const subTemplate = this.subtypeTemplates().find(value => value.key === newTemplateKey);
+    if (!screen || !subTemplate) return;
+
+    this.selectedSubTemplate.set(subTemplate);
+    screen.layout.subType = subTemplate.key;
+    this.data.set({ ...screen, layout: { ...screen.layout } });
   }
   onMenuChange(evt: any) {
     const newMenuKey = evt.target.value;
     if(!newMenuKey)
     {
-      this.data.menuEntityId = null;
+      this.updateScreenData(screen => ({ ...screen, menuEntityId: null }));
       return;
     }
-    this.menus.forEach((value, index) => {
-      if (value.id == newMenuKey) {
-        this.data.menuEntityId = value.id;
-      }
-    });
+    if (this.menus().some(value => value.id === newMenuKey)) {
+      this.updateScreenData(screen => ({ ...screen, menuEntityId: newMenuKey }));
+    }
   }
   onMediaSelect(evt: any) {
     const selectedMedia = evt.selectedMedia;
     if (!selectedMedia) return;
-    this.data.mediaAssetEntityId = selectedMedia.id
-    this.dataMediaAsset = selectedMedia;
+    this.updateScreenData(screen => ({ ...screen, mediaAssetEntityId: selectedMedia.id }));
+    this.dataMediaAsset.set(selectedMedia);
   }
 
   isRange(prop: TemplateProperty) {
@@ -139,23 +132,18 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   onTextAssetSelect(evt: any) {
     const selectedAsset = evt.selectedAsset;
     if (!selectedAsset) return;
-    this.data.textAssetEntityId = selectedAsset.id;
-    this.dataTextAsset = selectedAsset;
+    this.updateScreenData(screen => ({ ...screen, textAssetEntityId: selectedAsset.id }));
+    this.dataTextAsset.set(selectedAsset);
   }
 
   onPlaylistChange(evt: any) {
     const newKey = evt.target.value;
-    this.playlists.forEach((value, index) => {
-      if (value.id == newKey) {
-        this.data.playlistId = value.id;
-      }
-    });
+    if (this.playlists().some(value => value.id === newKey)) {
+      this.updateScreenData(screen => ({ ...screen, playlistId: newKey }));
+    }
   }
 
   ngOnInit() {
-
-    this.isAdminUser = this.auth.isAdminUser();
-
     this.fetchTemplates();
     this.fetchMenus();
     this.fetchDevices();
@@ -167,56 +155,44 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  get SelectedTemplateHasMedia(): boolean {
-    if (!this.data || !this.data.layout || !this.data.layout.templateKey) return false;
-
-    const templateKey = this.data?.layout?.templateKey;
-    // we not looking for MediaPlaylist
-    if (templateKey.indexOf('MediaPlaylist') > -1) return false;
-
-    // any template with media in it.
-    return templateKey.indexOf('MenuOverlay') > -1 || templateKey.indexOf('Media') > -1;
-  }
-
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
   fetchData() {
-    this.isLoading = true;
-    this.loadError = '';
+    this.isLoading.set(true);
+    this.loadError.set('');
     this.dataService.fetchScreenDetails(this.id).subscribe({
       next: (data) => {
-        this.data = data
-        if(!this.data.layout) {
-          this.data.layout = { id: "", subType: "", templateKey: "", templateProperties: []}
-        }
-        if(!this.data.layout.templateProperties) {
-          this.data.layout.templateProperties = []
-        }
+        const layout = data.layout ?? { id: '', subType: '', templateKey: '', templateProperties: [] };
+        const screen = {
+          ...data,
+          layout: { ...layout, templateProperties: layout.templateProperties ?? [] }
+        };
+        this.data.set(screen);
 
-        if (this.data && this.data.layout && this.data.layout.templateKey) {
-          this.updateSelectedTemplate(this.data.layout.templateKey)
+        if (screen.layout.templateKey) {
+          this.updateSelectedTemplate(screen.layout.templateKey)
         }
-        if(this.data && this.data.mediaAssetEntityId)
+        if(screen.mediaAssetEntityId)
         {
-          this.fetchMediaAsset(this.data.mediaAssetEntityId)
+          this.fetchMediaAsset(screen.mediaAssetEntityId)
         }
-        if(this.data && this.data.textAssetEntityId)
+        if(screen.textAssetEntityId)
         {
-          this.fetchTextAsset(this.data.textAssetEntityId)
+          this.fetchTextAsset(screen.textAssetEntityId)
         }
       },
       error: (e) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         if (e.status == 401) {
           this.authService.redirectToLogin(true);
           return;
         }
-        this.loadError = 'We could not load this screen. Please try again.';
+        this.loadError.set('We could not load this screen. Please try again.');
       },
       complete: () => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         console.info('complete');
       }
     });
@@ -225,7 +201,9 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   fetchTemplates() {
     this.dataService.fetchTemplates().subscribe({
       next: (data) => {
-        this.templates = data
+        this.templates.set(data);
+        const templateKey = this.data()?.layout?.templateKey;
+        if (templateKey) this.updateSelectedTemplate(templateKey);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -237,7 +215,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   fetchMenus() {
     this.menuService.fetchMenus().subscribe({
       next: (data) => {
-        this.menus = data
+        this.menus.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -249,7 +227,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   fetchDevices() {
     this.deviceService.fetchDevices().subscribe({
       next: (data) => {
-        this.devices = data
+        this.devices.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -260,7 +238,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   fetchMediaAsset(id: string) {
     this.mediaService.fetchMediaAsset(id).subscribe({
       next: (data) => {
-        this.dataMediaAsset = data
+        this.dataMediaAsset.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -271,7 +249,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   fetchTextAsset(id: string) {
     this.textAssetService.fetchTextAsset(id).subscribe({
       next: (data) => {
-        this.dataTextAsset = data
+        this.dataTextAsset.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -282,7 +260,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   fetchPlaylists() {
     this.playlistService.fetchPlaylists().subscribe({
       next: (data) => {
-        this.playlists = data
+        this.playlists.set(data);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -292,19 +270,16 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   publishScreenUpdates() {
+    const screen = this.data();
+    if (!screen) return;
+
     this.saveScreenUpdates(true, () => {
-      this.dataService.publishScreen(this.data.id).subscribe(
+      this.dataService.publishScreen(screen.id).subscribe(
         {
           next: () => {
             this.notification.showSuccess("PUBLISHED..")
 
-            // if user has selected, default to the preselected device
-            if(!this.selectedDeviceId) {
-              this.devices.forEach(x => {
-                if(x.screenId == this.data.id) this.selectedDeviceId = x.id;
-              });
-            }
-            this.deviceService.linkToDevice(this.selectedDeviceId, this.data.id, this.devices);
+            this.deviceService.linkToDevice(this.deviceIdForPublish(), screen.id, this.devices());
           },
           error: (e) => {
             if (e.status == 401) {
@@ -319,20 +294,23 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveScreenUpdates(hidePostAction?: boolean, callbkFunc?: Function) {
-    if(this.data?.layout?.templateProperties) {
-      this.data.layout.templateProperties.forEach(t => {
+  saveScreenUpdates(hidePostAction?: boolean, callback?: () => void) {
+    const screen = this.data();
+    if (!screen) return;
+
+    if(screen.layout?.templateProperties) {
+      screen.layout.templateProperties.forEach(t => {
         t.value = "" + t.value
       });
     }
-    this.dataService.updateScreen(this.data).subscribe(
+    this.dataService.updateScreen(screen).subscribe(
       {
         next: () => {
           if (!hidePostAction) {
             this.notification.showSuccess("SAVED..")
           }
 
-          if (callbkFunc) callbkFunc();
+          callback?.();
         },
         error: (e) => {
           if (e.status == 401) {
@@ -344,5 +322,10 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
         },
         complete: () => console.info('complete')
       });
+  }
+
+  private updateScreenData(update: (screen: ScreenModel) => ScreenModel): void {
+    const screen = this.data();
+    if (screen) this.data.set(update(screen));
   }
 }
