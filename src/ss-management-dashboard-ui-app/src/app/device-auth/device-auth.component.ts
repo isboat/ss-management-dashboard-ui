@@ -25,6 +25,7 @@ export class DeviceAuthComponent implements OnInit {
   });
 
   readonly showForm = signal(true);
+  readonly submitting = signal(false);
 
   ngOnInit() {
   }
@@ -38,12 +39,14 @@ export class DeviceAuthComponent implements OnInit {
       return;
     }
     const data: DeviceAuthRequestModel = { userCode: `${partOne}-${partTwo}-${partThree}` };
+    this.submitting.set(true);
     this.dataService.post(data).subscribe({
       next: (data) => {
         this.showForm.set(false);
         this.notification.showSuccess('Success: TV App authenticated.');
       },
       error: (e) => {
+        this.submitting.set(false);
         if (e.status == 401) this.authService.redirectToLogin(true);
         if (e.status == 404) this.notification.showWarning('NOT FOUND: Incorrect code, please update.')
         if (e.status == 400) {
@@ -62,7 +65,7 @@ export class DeviceAuthComponent implements OnInit {
           if (message) this.notification.showError(message)
         }
       },
-      complete: () => console.info('complete')
+      complete: () => this.submitting.set(false)
     });
   }
 }

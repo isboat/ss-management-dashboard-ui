@@ -1,31 +1,75 @@
-<div class="main-content">
+<div class="main-content device-connect-page">
   <div class="container-fluid">
     @if (showForm()) {
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header card-header-danger">
-              <h4 class="card-title">Device Authentication</h4>
-              <p class="card-category">Enter the code displayed on your TV App</p>
+      <section class="device-connect-shell" aria-labelledby="device-connect-title">
+        <div class="device-intro">
+          <div class="intro-content">
+            <span class="section-eyebrow"><i class="material-icons">connected_tv</i> Device setup</span>
+            <h2 id="device-connect-title">Bring a new screen online</h2>
+            <p>Connect your TV app to this workspace using the 12-character code shown on its welcome screen.</p>
+
+            <ol class="setup-steps" aria-label="Connection steps">
+              <li><span>1</span><div><strong>Open onScreenSync</strong><small>Launch the app on your TV or display.</small></div></li>
+              <li><span>2</span><div><strong>Find your code</strong><small>Keep the pairing screen open.</small></div></li>
+              <li><span>3</span><div><strong>Enter it here</strong><small>Your device connects in a few seconds.</small></div></li>
+            </ol>
+          </div>
+          <div class="display-illustration" aria-hidden="true">
+            <div class="display-frame">
+              <span class="live-chip"><i></i> Ready to connect</span>
+              <div class="display-logo"><i class="material-icons">cast_connected</i></div>
+              <div class="display-lines"><span></span><span></span></div>
             </div>
-            <div class="card-body">
-              <form  [formGroup]="deviceAuthForm" (ngSubmit)="submit()">
-                <div class="row">
-                  <div class="col-md-12">
-                    <input class="device-code-input" placeholder="ABCD" maxlength="4" minlength="4" matInput type="text" formControlName="partOne">
-                    <span>-</span>
-                    <input class="device-code-input" placeholder="EFGH" maxlength="4" minlength="4" matInput type="text" formControlName="partTwo">
-                    <span>-</span>
-                    <input class="device-code-input" placeholder="IJKL" maxlength="4" minlength="4" matInput type="text" formControlName="partThree">
-                  </div>
-                </div>
-                <button mat-raised-button type="submit" class="btn btn-danger pull-right">Continue</button>
-                <div class="clearfix"></div>
-              </form>
-            </div>
+            <div class="display-stand"></div>
           </div>
         </div>
-      </div>
+
+        <div class="device-form-panel">
+          <div class="form-heading">
+            <span class="form-icon"><i class="material-icons">key</i></span>
+            <div>
+              <h3>Enter pairing code</h3>
+              <p>Type each group exactly as it appears on your TV.</p>
+            </div>
+          </div>
+
+          <form [formGroup]="deviceAuthForm" (ngSubmit)="submit()" novalidate>
+            <fieldset class="code-fieldset">
+              <legend>12-character device code</legend>
+              <div class="code-inputs">
+                <input class="device-code-input" aria-label="First four characters" placeholder="ABCD"
+                  maxlength="4" minlength="4" autocomplete="off" autocapitalize="characters"
+                  matInput type="text" formControlName="partOne">
+                <span class="code-separator" aria-hidden="true"></span>
+                <input class="device-code-input" aria-label="Middle four characters" placeholder="EFGH"
+                  maxlength="4" minlength="4" autocomplete="off" autocapitalize="characters"
+                  matInput type="text" formControlName="partTwo">
+                <span class="code-separator" aria-hidden="true"></span>
+                <input class="device-code-input" aria-label="Last four characters" placeholder="IJKL"
+                  maxlength="4" minlength="4" autocomplete="off" autocapitalize="characters"
+                  matInput type="text" formControlName="partThree">
+              </div>
+            </fieldset>
+
+            <div class="security-note">
+              <i class="material-icons">verified_user</i>
+              <span>The code is single-use and only authorizes this display.</span>
+            </div>
+
+            <button mat-raised-button type="submit" [disabled]="submitting()" class="connect-button">
+              <span>{{submitting() ? 'Connecting device...' : 'Connect device'}}</span>
+              <i class="material-icons">arrow_forward</i>
+            </button>
+          </form>
+        </div>
+      </section>
+    } @else {
+      <section class="connection-success" role="status">
+        <span><i class="material-icons">check</i></span>
+        <h2>Device connected</h2>
+        <p>Your TV app is authorized and ready for content.</p>
+        <a routerLink="/devices" class="btn btn-primary">View devices</a>
+      </section>
     }
   </div>
 </div>
