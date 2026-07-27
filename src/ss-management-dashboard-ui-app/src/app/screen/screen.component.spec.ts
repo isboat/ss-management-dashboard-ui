@@ -29,7 +29,6 @@ describe('ScreenDetailsComponent signals', () => {
       {} as any,
       {} as any,
       {} as any,
-      auth as any,
       {} as any,
       {} as any,
       {} as any

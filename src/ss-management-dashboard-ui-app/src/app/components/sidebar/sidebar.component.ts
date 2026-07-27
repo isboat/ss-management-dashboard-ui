@@ -1,4 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/services/auth.service';
 
@@ -34,12 +35,13 @@ export class SidebarComponent implements OnInit {
   readonly menuItems = signal<RouteInfo[]>([]);
   readonly showMenuLinks = signal(true);
 
-  constructor(private auth: AuthService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private auth: AuthService, private route: ActivatedRoute, private router: Router,
+    private destroyRef: DestroyRef) { }
 
   ngOnInit() {
 
     this.updateMenu();
-    this.router.events.subscribe((event) => {
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.updateMenu();
    });
   }

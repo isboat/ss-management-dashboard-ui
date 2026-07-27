@@ -40,7 +40,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   readonly selectedSubTemplate = signal<SubtypeTemplate | null>(null);
   readonly selectedDeviceId = signal<string | null>(null);
 
-  readonly isAdminUser = this.auth.adminUser;
+  readonly isAdminUser = this.authService.adminUser;
 
   readonly previewWidth = "200px";
   readonly selectedTemplateHasMedia = computed(() => {
@@ -57,13 +57,12 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private auth: AuthService,
+    private authService: AuthService,
     private textAssetService: TextAssetService,
     private dataService: DataService,
     private notification: NotificationsService,
     private menuService: MenuService,
     private mediaService: MediaService,
-    private authService: AuthService,
     private deviceService: DeviceService,
     private playlistService: PlaylistService,
     private route: ActivatedRoute) { }

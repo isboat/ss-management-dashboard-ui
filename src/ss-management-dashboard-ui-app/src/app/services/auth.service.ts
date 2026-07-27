@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, OnDestroy, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './localstorage.service';
 
@@ -11,7 +11,7 @@ interface TokenClaims {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private readonly tokenKey = 'token';
   private readonly authorizationToken = signal<string | null>(null);
   private readonly tokenValidityTick = signal(0);
@@ -67,6 +67,10 @@ export class AuthService {
   clearAuthorizationToken(): void {
     this.localStorage.remove(this.tokenKey);
     this.authorizationToken.set(null);
+    this.clearExpirationTimer();
+  }
+
+  ngOnDestroy(): void {
     this.clearExpirationTimer();
   }
 

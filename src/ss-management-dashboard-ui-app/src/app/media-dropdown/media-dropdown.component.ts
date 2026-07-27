@@ -36,11 +36,14 @@ export class MediaDropdownComponent implements OnInit {
   }
 
   fetchListData() {
-    this.dataService.fetchMediaAssets(this.listData().length, appconstants.fetchLimit).subscribe(
+    const assetType = this.assetType();
+    this.dataService.fetchMediaAssets(
+      this.listData().length,
+      appconstants.fetchLimit,
+      assetType ? Number(assetType) : undefined
+    ).subscribe(
       {
         next: (data) => {
-          const assetType = this.assetType();
-          if(assetType) data = data.filter(x => x.type.toString() === assetType)
           this.listData.update(items => [...items, ...data]);
         },
         error: (e) => {

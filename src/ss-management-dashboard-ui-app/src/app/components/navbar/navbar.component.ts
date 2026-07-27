@@ -1,9 +1,10 @@
-import { Component, OnInit, ElementRef, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, ElementRef, signal } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 import { LoginService } from 'app/services/login.service';
 import { AuthService } from 'app/services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -19,7 +20,8 @@ export class NavbarComponent implements OnInit {
     readonly showLogoutBtn = this.authService.authenticated;
     private readonly sidebarOpenState = signal(false);
 
-    constructor(location: Location,  private element: ElementRef, private router: Router, private loginService: LoginService, private authService: AuthService) {
+    constructor(location: Location, private element: ElementRef, private router: Router,
+      private loginService: LoginService, private authService: AuthService, private destroyRef: DestroyRef) {
       this.location = location;
     }
 
@@ -27,7 +29,7 @@ export class NavbarComponent implements OnInit {
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
-      this.router.events.subscribe((event) => {
+      this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         this.sidebarClose();
          const $layer: any = document.getElementsByClassName('close-layer')[0];
          if ($layer) {
