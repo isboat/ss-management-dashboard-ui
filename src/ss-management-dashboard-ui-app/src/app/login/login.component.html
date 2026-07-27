@@ -6,7 +6,7 @@
           <p>Sign in to publish content, coordinate playlists, and monitor your connected displays.</p>
       </header>
       <div class="row">
-          <div class="col-md-8">
+          <div class="col-lg-7">
               <div class="card">
                   <div class="card-header card-header-info login-card-header">
                       <h2 class="card-title">Welcome back</h2>
@@ -30,27 +30,22 @@
                                 </mat-form-field>
                               </div>
                           </div>
-                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Sign in</button>
+                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Sign in <i class="material-icons">arrow_forward</i></button>
                           <div class="clearfix"></div>
                       </form>
                       <a [routerLink]="['/register']" class="pull-right">No account? Register</a>
                   </div>
               </div>
           </div>
-          <div class="col-md-4">
-              <div class="card card-profile">
-                  <div class="card-avatar">
-                      <a href="javascript:void(0)">
-                          <img class="img profile-img" src="./assets/img/site-logo.png" alt="onScreenSync logo" />
-                      </a>
+          <div class="col-lg-5">
+              <div class="login-visual" role="img" aria-label="A modern digital display in a creative workspace">
+                <div class="visual-overlay">
+                  <span class="visual-badge"><i class="material-icons">bolt</i> Live content</span>
+                  <div>
+                    <p>One workspace.<br><strong>Every screen.</strong></p>
+                    <span>Publish in moments, stay perfectly in sync.</span>
                   </div>
-                  <div class="card-body">
-                      <h4 class="card-title">onScreenSync.com</h4>
-                      <p class="card-description">
-                        Follow us on all social media platforms. Click the button below
-                      </p>
-                      <a target="_blank" href="https://www.youtube.com/@onScreenSync" class="btn btn-danger login-card-header btn-round">Follow</a>
-                  </div>
+                </div>
               </div>
           </div>
       </div>

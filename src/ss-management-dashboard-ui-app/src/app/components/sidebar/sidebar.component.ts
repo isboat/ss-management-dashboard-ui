@@ -12,17 +12,17 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
     //{ path: '/dashboard', title: 'Dashboard',  icon: 'dashboard', class: '' },
-    { path: '/screens', title: 'Screen List',  icon:'content_paste', class: '' },
-    { path: '/menus', title: 'Menu List',  icon:'restaurant_menu', class: '' },
-    { path: '/users', title: 'User List',  icon:'person', class: '' },
-    { path: '/devices', title: 'TV Devices',  icon:'queue_play_next', class: '' },
-    { path: '/device/auth', title: 'New TV Device Setup',  icon:'video_label', class: '' },
+    { path: '/screens', title: 'Screens',  icon:'monitor', class: '' },
+    { path: '/menus', title: 'Menus',  icon:'restaurant_menu', class: '' },
+    { path: '/users', title: 'Team',  icon:'group', class: '' },
+    { path: '/devices', title: 'Devices',  icon:'connected_tv', class: '' },
+    { path: '/device/auth', title: 'Connect device',  icon:'add_to_queue', class: '' },
     { path: '/media-list', title: 'Media Assets',  icon:'play_circle', class: '' },
-    { path: '/text-asset-list', title: 'ADs / Information',  icon:'play_circle', class: '' },
-    { path: '/playlists', title: 'Playlists',  icon:'playlist_add_check', class: '' },
-    { path: '/settings', title: 'Settings',  icon:'help', class: '' },
-    { path: '/help-and-support', title: 'Help and Support',  icon:'help', class: '' },
-    { path: '/login', title: 'Login',  icon:'person', class: '' },
+    { path: '/text-asset-list', title: 'Messages',  icon:'text_fields', class: '' },
+    { path: '/playlists', title: 'Playlists',  icon:'playlist_play', class: '' },
+    { path: '/settings', title: 'Settings',  icon:'tune', class: '' },
+    { path: '/help-and-support', title: 'Help & support',  icon:'help_outline', class: '' },
+    { path: '/login', title: 'Sign in',  icon:'login', class: '' },
 ];
 
 @Component({

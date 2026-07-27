@@ -1,7 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
   <div class="container-fluid">
     <div class="navbar-wrapper">
-      <a class="navbar-brand" href="javascript:void(0)">{{getTitle()}}</a>
+      <div class="page-heading">
+        <span class="page-kicker">Management console</span>
+        <h1 class="navbar-brand">{{getTitle()}}</h1>
+      </div>
     </div>
     <button mat-raised-button class="navbar-toggler" type="button" (click)="sidebarToggle()">
       <span class="sr-only">Toggle navigation</span>
@@ -10,16 +13,18 @@
       <span class="navbar-toggler-icon icon-bar"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navigation">
-      <form class="navbar-form">
+      <form class="navbar-form" role="search">
         <div class="input-group no-border">
-          <input type="text" value="" class="form-control" placeholder="Search...">
+          <i class="material-icons search-leading">search</i>
+          <input type="search" value="" class="form-control" placeholder="Search workspace">
           <button mat-raised-button type="submit" class="btn btn-white btn-round btn-just-icon">
-            <i class="material-icons">search</i>
+            <i class="material-icons">arrow_forward</i>
             <div class="ripple-container"></div>
           </button>
         </div>
       </form>
       <ul class="navbar-nav">
+      <li class="nav-item status-pill"><span></span> All systems operational</li>
         <!-- <li class="nav-item dropdown">
         <a class="nav-link" href="javascript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="material-icons">notifications</i>
