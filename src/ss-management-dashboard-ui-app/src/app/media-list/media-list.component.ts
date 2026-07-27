@@ -15,7 +15,9 @@ export class MediaListComponent implements OnInit {
 
   readonly listData = signal<AssetModel[]>([]);
   readonly playlists = signal<PlaylistModel[]>([]);
-  fetchLimit: number = 20;
+  readonly loading = signal(false);
+  readonly deletingId = signal<string | null>(null);
+  readonly fetchLimit = 20;
 
   constructor(
     private dataService: MediaService, 
@@ -114,10 +116,13 @@ export class MediaListComponent implements OnInit {
   }
 
   fetchListData(){
+    if (this.loading()) return;
+    this.loading.set(true);
     this.dataService.fetchMediaAssets(this.listData().length, this.fetchLimit).subscribe(
       {
         next: (data) => this.listData.update(items => [...items, ...data]),
         error: (e) => {
+          this.loading.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -127,19 +132,22 @@ export class MediaListComponent implements OnInit {
             console.log(e)
           }
         },
-        complete: () => console.info('complete')
+        complete: () => this.loading.set(false)
       });
  }
 
  deleteMedia(id: string)
  {
+  this.deletingId.set(id);
   this.dataService.deleteMedia(id).subscribe(
     {
       next: () => 
       {
         this.listData.update(items => items.filter(item => item.id !== id));
+        this.deletingId.set(null);
       },
       error: (e) => {
+        this.deletingId.set(null);
         if(e.status == 401) 
         {
           this.authService.redirectToLogin(true);

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItemModel, MenuModel } from 'app/models/menu-response.model';
@@ -13,19 +13,19 @@ import { MenuService } from 'app/services/menu.service';
   styleUrls: ['./menu.component.css']
 })
 export class MenuDetailsComponent implements OnInit, OnDestroy {
-  id: string;
+  readonly id = signal('');
   private sub: any;
   previewWidth: string = "50px";
 
   form: FormGroup;
 
-  data: MenuModel = null;
-  isLoading = true;
-  loadError = '';
+  readonly data = signal<MenuModel | null>(null);
+  readonly isLoading = signal(true);
+  readonly loadError = signal('');
 
   currencies: string[] = ["£", "$", "GHS", "Euro"]
 
-  itemToAdd: MenuItemModel = null;
+  readonly itemToAdd = signal<MenuItemModel>(this.newMenuItem());
   selectButtonText: string = "Choose ..."
 
   constructor(
@@ -37,7 +37,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id'];
+      this.id.set(params['id']);
       this.fetchData();
     });
 
@@ -47,7 +47,7 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   onMenuIconMediaChange(evt:any) {
     const selectedMedia = evt.selectedMedia;
     if (!selectedMedia) return;
-    this.data.iconUrl = selectedMedia.assetUrl;
+    this.data.update(data => data ? { ...data, iconUrl: selectedMedia.assetUrl } : data);
   }
 
   onMenuItemIconMediaChange(evt:any, menuItem: MenuItemModel) {
@@ -60,40 +60,50 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
     const newCur = evt.target.value;
     this.currencies.forEach((value, index) => {
       if (value == newCur) {
-        this.data.currency = value;
+        this.data.update(data => data ? { ...data, currency: value } : data);
       }
     });
   }
 
-  resetItemToAdd(): void {
-    this.itemToAdd =
-    {
+  private newMenuItem(): MenuItemModel {
+    return {
       id: '',
       name: '',
       description: '',
       price: '0',
       discountPrice: '',
       iconUrl: ''
-    }
+    };
+  }
+
+  resetItemToAdd(): void {
+    this.itemToAdd.set(this.newMenuItem());
+  }
+
+  updateItemToAdd(field: keyof MenuItemModel, value: string): void {
+    this.itemToAdd.update(item => ({ ...item, [field]: value }));
   }
 
   deleteMenuItem(menuItemId: string)
   {
-    this.data.menuItems = this.data.menuItems.filter(x => x.id != menuItemId);
+    this.data.update(data => data ? { ...data, menuItems: data.menuItems.filter(x => x.id != menuItemId) } : data);
   }
 
   addItemToList() {
-    if(!this.itemToAdd.name || !this.itemToAdd.price)
+    const itemToAdd = this.itemToAdd();
+    if(!itemToAdd.name || !itemToAdd.price)
     {
       this.notificationService.showWarning("Fill at least the name and price fields")
       return;
     }
-    this.data.menuItems.push(this.itemToAdd);
+    this.data.update(data => data ? { ...data, menuItems: [...data.menuItems, itemToAdd] } : data);
     this.resetItemToAdd();
   }
 
   saveMenu() {
-    this.dataService.saveMenu(this.data).subscribe({
+    const data = this.data();
+    if (!data) return;
+    this.dataService.saveMenu(data).subscribe({
       next: () => {
         this.notificationService.showSuccess("Changes saved successfully")
       },
@@ -109,25 +119,25 @@ export class MenuDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchData() {
-    this.isLoading = true;
-    this.loadError = '';
-    this.dataService.fetchMenuDetails(this.id).subscribe({
+    this.isLoading.set(true);
+    this.loadError.set('');
+    this.dataService.fetchMenuDetails(this.id()).subscribe({
       next: (data) => {
-        this.data = data
         if (!data.menuItems) {
           data.menuItems = []
         }
+        this.data.set(data);
       },
       error: (e) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         if (e.status == 401) {
           this.authService.redirectToLogin(true);
           return;
         }
-        this.loadError = 'We could not load this menu. Please try again.';
+        this.loadError.set('We could not load this menu. Please try again.');
       },
       complete: () => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         console.info('complete');
       }
     });

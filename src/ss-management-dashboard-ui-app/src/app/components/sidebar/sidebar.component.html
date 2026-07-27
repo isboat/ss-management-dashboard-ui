@@ -1,10 +1,7 @@
 <div class="logo">
-  <a href="/" class="simple-text">
-    <div>
-      <img class="img" src="./assets/img/site-logo.png" width="50px" />
-      <span>onScreenSync</span>
-    </div>
-    <div>Management Service</div>
+  <a routerLink="/screens" class="simple-text" aria-label="onScreenSync home">
+    <span class="brand-mark"><img class="img" src="./assets/img/site-logo.png" alt="" /></span>
+    <span class="brand-copy"><strong>onScreenSync</strong><small>Content cloud</small></span>
   </a>
 </div>
 <div class="sidebar-wrapper">
@@ -50,15 +47,21 @@
   </div>
 }
 @if (showMenuLinks()) {
+  <p class="nav-section-label">Workspace</p>
   <ul class="nav sidebar-link">
     @for (menuItem of menuItems(); track menuItem.path) {
       <li routerLinkActive="active" class="{{menuItem.class}} nav-item">
         <a class="nav-link " [routerLink]="[menuItem.path]">
-          <i class="material-icons">{{menuItem.icon}}</i>
+          <span class="nav-icon"><i class="material-icons">{{menuItem.icon}}</i></span>
           <p>{{menuItem.title}}</p>
+          <i class="material-icons nav-chevron">chevron_right</i>
         </a>
       </li>
     }
   </ul>
 }
+</div>
+<div class="sidebar-promo">
+  <span class="promo-icon"><i class="material-icons">auto_awesome</i></span>
+  <div><strong>Ready to publish?</strong><small>Keep every display in sync.</small></div>
 </div>

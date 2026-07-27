@@ -1,53 +1,25 @@
-<div class="main-content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header card-header-primary">
-                <h3 class="card-title">Create a new AD or Information Asset</h3>
-                <p class="card-category">
-                    This can be used for ad, information, etc
-                </p>
-            </div>
-            <div class="card-body">
-                <div class="row mt-5">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="formtitle" class="form-label">Title</label>
-                            <input [(ngModel)]="title" class="form-control" type="text" id="formtitle">
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Text / Information</label>
-                            <ckeditor [editor]="Editor"
-                                [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
-                                [(ngModel)]="desc"></ckeditor>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="bgColor" class="form-label">Background Color</label>
-                            <input [(ngModel)]="backgroundColor" class="form-control" type="text" id="bgColor">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="bgColor" class="form-label">Text Color</label>
-                            <input [(ngModel)]="textColor" class="form-control" type="text" id="bgColor">
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <button (click)="this.postNew()" type="button" class="btn btn-primary mt-3">Create</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="main-content message-editor-page"><div class="container-fluid"><div class="message-editor-shell">
+  <header class="message-editor-hero">
+    <div class="message-art" aria-hidden="true"><span class="quote">“</span><div><i></i><i></i><i></i></div></div>
+    <div class="hero-copy"><span><i class="material-icons">text_fields</i> Message studio</span><h2>Create a new message</h2><p>Design an announcement, promotion or information card for any screen.</p></div>
+    <a routerLink="/text-asset-list" class="back-action"><i class="material-icons">arrow_back</i>Message library</a>
+  </header>
+
+  <div class="editor-layout">
+    <main class="editor-card">
+      <div class="section-heading"><span>01</span><div><h3>Message content</h3><p>Give your message a clear title and write the content viewers will see.</p></div></div>
+      <div class="editor-fields">
+        <label><span>Message title</span><input [ngModel]="title()" (ngModelChange)="title.set($event)" class="form-control" placeholder="e.g. Welcome to our summer sale"></label>
+        <label><span>Text / information</span><div class="rich-editor"><ckeditor [editor]="Editor" [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }" [ngModel]="desc()" (ngModelChange)="desc.set($event)"></ckeditor></div><small>Keep it concise for the best readability on large screens.</small></label>
+      </div>
+    </main>
+
+    <aside class="appearance-card">
+      <div class="appearance-icon"><i class="material-icons">palette</i></div><h3>Appearance</h3><p>Choose colors that make your message easy to read.</p>
+      <label><span>Background color</span><div class="color-field"><input type="color" [value]="backgroundColor() || '#171f37'" (input)="backgroundColor.set($any($event.target).value)"><input [ngModel]="backgroundColor()" (ngModelChange)="backgroundColor.set($event)" class="form-control" placeholder="#171f37"></div></label>
+      <label><span>Text color</span><div class="color-field"><input type="color" [value]="textColor() || '#ffffff'" (input)="textColor.set($any($event.target).value)"><input [ngModel]="textColor()" (ngModelChange)="textColor.set($event)" class="form-control" placeholder="#ffffff"></div></label>
+      <div class="mini-preview" [style.background]="backgroundColor() || '#171f37'" [style.color]="textColor() || '#ffffff'"><small>LIVE PREVIEW</small><strong>{{title() || 'Your message title'}}</strong><p>Message content will appear here.</p></div>
+      <button (click)="postNew()" [disabled]="submitting()" class="editor-submit">{{submitting() ? 'Creating message...' : 'Create message'}}<i class="material-icons">arrow_forward</i></button>
+    </aside>
+  </div>
+</div></div></div>

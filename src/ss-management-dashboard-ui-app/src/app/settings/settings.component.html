@@ -1,88 +1,30 @@
-<div class="main-content">
-  <div class="container-fluid">
-    @if (allowToView) {
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header card-header-info">
-              <h3 class="card-title">Details</h3>
-              <p class="card-category">
-                Below is the details
-              </p>
-            </div>
-            @if (data) {
-              <div class="card-body">
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Name" type="text" [(ngModel)]="data.name">
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Email" type="email" [(ngModel)]="data.email">
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Address field" type="text" [(ngModel)]="data.address">
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="city" type="text" [(ngModel)]="data.city">
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="country" type="text" [(ngModel)]="data.country">
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="postcode" type="text" [(ngModel)]="data.postcode">
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="telephone" type="text" [(ngModel)]="data.telephone">
-                </mat-form-field>
-                <p class="card-category">
-                  <br /><br /><br />
-                  Save changes you've made to the detail.
-                </p>
-                <p class="card-category">
-                  <a (click)="saveUpdates()" class="btn btn-round btn-fill btn-info">Save Updates</a>
-                </p>
-              </div>
-            }
+<div class="main-content settings-page"><div class="container-fluid">
+  @if (allowToView()) {
+    <header class="settings-hero"><div><span>Workspace administration</span><h2>Organization settings</h2><p>Keep your company profile and partner access up to date.</p></div><div class="hero-icon"><i class="material-icons">tune</i></div></header>
+    @if (data(); as settings) {
+      <div class="settings-grid">
+        <section class="settings-card profile-settings">
+          <div class="section-heading"><span><i class="material-icons">business</i></span><div><h3>Company profile</h3><p>Contact and location details shown across your workspace.</p></div></div>
+          <div class="settings-form">
+            <label class="wide"><span>Organization name</span><input class="form-control" [(ngModel)]="settings.name"></label>
+            <label class="wide"><span>Email address</span><input type="email" class="form-control" [(ngModel)]="settings.email"></label>
+            <label class="wide"><span>Street address</span><input class="form-control" [(ngModel)]="settings.address"></label>
+            <label><span>City</span><input class="form-control" [(ngModel)]="settings.city"></label>
+            <label><span>Postcode</span><input class="form-control" [(ngModel)]="settings.postcode"></label>
+            <label><span>Country</span><input class="form-control" [(ngModel)]="settings.country"></label>
+            <label><span>Telephone</span><input type="tel" class="form-control" [(ngModel)]="settings.telephone"></label>
           </div>
-        </div>
-        <div class="col-md-6">
-          @if (data && isAdminUser) {
-            <div class="card">
-              <div class="card-header card-header-warning">
-                <h3 class="card-title">Permissions</h3>
-                <p class="card-category">
-                  Click button below to allow partner permission
-                </p>
-              </div>
-              <div class="card-body">
-                <div class="form-check">
-                  <input class="" type="checkbox" id="flexCheckChecked" [(ngModel)]="data.allowedPartnerPermission">
-                  <!-- <input type="checkbox" [checked]="data.allowedPartnerPermission" (change)="data.allowedPartnerPermission = !data.allowedPartnerPermission"/> -->
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Allow permission
-                  </label>
-                </div>
-                <div>
-                  <a (click)="updatePermission()" class="btn btn-round btn-fill btn-warning">Save Permission</a>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
+          <div class="card-action"><div><strong>Save company profile</strong><small>Apply these details across your account.</small></div><button (click)="saveUpdates()" [disabled]="saving()" class="primary-action">{{saving() ? 'Saving...' : 'Save changes'}} <i class="material-icons">arrow_forward</i></button></div>
+        </section>
+        <aside class="settings-card permission-card">
+          <span class="permission-icon"><i class="material-icons">handshake</i></span><h3>Partner access</h3><p>Allow authorized partners to help manage content and devices in this workspace.</p>
+          <label class="toggle-row" for="partner-access"><span><strong>Allow partner permission</strong><small>You can turn this off at any time.</small></span><input type="checkbox" id="partner-access" [(ngModel)]="settings.allowedPartnerPermission"><i></i></label>
+          <button (click)="updatePermission()" [disabled]="updatingPermission()" class="secondary-action">{{updatingPermission() ? 'Updating...' : 'Update permission'}}</button>
+          <div class="security-tip"><i class="material-icons">shield</i><span>Only verified partners receive access.</span></div>
+        </aside>
       </div>
     }
-    @if (!allowToView) {
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-danger">
-              <h3 class="card-title">Forbidden</h3>
-            </div>
-            <div class="card-body">
-              <p class="card-category">You are not allow to view this page. </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-  </div>
-</div>
+  } @else {
+    <section class="access-denied"><i class="material-icons">lock</i><h2>Administrator access required</h2><p>You don’t have permission to view organization settings.</p></section>
+  }
+</div></div>

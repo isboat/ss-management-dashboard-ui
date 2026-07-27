@@ -1,62 +1,29 @@
-<div class="main-content">
-  @if (data) {
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header card-header-primary">
-          <h3 class="card-title">Edit AD or Information Asset</h3>
-          <p class="card-category">
-            This can be used for ad, information, etc
-          </p>
-        </div>
-        <div class="card-body">
-          <div class="row mt-5">
-            <div class="col-md-5">
-              <div class="mb-3">
-                <label for="formtitle" class="form-label">Title/Name</label>
-                <input [(ngModel)]="data.name" class="form-control" type="text" id="formtitle">
-              </div>
-            </div>
+<div class="main-content message-editor-page"><div class="container-fluid">
+  @if (loading()) { <div class="editor-loading" role="status"><span></span><p>Loading message editor...</p></div> }
+  @if (data(); as asset) {
+    <div class="message-editor-shell">
+      <header class="message-editor-hero edit-hero">
+        <div class="message-art" aria-hidden="true"><span class="quote">“</span><div><i></i><i></i><i></i></div></div>
+        <div class="hero-copy"><span><i class="material-icons">edit_note</i> Message studio</span><h2>{{asset.name}}</h2><p>Refine your message and keep every connected screen current.</p></div>
+        <span class="updated-chip"><i></i> Saved content</span>
+      </header>
+      <div class="editor-layout">
+        <main class="editor-card">
+          <div class="section-heading"><span><i class="material-icons">article</i></span><div><h3>Edit content</h3><p>Update the title and message shown to your audience.</p></div></div>
+          <div class="editor-fields">
+            <label><span>Message title</span><input [(ngModel)]="asset.name" class="form-control" placeholder="Message title"></label>
+            <label><span>Text / information</span><div class="rich-editor"><ckeditor [editor]="Editor" [config]="{ width: '400px', height: '500px', toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }" [(ngModel)]="asset.description"></ckeditor></div><small>Use headings and short paragraphs for display-friendly content.</small></label>
           </div>
-          <div class="row mt-5">
-            <div class="col-md-5">
-              <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Text / Information</label>
-                <ckeditor [editor]="Editor"
-                  [config]="{ width: '400px', height: '500px', toolbar: [ 'heading', '|', 'bold', 'italic', 'NumberedList','BulletedList', 'blockQuote' ] }"
-                [(ngModel)]="data.description"></ckeditor>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-5">
-            <div class="col-md-2">
-              <div class="mb-3">
-                <label for="bgColor" class="form-label">Background Color</label>
-                <input [(ngModel)]="data.backgroundColor" class="form-control" type="text" id="bgColor">
-              </div>
-            </div>
-            <div class="col-md-1">
-            </div>
-            <div class="col-md-2">
-              <div class="mb-3">
-                <label for="bgColor" class="form-label">Text Color</label>
-                <input [(ngModel)]="data.textColor" class="form-control" type="text" id="bgColor">
-              </div>
-            </div>
-          </div>
-          <div class="row mt-5">
-            <div class="col-md-4">
-              <div class="mb-3">
-                <button (click)="this.save()" type="button" class="btn btn-primary mt-3">Save</button>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-5">
-            <div class="col-md-12">
-              <div><small>Created on: {{data.createdOn}}, Last updated on: {{data.updatedOn}}</small></div>
-            </div>
-          </div>
-        </div>
+        </main>
+        <aside class="appearance-card">
+          <div class="appearance-icon"><i class="material-icons">palette</i></div><h3>Appearance</h3><p>Fine-tune the contrast for this message.</p>
+          <label><span>Background color</span><div class="color-field"><input type="color" [value]="asset.backgroundColor || '#171f37'" (input)="asset.backgroundColor = $any($event.target).value"><input [(ngModel)]="asset.backgroundColor" class="form-control"></div></label>
+          <label><span>Text color</span><div class="color-field"><input type="color" [value]="asset.textColor || '#ffffff'" (input)="asset.textColor = $any($event.target).value"><input [(ngModel)]="asset.textColor" class="form-control"></div></label>
+          <div class="mini-preview" [style.background]="asset.backgroundColor || '#171f37'" [style.color]="asset.textColor || '#ffffff'"><small>LIVE PREVIEW</small><strong>{{asset.name || 'Your message title'}}</strong><div class="preview-copy" [innerHTML]="asset.description || 'Message content will appear here.'"></div></div>
+          <button (click)="save()" [disabled]="saving()" class="editor-submit">{{saving() ? 'Saving changes...' : 'Save message'}}<i class="material-icons">save</i></button>
+          <div class="asset-meta"><i class="material-icons">history</i><span>Created {{asset.createdOn | date:'mediumDate'}}<br>Updated {{asset.updatedOn | date:'mediumDate'}}</span></div>
+        </aside>
       </div>
     </div>
   }
-</div>
+</div></div>

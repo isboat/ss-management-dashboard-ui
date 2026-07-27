@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { PlaylistWithItemsModel } from 'app/models/playlist-response.model';
 import { AuthService } from 'app/services/auth.service';
 import { PlaylistService } from 'app/services/playlist.service';
@@ -13,13 +13,14 @@ import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk
   styleUrls: ['./playlist-details.component.css']
 })
 export class PlaylistComponent implements OnInit {
-  id: string;
+  readonly id = signal('');
   private sub: any;
-  data: PlaylistWithItemsModel = null
+  readonly data = signal<PlaylistWithItemsModel | null>(null);
 
-  hrPart = 0;
-  minPart = 0;
-  secPart = 0;
+  readonly hrPart = signal(0);
+  readonly minPart = signal(0);
+  readonly secPart = signal(0);
+  readonly saving = signal(false);
 
   constructor(
     private notificationService: NotificationsService,
@@ -30,29 +31,30 @@ export class PlaylistComponent implements OnInit {
 
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.data.items, event.previousIndex, event.currentIndex);
-    this.data.itemIdAndTypePairs = [];
-    this.data.items.forEach(x => {
-      this.data.itemIdAndTypePairs.push({ itemType: x.playlistType, id: x.id }); // 0 is media type
-    })
+    const data = this.data();
+    if (!data) return;
+    moveItemInArray(data.items, event.previousIndex, event.currentIndex);
+    data.itemIdAndTypePairs = data.items.map(x => ({ itemType: x.playlistType, id: x.id }));
+    this.data.set({ ...data });
   }
 
   ngOnInit() {
     this.fetchData();
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id'];
+      this.id.set(params['id']);
       this.fetchData();
     });
   }
 
   splitDataDurations() {
-    if (!this.data || !this.data.itemDuration) return;
-    const splits = this.data.itemDuration.split(':')
+    const data = this.data();
+    if (!data?.itemDuration) return;
+    const splits = data.itemDuration.split(':')
     if (splits.length !== 3) return;
 
-    this.hrPart = parseInt(splits[0]);
-    this.minPart = parseInt(splits[1]);
-    this.secPart = parseInt(splits[2]);
+    this.hrPart.set(parseInt(splits[0]));
+    this.minPart.set(parseInt(splits[1]));
+    this.secPart.set(parseInt(splits[2]));
   }
 
   ngOnDestroy() {
@@ -63,14 +65,19 @@ export class PlaylistComponent implements OnInit {
     return part ? (part < 10 ? '0' + part : part) : '00';
   }
   saveChanges() {
-    this.data.itemDuration = `${this.formatDurPart(this.hrPart)}:${this.formatDurPart(this.minPart)}:${this.formatDurPart(this.secPart)}`;
+    const data = this.data();
+    if (!data) return;
+    data.itemDuration = `${this.formatDurPart(this.hrPart())}:${this.formatDurPart(this.minPart())}:${this.formatDurPart(this.secPart())}`;
 
-    this.playlistService.save(this.data).subscribe(
+    this.saving.set(true);
+    this.playlistService.save(data).subscribe(
       {
         next: () => {
           this.notificationService.showSuccess("Saved!")
+          this.saving.set(false);
         },
         error: (e) => {
+          this.saving.set(false);
           if (e.status == 401) {
             this.authService.redirectToLogin(true);
           }
@@ -82,10 +89,12 @@ export class PlaylistComponent implements OnInit {
       });
   }
   publishRelatedScreens() {
-    this.playlistService.save(this.data).subscribe(
+    const data = this.data();
+    if (!data) return;
+    this.playlistService.save(data).subscribe(
       {
         next: () => {
-          this.playlistService.publishRelatedScreens(this.data.id).subscribe(
+          this.playlistService.publishRelatedScreens(data.id).subscribe(
             {
               next: () => { this.notificationService.showSuccess("Related Screens published!") },
               error: (e) => {
@@ -115,48 +124,57 @@ export class PlaylistComponent implements OnInit {
     const selectedMedia = $event.selectedMedia;
     if (!selectedMedia) return;
 
-    const exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedMedia.id) > -1;
+    const data = this.data();
+    if (!data) return;
+    const exist = data.itemIdAndTypePairs?.findIndex(x => x.id === selectedMedia.id) > -1;
     if (!exist) {
-      if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
-      this.data.itemIdAndTypePairs.push({ itemType: 0, id: selectedMedia.id }); // 0 is media type
+      if (!data.itemIdAndTypePairs) data.itemIdAndTypePairs = []
+      data.itemIdAndTypePairs.push({ itemType: 0, id: selectedMedia.id }); // 0 is media type
 
-      if (!this.data?.items) this.data.items = [];
-      this.data.items.push(selectedMedia);
+      if (!data.items) data.items = [];
+      data.items.push(selectedMedia);
+      this.data.set({ ...data });
     }
   }
   onTextAssetSelect($event) {
     const selectedAsset = $event.selectedAsset;
     if (!selectedAsset) return;
 
-    const exist = this.data?.itemIdAndTypePairs?.findIndex(x => x.id === selectedAsset.id) > -1;
+    const data = this.data();
+    if (!data) return;
+    const exist = data.itemIdAndTypePairs?.findIndex(x => x.id === selectedAsset.id) > -1;
     if (!exist) {
-      if (!this.data?.itemIdAndTypePairs) this.data.itemIdAndTypePairs = []
-      this.data.itemIdAndTypePairs.push({ itemType: 1, id: selectedAsset.id }); // 1 is Text type
+      if (!data.itemIdAndTypePairs) data.itemIdAndTypePairs = []
+      data.itemIdAndTypePairs.push({ itemType: 1, id: selectedAsset.id }); // 1 is Text type
 
-      if (!this.data?.items) this.data.items = [];
-      this.data.items.push(selectedAsset);
+      if (!data.items) data.items = [];
+      data.items.push(selectedAsset);
+      this.data.set({ ...data });
     }
   }
 
   removeMediaAsset(id: string) {
     if (!id) return;
 
-    const index = this.data?.itemIdAndTypePairs?.findIndex(x => x.id == id);
+    const data = this.data();
+    if (!data) return;
+    const index = data.itemIdAndTypePairs?.findIndex(x => x.id == id);
     if (index < 0) return;
 
-    this.data.itemIdAndTypePairs.splice(index, 1);
+    data.itemIdAndTypePairs.splice(index, 1);
 
-    const assetIndex = this.data.items.findIndex(x => x.id == id);
+    const assetIndex = data.items.findIndex(x => x.id == id);
 
-    if (assetIndex > -1) this.data.items.splice(assetIndex, 1)
+    if (assetIndex > -1) data.items.splice(assetIndex, 1)
+    this.data.set({ ...data });
   }
 
   fetchData() {
-    if (this.id) {
-      this.playlistService.fetchDetails(this.id).subscribe(
+    if (this.id()) {
+      this.playlistService.fetchDetails(this.id()).subscribe(
         {
           next: (data) => {
-            this.data = data;
+            this.data.set(data);
             this.splitDataDurations();
           },
           error: (e) => {
