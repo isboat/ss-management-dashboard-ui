@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserModel } from 'app/models/user-response.model';
@@ -11,23 +11,18 @@ import { UserService } from 'app/services/user.service';
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.css']
 })
-export class UserCreateComponent implements OnInit {
-  id: string;
-  form: FormGroup;
+export class UserCreateComponent {
+  readonly submitting = signal(false);
+  readonly form = new FormGroup({
+    name: new FormControl(''),
+    email: new FormControl(''),
+    role: new FormControl('0')
+  });
 
   constructor(
     private dataService: UserService,
     private authService: AuthService, 
     private router: Router) { }
-
-  ngOnInit() {
-    
-    this.form = new FormGroup({
-      name: new FormControl(),      
-      email: new FormControl(),
-      role: new FormControl()
-    })
-  }
 
  submit(){
   const data: UserModel = {
@@ -41,15 +36,17 @@ export class UserCreateComponent implements OnInit {
     password: null
   }
 
+  this.submitting.set(true);
   this.dataService.createNewUser(data).subscribe({
     next: (data) => 
     {
       this.router.navigate(['/users']);
     },
     error: (e) => {
+      this.submitting.set(false);
       if(e.status == 401) this.authService.redirectToLogin(true);
     },
-    complete: () => console.info('complete') 
+    complete: () => this.submitting.set(false)
   });
  }
 

@@ -1,4 +1,4 @@
-<div class="main-content">
+<div class="main-content screen-editor-page">
   @if (isLoading()) {
     <div class="container-fluid">
       <div class="alert alert-info" role="status">Loading screen details...</div>
@@ -14,6 +14,11 @@
   }
   @if (data(); as screen) {
     <div class="container-fluid">
+      <header class="detail-hero screen-detail-hero">
+        <div class="detail-hero-art" aria-hidden="true"><div class="hero-monitor"><i class="material-icons">dashboard_customize</i></div><span></span></div>
+        <div class="detail-hero-copy"><span><i class="material-icons">monitor</i> Screen studio</span><h2>{{screen.displayName}}</h2><p>Compose the layout, connect content and prepare this screen for publishing.</p></div>
+        <div class="detail-status"><i></i> Draft ready</div>
+      </header>
       <div class="row">
         <div class="col-md-6">
           <div class="card">

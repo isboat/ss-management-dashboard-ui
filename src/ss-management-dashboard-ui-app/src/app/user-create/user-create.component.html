@@ -1,52 +1,14 @@
-<div class="main-content">
-  <div class="container-fluid">
-
-    <div class="row">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header card-header-danger">
-            <h4 class="card-title">User Create:</h4>
-            <small>Ask the user to login and reset their password!</small>
-          </div>
-          <div class="card-body">
-            <form [formGroup]="form" (ngSubmit)="submit()">
-              <div class="row">
-                <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Name" type="text" formControlName="name">
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Email" type="email" formControlName="email">
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="Temporary Password" type="text" value="Temporary!" [disabled]="true">
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <select matNativeControl formControlName="role">
-                      <option value="0" selected="true">Editor</option>
-                      <option value="1">Admin</option>
-                    </select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <button mat-raised-button type="submit" class="btn btn-danger pull-right">Create</button>
-              <div class="clearfix"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="main-content invite-page"><div class="container-fluid">
+  <div class="invite-shell">
+    <aside class="invite-visual"><span class="invite-eyebrow"><i class="material-icons">group_add</i> Team access</span><h2>Bring great people into your workspace.</h2><p>Invite a teammate and choose exactly how they can contribute.</p><div class="people-art" aria-hidden="true"><span><i class="material-icons">person</i></span><span><i class="material-icons">person</i></span><span><i class="material-icons">add</i></span></div><div class="invite-tip"><i class="material-icons">shield</i><div><strong>Secure by default</strong><small>New users should reset their temporary password after signing in.</small></div></div></aside>
+    <section class="invite-form-panel" aria-labelledby="invite-title"><div class="invite-heading"><span>01</span><div><h3 id="invite-title">Invite a teammate</h3><p>Enter their details and assign a workspace role.</p></div></div>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label><span>Full name</span><div class="input-with-icon"><i class="material-icons">person_outline</i><input class="form-control" placeholder="e.g. Jordan Lee" formControlName="name"></div></label>
+        <label><span>Email address</span><div class="input-with-icon"><i class="material-icons">mail_outline</i><input type="email" class="form-control" placeholder="jordan@company.com" formControlName="email"></div></label>
+        <label><span>Workspace role</span><select class="modern-select" formControlName="role"><option value="0">Editor — create and manage content</option><option value="1">Administrator — full workspace access</option></select></label>
+        <div class="password-note"><i class="material-icons">key</i><div><strong>Temporary password</strong><code>Temporary!</code><small>Share this securely and ask the user to change it immediately.</small></div></div>
+        <button type="submit" [disabled]="submitting()" class="invite-button">{{submitting() ? 'Creating user...' : 'Send invitation'}}<i class="material-icons">arrow_forward</i></button>
+      </form>
+    </section>
   </div>
-</div>
+</div></div>

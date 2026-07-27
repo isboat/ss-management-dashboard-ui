@@ -1,4 +1,4 @@
-<div class="main-content">
+<div class="main-content menu-editor-page">
   <div class="container-fluid">
     @if (isLoading()) {
       <div class="alert alert-info" role="status">Loading menu details...</div>
@@ -10,6 +10,11 @@
       </div>
     }
     @if (data(); as menu) {
+      <header class="detail-hero menu-detail-hero">
+        <div class="detail-hero-art menu-hero-art" aria-hidden="true"><i class="material-icons">restaurant_menu</i><span></span><span></span></div>
+        <div class="detail-hero-copy"><span><i class="material-icons">local_dining</i> Menu studio</span><h2>{{menu.title || menu.name}}</h2><p>Edit your menu identity, pricing and items in one place.</p></div>
+        <button (click)="saveMenu()" class="detail-save"><i class="material-icons">save</i>Save menu</button>
+      </header>
       <div class="card">
         <div class="card-body">
           <div class="row">
