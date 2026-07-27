@@ -1,83 +1,29 @@
-<div class="main-content">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header card-header-info login-card-header">
-            <h4 class="card-title">REGISTER</h4>
-            <p class="card-category">Ready to use onScreenSync, complete the form below and one of the sales team
-              members will be in touch with you</p>
-          </div>
-          <div class="card-body">
-            <form class="register-form" [formGroup]="registerForm" (ngSubmit)="submit()">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Name/Business name</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="name"
-                  placeholder="Enter name">
-                <small class="form-text text-muted">We'll never share your name or business name with
-                  anyone
-                  else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" formControlName="email"
-                  placeholder="Enter email">
-                <small class="form-text text-muted">We'll never share your email with anyone
-                  else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Address</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="address"
-                  placeholder="Enter address">
-                <small class="form-text text-muted">We'll never share your address with anyone
-                  else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Postcode / Zipcode</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="postcode"
-                  placeholder="Enter Postcode or Zipcode">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">City</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="city"
-                  placeholder="Enter city">
-                <small class="form-text text-muted">We'll never share your city with anyone
-                  else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Country</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="country"
-                  placeholder="Enter country">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Telephone</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" formControlName="telephone"
-                  placeholder="Enter Telephone">
-                <small class="form-text text-muted">We'll never share your telephone with anyone
-                  else.</small>
-              </div>
-              <button type="submit" [disabled]="submitting()" class="btn btn-primary login-card-header">{{submitting() ? 'Submitting...' : 'Submit'}}</button>
-            </form>
-          </div>
-        </div>
+<div class="main-content register-page"><div class="container-fluid">
+  <div class="register-shell">
+    <aside class="register-aside">
+      <span class="eyebrow"><i class="material-icons">auto_awesome</i> Get started</span>
+      <h2>Make every screen work harder.</h2>
+      <p>Tell us about your organization and our team will help you build a perfectly synchronized display network.</p>
+      <div class="benefits">
+        <div><i class="material-icons">bolt</i><span><strong>Fast onboarding</strong><small>Get your first screen live in minutes.</small></span></div>
+        <div><i class="material-icons">devices</i><span><strong>Built to scale</strong><small>One workspace for every location.</small></span></div>
+        <div><i class="material-icons">support_agent</i><span><strong>Expert support</strong><small>Guidance whenever you need it.</small></span></div>
       </div>
-
-      <div class="col-md-4">
-        <div class="card card-profile">
-          <div class="card-avatar">
-            <a href="javascript:void(0)" class="login-card-header">
-              <img class="img profile-img" src="./assets/img/site-logo.png" />
-            </a>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Already a customer?</h4>
-            <p class="card-description">
-              Click the button below to login
-            </p>
-            <a [routerLink]="['/login']" class="btn btn-danger login-card-header btn-round">Login</a>
-          </div>
-        </div>
-      </div>
-    </div>
+      <p class="signin-prompt">Already have an account? <a routerLink="/login">Sign in</a></p>
+    </aside>
+    <section class="register-panel" aria-labelledby="register-title">
+      <div class="panel-heading"><span>01</span><div><h3 id="register-title">Create your workspace</h3><p>We’ll use these details to prepare your account.</p></div></div>
+      <form class="register-form" [formGroup]="registerForm" (ngSubmit)="submit()">
+        <div class="field field-wide"><label for="register-name">Business name</label><input id="register-name" class="form-control" formControlName="name" placeholder="Your organization"></div>
+        <div class="field field-wide"><label for="register-email">Work email</label><input id="register-email" type="email" class="form-control" formControlName="email" placeholder="you@company.com"></div>
+        <div class="field field-wide"><label for="register-address">Address</label><input id="register-address" class="form-control" formControlName="address" placeholder="Street address"></div>
+        <div class="field"><label for="register-city">City</label><input id="register-city" class="form-control" formControlName="city" placeholder="City"></div>
+        <div class="field"><label for="register-postcode">Postcode / ZIP</label><input id="register-postcode" class="form-control" formControlName="postcode" placeholder="Postcode"></div>
+        <div class="field"><label for="register-country">Country</label><input id="register-country" class="form-control" formControlName="country" placeholder="Country"></div>
+        <div class="field"><label for="register-phone">Telephone</label><input id="register-phone" type="tel" class="form-control" formControlName="telephone" placeholder="+44 000 000 0000"></div>
+        <p class="privacy-note"><i class="material-icons">lock</i> Your details are private and only used to set up your account.</p>
+        <button type="submit" [disabled]="submitting()" class="register-button">{{submitting() ? 'Sending request...' : 'Request access'}}<i class="material-icons">arrow_forward</i></button>
+      </form>
+    </section>
   </div>
-</div>
+</div></div>

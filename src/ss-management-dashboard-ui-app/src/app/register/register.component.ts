@@ -23,6 +23,7 @@ export class RegisterComponent {
     name: new FormControl(''),
     email: new FormControl(''),
     address: new FormControl(''),
+    city: new FormControl(''),
     postcode: new FormControl(''),
     country: new FormControl(''),
     telephone: new FormControl(''),
@@ -33,12 +34,13 @@ export class RegisterComponent {
       name: this.registerForm.get('name').value,
       email: this.registerForm.get('email').value,
       address: this.registerForm.get('address').value,
+      city: this.registerForm.get('city').value,
       postcode: this.registerForm.get('postcode').value,
       country: this.registerForm.get('country').value,
       telephone: this.registerForm.get('telephone').value
     };
 
-    if(!form.name || !form.email || !form.address || !form.postcode || !form.country || !form.telephone)
+    if(!form.name || !form.email || !form.address || !form.city || !form.postcode || !form.country || !form.telephone)
     {
       this.notificationService.showWarning("Please complete the form fully.");
       return;
