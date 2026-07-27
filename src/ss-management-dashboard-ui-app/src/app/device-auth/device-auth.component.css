@@ -37,6 +37,8 @@
 .device-code-input { width: 112px; height: 60px; padding: 0 10px; border: 1px solid #dfe3ed; border-radius: 13px; color: #222b41; background: #f8f9fc; outline: none; font-size: 19px; font-weight: 700; letter-spacing: .14em; text-align: center; text-transform: uppercase; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
 .device-code-input::placeholder { color: #b4bbca; }
 .device-code-input:focus { border-color: #7165f1; background: #fff; box-shadow: 0 0 0 4px rgba(113,101,241,.11); }
+.code-inputs.has-error .device-code-input { border-color: #e45368; background: #fff8f9; }
+.code-error { margin: 9px 0 -5px; color: #c83f55; font-size: 11px; font-weight: 500; }
 .code-separator { width: 11px; height: 2px; flex: 0 0 11px; border-radius: 2px; background: #c7ccd8; }
 .security-note { display: flex; align-items: center; gap: 8px; margin: 19px 0 30px; color: #7a8498; font-size: 11px; }
 .security-note i { color: #27a878; font-size: 17px; }

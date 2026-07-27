@@ -36,22 +36,28 @@
           <form [formGroup]="deviceAuthForm" (ngSubmit)="submit()" novalidate>
             <fieldset class="code-fieldset">
               <legend>12-character device code</legend>
-              <div class="code-inputs">
+              <div class="code-inputs" [class.has-error]="showCodeError()" aria-describedby="pairing-code-help pairing-code-error">
                 <input class="device-code-input" aria-label="First four characters" placeholder="ABCD"
                   maxlength="4" minlength="4" autocomplete="off" autocapitalize="characters"
+                  inputmode="text" pattern="[A-Za-z0-9]{4}" (input)="normalizeCodePart('partOne')"
                   matInput type="text" formControlName="partOne">
                 <span class="code-separator" aria-hidden="true"></span>
                 <input class="device-code-input" aria-label="Middle four characters" placeholder="EFGH"
                   maxlength="4" minlength="4" autocomplete="off" autocapitalize="characters"
+                  inputmode="text" pattern="[A-Za-z0-9]{4}" (input)="normalizeCodePart('partTwo')"
                   matInput type="text" formControlName="partTwo">
                 <span class="code-separator" aria-hidden="true"></span>
                 <input class="device-code-input" aria-label="Last four characters" placeholder="IJKL"
                   maxlength="4" minlength="4" autocomplete="off" autocapitalize="characters"
+                  inputmode="text" pattern="[A-Za-z0-9]{4}" (input)="normalizeCodePart('partThree')"
                   matInput type="text" formControlName="partThree">
               </div>
+              @if (showCodeError()) {
+                <p id="pairing-code-error" class="code-error" role="alert">Enter three groups of four letters or numbers.</p>
+              }
             </fieldset>
 
-            <div class="security-note">
+            <div class="security-note" id="pairing-code-help">
               <i class="material-icons">verified_user</i>
               <span>The code is single-use and only authorizes this display.</span>
             </div>
