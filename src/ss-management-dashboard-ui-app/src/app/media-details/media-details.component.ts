@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssetModel } from 'app/models/asset-response.model';
 import { PlaylistModel } from 'app/models/playlist-response.model';
@@ -14,11 +14,16 @@ import { PlaylistService } from 'app/services/playlist.service';
   styleUrls: ['./media-details.component.css']
 })
 export class MediaDetailsComponent implements OnInit {
-  id: string;
+  readonly id = signal('');
   private sub: any;
-  data: AssetModel = null;
-  previewWidth: string = "500px";
-  playlists: PlaylistModel[] = [];
+  readonly data = signal<AssetModel | null>(null);
+  readonly playlists = signal<PlaylistModel[]>([]);
+  readonly loading = signal(false);
+  readonly loadingPlaylists = signal(false);
+  readonly savingName = signal(false);
+  readonly deleting = signal(false);
+  readonly updatingPlaylist = signal(false);
+  readonly previewWidth = "500px";
 
   constructor(
     private dataService: MediaService, 
@@ -32,7 +37,7 @@ export class MediaDetailsComponent implements OnInit {
     
 
     this.sub = this.route.params.subscribe(params => {
-      this.id = params['id'];
+      this.id.set(params['id']);
       this.fetchData();
     });
 
@@ -56,7 +61,7 @@ export class MediaDetailsComponent implements OnInit {
 
     if(playlistId == "none")
     {
-      const playlist = this.playlists.find(x => x.itemIdAndTypePairs.findIndex(x => x.id === mediaId) > -1);
+      const playlist = this.playlists().find(x => x.itemIdAndTypePairs?.findIndex(x => x.id === mediaId) > -1);
       if(playlist)
       {
         this.removeMediaPlaylist(mediaId, playlist.id)
@@ -71,10 +76,12 @@ export class MediaDetailsComponent implements OnInit {
 
   addMediaToPlaylist(mediaId, playlistId)
   {
+    this.updatingPlaylist.set(true);
     this.dataService.addMediaToPlaylist(mediaId, playlistId).subscribe(
       {
         next: () => {},
         error: (e) => {
+          this.updatingPlaylist.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -84,16 +91,18 @@ export class MediaDetailsComponent implements OnInit {
             console.log(e)
           }
         },
-        complete: () => console.info('complete')
+        complete: () => this.updatingPlaylist.set(false)
       });
   }
 
   removeMediaPlaylist(mediaId: string, playlistId: string)
   {
+    this.updatingPlaylist.set(true);
     this.dataService.removeMediaPlaylist(mediaId, playlistId).subscribe(
       {
         next: () => {},
         error: (e) => {
+          this.updatingPlaylist.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -103,16 +112,18 @@ export class MediaDetailsComponent implements OnInit {
             console.log(e)
           }
         },
-        complete: () => console.info('complete')
+        complete: () => this.updatingPlaylist.set(false)
       });
   }
 
   fetchPlaylists()
   {
+    this.loadingPlaylists.set(true);
     this.playlistService.fetchPlaylists().subscribe(
       {
-        next: (data) => this.playlists = data,
+        next: (data) => this.playlists.set(data),
         error: (e) => {
+          this.loadingPlaylists.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -122,16 +133,18 @@ export class MediaDetailsComponent implements OnInit {
             console.log(e)
           }
         },
-        complete: () => console.info('complete')
+        complete: () => this.loadingPlaylists.set(false)
       });
   }
 
   fetchData(){
-    if(!this.id) return;
-    this.dataService.fetchMediaAsset(this.id).subscribe(
+    if(!this.id()) return;
+    this.loading.set(true);
+    this.dataService.fetchMediaAsset(this.id()).subscribe(
       {
-        next: (data) => this.data = data,
+        next: (data) => this.data.set(data),
         error: (e) => {
+          this.loading.set(false);
           if(e.status == 401) 
           {
             this.authService.redirectToLogin(true);
@@ -140,12 +153,14 @@ export class MediaDetailsComponent implements OnInit {
           {
             console.log(e)
           }
-        }
+        },
+        complete: () => this.loading.set(false)
       });
  }
 
  deleteMedia(id: string)
  {
+  this.deleting.set(true);
   this.dataService.deleteMedia(id).subscribe(
     {
       next: () => 
@@ -153,6 +168,7 @@ export class MediaDetailsComponent implements OnInit {
         this.router.navigate(['/media-list']);
       },
       error: (e) => {
+        this.deleting.set(false);
         if(e.status == 401) 
         {
           this.authService.redirectToLogin(true);
@@ -162,18 +178,23 @@ export class MediaDetailsComponent implements OnInit {
           console.log(e)
         }
       },
-      complete: () => console.info('complete')
+      complete: () => this.deleting.set(false)
     });
  }
 
  saveName() {
-  this.dataService.updateMediaName(this.data.id, this.data.name).subscribe(
+  const data = this.data();
+  if (!data) return;
+  this.savingName.set(true);
+  this.dataService.updateMediaName(data.id, data.name).subscribe(
     {
       next: () => 
       {
         this.notificationService.showSuccess("Name updated");
+        this.data.update(asset => asset ? { ...asset, editName: false } : asset);
       },
       error: (e) => {
+        this.savingName.set(false);
         if(e.status == 401) 
         {
           this.authService.redirectToLogin(true);
@@ -183,7 +204,16 @@ export class MediaDetailsComponent implements OnInit {
           console.log(e)
         }
       },
+      complete: () => this.savingName.set(false)
     });
+ }
+
+ setMediaName(name: string): void {
+  this.data.update(asset => asset ? { ...asset, name } : asset);
+ }
+
+ enableNameEditing(): void {
+  this.data.update(asset => asset ? { ...asset, editName: true } : asset);
  }
 
 }
