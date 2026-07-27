@@ -14,7 +14,10 @@ interface TokenClaims {
 export class AuthService {
   private readonly tokenKey = 'token';
   private readonly authorizationToken = signal<string | null>(null);
+  private readonly tokenValidityTick = signal(0);
+  private tokenExpiryTimer: ReturnType<typeof setTimeout> | undefined;
   readonly authenticated = computed(() => {
+    this.tokenValidityTick();
     const claims = this.getTokenClaims(this.authorizationToken());
     return claims !== null && (claims.exp === undefined || claims.exp * 1000 > Date.now());
   });
@@ -29,7 +32,9 @@ export class AuthService {
   );
 
   constructor(private localStorage: LocalStorageService, private router: Router){
-    this.authorizationToken.set(this.localStorage.get(this.tokenKey));
+    const token = this.localStorage.get(this.tokenKey);
+    this.authorizationToken.set(token);
+    this.scheduleExpirationCheck(token);
   }
 
   getAuthorizationToken(): string | null {
@@ -39,6 +44,7 @@ export class AuthService {
   setAuthorizationToken(token: string): void {
     this.localStorage.set(this.tokenKey, token);
     this.authorizationToken.set(token);
+    this.scheduleExpirationCheck(token);
   }
 
   isAuthenticated(): boolean {
@@ -61,6 +67,7 @@ export class AuthService {
   clearAuthorizationToken(): void {
     this.localStorage.remove(this.tokenKey);
     this.authorizationToken.set(null);
+    this.clearExpirationTimer();
   }
 
   private getTokenClaims(token: string | null): TokenClaims | null {
@@ -82,5 +89,22 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+  private scheduleExpirationCheck(token: string | null): void {
+    this.clearExpirationTimer();
+    const expiresAt = this.getTokenClaims(token)?.exp;
+    if (expiresAt === undefined) return;
+
+    const delay = Math.min(2_147_483_647, Math.max(0, expiresAt * 1000 - Date.now()));
+    this.tokenExpiryTimer = setTimeout(() => {
+      this.tokenValidityTick.update(value => value + 1);
+      if (expiresAt * 1000 > Date.now()) this.scheduleExpirationCheck(this.authorizationToken());
+    }, delay);
+  }
+
+  private clearExpirationTimer(): void {
+    if (this.tokenExpiryTimer !== undefined) clearTimeout(this.tokenExpiryTimer);
+    this.tokenExpiryTimer = undefined;
   }
 }

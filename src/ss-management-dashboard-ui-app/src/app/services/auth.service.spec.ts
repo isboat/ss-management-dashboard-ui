@@ -69,4 +69,20 @@ describe('AuthService', () => {
     service.clearAuthorizationToken();
     expect(service.authenticated()).toBeFalse();
   });
+
+  it('invalidates authentication when the token expires', () => {
+    jasmine.clock().install();
+    try {
+      const now = new Date('2026-01-01T00:00:00Z');
+      jasmine.clock().mockDate(now);
+      storage.get.and.returnValue(token({ exp: Math.floor(now.getTime() / 1000) + 1 }));
+      service = new AuthService(storage, router);
+
+      expect(service.authenticated()).toBeTrue();
+      jasmine.clock().tick(1_001);
+      expect(service.authenticated()).toBeFalse();
+    } finally {
+      jasmine.clock().uninstall();
+    }
+  });
 });

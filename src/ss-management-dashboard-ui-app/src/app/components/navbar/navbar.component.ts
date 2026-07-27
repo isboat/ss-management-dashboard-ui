@@ -16,13 +16,11 @@ export class NavbarComponent implements OnInit {
     location: Location;
       mobile_menu_visible: any = 0;
     private toggleButton: any;
-    private sidebarVisible: boolean;
     readonly showLogoutBtn = this.authService.authenticated;
     private readonly sidebarOpenState = signal(false);
 
     constructor(location: Location,  private element: ElementRef, private router: Router, private loginService: LoginService, private authService: AuthService) {
       this.location = location;
-          this.sidebarVisible = false;
     }
 
     ngOnInit(){
@@ -48,13 +46,11 @@ export class NavbarComponent implements OnInit {
 
         body.classList.add('nav-open');
 
-        this.sidebarVisible = true;
         this.sidebarOpenState.set(true);
     };
     sidebarClose() {
         const body = document.getElementsByTagName('body')[0];
         this.toggleButton.classList.remove('toggled');
-        this.sidebarVisible = false;
         this.sidebarOpenState.set(false);
         body.classList.remove('nav-open');
     };
@@ -101,6 +97,7 @@ export class NavbarComponent implements OnInit {
             $layer.onclick = function() { //asign a function
               body.classList.remove('nav-open');
               this.mobile_menu_visible = 0;
+              this.sidebarOpenState.set(false);
               $layer.classList.remove('visible');
               setTimeout(function() {
                   $layer.remove();

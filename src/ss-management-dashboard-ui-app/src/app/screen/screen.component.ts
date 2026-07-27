@@ -87,7 +87,7 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     const existingProperties = screen.layout.templateProperties ?? [];
     screen.layout.templateKey = template.key;
     screen.layout.templateProperties = template.requiredProperties.map(required =>
-      existingProperties.find(property => property.key === required.key) ?? required
+      existingProperties.find(property => property.key === required.key) ?? { ...required }
     );
     this.subtypeTemplates.set(template.subTypes ?? []);
     if (!template.subTypes?.length) screen.layout.subType = '';
@@ -203,6 +203,8 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     this.dataService.fetchTemplates().subscribe({
       next: (data) => {
         this.templates.set(data);
+        const templateKey = this.data()?.layout?.templateKey;
+        if (templateKey) this.updateSelectedTemplate(templateKey);
       },
       error: (e) => {
         if (e.status == 401) this.authService.redirectToLogin(true);
@@ -269,13 +271,16 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
   }
 
   publishScreenUpdates() {
+    const screen = this.data();
+    if (!screen) return;
+
     this.saveScreenUpdates(true, () => {
-      this.dataService.publishScreen(this.data()?.id).subscribe(
+      this.dataService.publishScreen(screen.id).subscribe(
         {
           next: () => {
             this.notification.showSuccess("PUBLISHED..")
 
-            this.deviceService.linkToDevice(this.deviceIdForPublish(), this.data()?.id, this.devices());
+            this.deviceService.linkToDevice(this.deviceIdForPublish(), screen.id, this.devices());
           },
           error: (e) => {
             if (e.status == 401) {
@@ -290,20 +295,23 @@ export class ScreenDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveScreenUpdates(hidePostAction?: boolean, callbkFunc?: Function) {
-    if(this.data()?.layout?.templateProperties) {
-      this.data().layout.templateProperties.forEach(t => {
+  saveScreenUpdates(hidePostAction?: boolean, callback?: () => void) {
+    const screen = this.data();
+    if (!screen) return;
+
+    if(screen.layout?.templateProperties) {
+      screen.layout.templateProperties.forEach(t => {
         t.value = "" + t.value
       });
     }
-    this.dataService.updateScreen(this.data()).subscribe(
+    this.dataService.updateScreen(screen).subscribe(
       {
         next: () => {
           if (!hidePostAction) {
             this.notification.showSuccess("SAVED..")
           }
 
-          if (callbkFunc) callbkFunc();
+          callback?.();
         },
         error: (e) => {
           if (e.status == 401) {
