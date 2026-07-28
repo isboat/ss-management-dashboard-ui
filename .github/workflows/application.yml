@@ -1,4 +1,4 @@
-name: Application CI
+name: Application CI and Azure deployment
 
 on:
   pull_request:
@@ -24,3 +24,12 @@ jobs:
       - run: npm run build -- --progress=false
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
+      - name: Deploy to Azure Static Web Apps
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: src/ss-management-dashboard-ui-app/dist/browser
+          output_location: ''
+          skip_app_build: true
