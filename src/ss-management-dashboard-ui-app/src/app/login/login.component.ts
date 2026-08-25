@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NotificationsService } from 'app/notifications';
 import { AuthService } from 'app/services/auth.service';
 import { LoginService } from 'app/services/login.service';
+import { finalize } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -12,6 +13,8 @@ import { LoginService } from 'app/services/login.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  isSigningIn = false;
+
   constructor(
     private loginService: LoginService, 
     private authService: AuthService,
@@ -27,9 +30,16 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
+    if (this.isSigningIn) {
+      return;
+    }
+
+    this.isSigningIn = true;
     const email = this.loginForm.get('email').value;    
     const passwd = this.loginForm.get('password').value;
-    this.loginService.login(email, passwd).subscribe({
+    this.loginService.login(email, passwd).pipe(
+      finalize(() => this.isSigningIn = false)
+    ).subscribe({
       next: (tokenResponse) => {
         this.authService.setAuthorizationToken(tokenResponse.token);
         this.router.navigate(['/']);

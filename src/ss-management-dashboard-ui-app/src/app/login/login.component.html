@@ -30,7 +30,19 @@
                                 </mat-form-field>
                               </div>
                           </div>
-                          <button mat-raised-button type="submit" class="btn btn-danger login-card-header">Sign in <i class="material-icons">arrow_forward</i></button>
+                          <button
+                            mat-raised-button
+                            type="submit"
+                            class="btn btn-danger login-card-header"
+                            [disabled]="isSigningIn"
+                            [attr.aria-busy]="isSigningIn">
+                            <span>{{ isSigningIn ? 'Signing in…' : 'Sign in' }}</span>
+                            @if (isSigningIn) {
+                              <span class="sign-in-spinner" aria-hidden="true"></span>
+                            } @else {
+                              <i class="material-icons" aria-hidden="true">arrow_forward</i>
+                            }
+                          </button>
                           <div class="clearfix"></div>
                       </form>
                       <a [routerLink]="['/register']" class="pull-right">No account? Register</a>

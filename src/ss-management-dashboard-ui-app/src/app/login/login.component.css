@@ -14,6 +14,9 @@
 .login-page mat-form-field { width: 100%; }
 .login-page form .btn { display: inline-flex; min-width: 140px; align-items: center; justify-content: center; gap: 10px; margin: 14px 0; }
 .login-page form .btn i { font-size: 17px; }
+.login-page form .btn:disabled { cursor: wait; opacity: .72; }
+.sign-in-spinner { width: 17px; height: 17px; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: sign-in-spin .8s linear infinite; }
+@keyframes sign-in-spin { to { transform: rotate(360deg); } }
 .login-page a { color: #6d5dfc; font-size: 12px; font-weight: 600; }
 .login-visual { position: relative; min-height: 430px; border-radius: 20px; background: linear-gradient(180deg, rgba(18,24,42,.05), rgba(18,24,42,.88)), url('/assets/img/cover.jpeg') center/cover; box-shadow: 0 22px 60px rgba(37,44,76,.16); overflow: hidden; animation: float-soft 7s ease-in-out infinite; }
 .login-visual::after { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.18); border-radius: inherit; content: ''; }
