@@ -34,11 +34,11 @@
                             mat-raised-button
                             type="submit"
                             class="btn btn-danger login-card-header"
-                            [disabled]="isSigningIn"
-                            [attr.aria-busy]="isSigningIn">
-                            <span>{{ isSigningIn ? 'Signing in…' : 'Sign in' }}</span>
-                            @if (isSigningIn) {
-                              <span class="sign-in-spinner" aria-hidden="true"></span>
+                            [disabled]="isSigningIn()"
+                            [attr.aria-busy]="isSigningIn()">
+                            <span>{{ isSigningIn() ? 'Signing in…' : 'Sign in' }}</span>
+                            @if (isSigningIn()) {
+                              <span class="sign-in-spinner" aria-hidden="true" style="display: block;"></span>
                             } @else {
                               <i class="material-icons" aria-hidden="true">arrow_forward</i>
                             }
