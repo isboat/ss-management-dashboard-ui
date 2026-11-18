@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- [Project overview](doc/project-overview.md)
+- [Project overview](docs/project-overview.md)
 - [Angular 22 modernization plan](doc/angular-modernization-plan.md)
 
 ## Development
